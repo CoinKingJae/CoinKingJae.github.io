@@ -10,7 +10,10 @@
 <script>
   (function(){
     var tok = '';
-    try { tok = localStorage.getItem('kj_v40_auth_hash') || ''; } catch(e){}
+    try {
+      localStorage.removeItem('kj_v40_raw_pin');
+      tok = localStorage.getItem('kj_v40_auth_hash') || '';
+    } catch(e){}
     document.documentElement.setAttribute('data-auth', tok === '7d186020da364fae037b8988d1d2ee5e157b61c0168cafa0519470c2bc4778c5' ? 'owner' : 'guest');
   })();
 </script>
@@ -28,24 +31,24 @@
   }
   body {
     max-width:540px; margin:0 auto;
-    padding:max(14px, calc(env(safe-area-inset-top, 0px) + 12px)) 12px calc(98px + env(safe-area-inset-bottom, 0px)) 12px;
+    padding:max(18px, calc(env(safe-area-inset-top, 0px) + 14px)) 12px calc(102px + env(safe-area-inset-bottom, 0px)) 12px;
   }
   body.modal-open { overflow:hidden !important; }
   html[data-auth="guest"] .owner-only { display:none !important; }
   a[href*="tradingview.com"], #tv-attr-logo { display:none !important; opacity:0 !important; pointer-events:none !important; }
 
-  /* 상단 자동 소멸 다크 토스트 배너 (alert 대체) */
+  /* 상단 자동 소멸 다크 토스트 배너 */
   .kj-toast {
-    position:fixed; left:50%; top:calc(env(safe-area-inset-top, 0px) + 14px);
-    transform:translate(-50%, -24px); opacity:0; pointer-events:none; z-index:12000;
-    background:rgba(15,23,42,0.96); border:1px solid rgba(56,189,248,0.45);
+    position:fixed; left:50%; top:calc(env(safe-area-inset-top, 0px) + 16px);
+    transform:translate(-50%, -24px); opacity:0; pointer-events:none; z-index:13000;
+    background:rgba(15,23,42,0.97); border:1px solid rgba(56,189,248,0.48);
     color:#f8fafc; font-size:12.5px; font-weight:800; padding:10px 16px; border-radius:999px;
-    box-shadow:0 12px 30px rgba(0,0,0,0.65); backdrop-filter:blur(10px);
+    box-shadow:0 12px 30px rgba(0,0,0,0.7); backdrop-filter:blur(10px);
     max-width:92vw; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     transition:opacity 0.22s ease, transform 0.22s ease;
   }
   .kj-toast.show { opacity:1; transform:translate(-50%, 0); }
-  .kj-toast.err { border-color:rgba(244,63,94,0.55); color:#fda4af; }
+  .kj-toast.err { border-color:rgba(244,63,94,0.6); color:#fda4af; }
 
   .card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:14px 15px; margin-bottom:10px; }
   .row-sb { display:flex; align-items:center; justify-content:space-between; gap:8px; }
@@ -59,22 +62,22 @@
   }
   .btn {
     background:var(--card2); border:1px solid rgba(148,163,184,0.24); color:#e2e8f0;
-    font-size:11.5px; font-weight:800; padding:6px 9px; border-radius:8px;
+    font-size:11.5px; font-weight:800; padding:6px 10px; border-radius:8px;
     cursor:pointer; white-space:nowrap; flex-shrink:0; line-height:1.2;
   }
   .btn:active { transform:scale(0.97); }
+  .btn:disabled { opacity:0.5; pointer-events:none; }
   .btn.acc { background:rgba(56,189,248,0.18); border-color:var(--acc); color:#fff; }
   .btn.warn { background:rgba(245,158,11,0.18); border-color:rgba(245,158,11,0.5); color:#fde68a; }
   .btn.danger { background:rgba(244,63,94,0.15); border-color:rgba(244,63,94,0.45); color:#fda4af; }
 
-  /* 상단 헤더 단일 행 잠금 */
-  .top-hdr { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:10px; flex-wrap:nowrap; }
-  .brand-wrap { display:flex; align-items:center; gap:7px; min-width:0; flex-shrink:0; }
-  .brand-name { font-size:17px; font-weight:900; letter-spacing:-0.3px; user-select:none; cursor:default; white-space:nowrap; }
-  .hdr-actions { display:flex; align-items:center; gap:4px; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; }
-  .hdr-actions::-webkit-scrollbar { display:none; }
+  /* 최상단 헤더 무절단 정렬 (레버리지 스위치를 시드 카드로 통합해 우측 잘림 0%) */
+  .top-hdr { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:11px; flex-wrap:nowrap; }
+  .brand-wrap { display:flex; align-items:center; gap:7px; min-width:0; flex-shrink:1; }
+  .brand-name { font-size:18px; font-weight:900; letter-spacing:-0.4px; user-select:none; cursor:default; white-space:nowrap; }
+  .hdr-actions { display:flex; align-items:center; gap:5px; flex-wrap:nowrap; flex-shrink:0; }
 
-  /* 실시간 체결 틱 미세 컬러 피드백 (레이아웃 흔들림 0%) */
+  /* BTC 히어로 카드 + 펀딩비 + 24h 고저 레인지 스펙트럼 바 */
   .hero-price {
     font-size:28px; font-weight:900; letter-spacing:-0.7px; line-height:1.15;
     white-space:nowrap; font-variant-numeric:tabular-nums; transition:color 0.22s ease;
@@ -85,27 +88,41 @@
     display:inline-block; width:6px; height:6px; border-radius:50%;
     background:#10b981; margin-right:5px; box-shadow:0 0 6px #10b981;
   }
+  .range-meta { display:flex; align-items:center; justify-content:space-between; font-size:10.5px; color:var(--sub); margin-top:10px; font-variant-numeric:tabular-nums; }
+  .range-track { position:relative; width:100%; height:5px; border-radius:999px; background:#080d19; margin-top:4px; overflow:hidden; border:1px solid rgba(148,163,184,0.12); }
+  .range-fill { height:100%; border-radius:999px; background:linear-gradient(90deg,#f43f5e 0%,#38bdf8 50%,#10b981 100%); transition:width 0.3s ease; }
 
+  /* 4대 글로벌 매크로 2단 카드 (가격 말줄임 ... 원천 제거!) */
   .macro-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-bottom:10px; }
   .m-box {
-    background:var(--card); border:1px solid var(--line); border-radius:13px;
-    padding:10px 11px; display:flex; align-items:center; justify-content:space-between;
-    gap:5px; cursor:pointer; min-width:0;
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:10px 12px; display:flex; flex-direction:column; gap:5px;
+    cursor:pointer; min-width:0;
   }
-  .m-sym { font-size:12px; font-weight:800; color:#cbd5e1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-variant-numeric:tabular-nums; }
-  .m-chg { font-size:11.5px; font-weight:800; white-space:nowrap; flex-shrink:0; font-variant-numeric:tabular-nums; }
-  .ses-tag { font-size:9px; font-weight:800; padding:1px 4px; border-radius:4px; margin-left:3px; vertical-align:middle; }
+  .m-top { display:flex; align-items:center; justify-content:space-between; gap:4px; }
+  .m-name { font-size:11.5px; font-weight:800; color:var(--sub); letter-spacing:0.2px; }
+  .m-bot { display:flex; align-items:baseline; justify-content:space-between; gap:6px; }
+  .m-prc { font-size:15px; font-weight:900; color:#f8fafc; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .m-chg { font-size:12px; font-weight:800; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .ses-tag { font-size:9.5px; font-weight:800; padding:1.5px 5px; border-radius:5px; white-space:nowrap; }
   .ses-tag.live { background:rgba(16,185,129,0.16); color:#34d399; }
   .ses-tag.ext { background:rgba(56,189,248,0.16); color:#7dd3fc; }
   .ses-tag.off { background:rgba(148,163,184,0.14); color:#94a3b8; }
 
-  /* 시드(AUM) 카드 */
+  /* 시드(AUM) 카드 & 4단계 상향 리스크 기어 스위치 */
   .upnl-pill {
     display:inline-flex; align-items:center; padding:3px 9px; border-radius:7px;
     font-size:12px; font-weight:800; margin-left:6px; vertical-align:middle; font-variant-numeric:tabular-nums;
   }
   .upnl-pill.pos { background:rgba(16,185,129,0.16); color:#34d399; border:1px solid rgba(16,185,129,0.35); }
   .upnl-pill.neg { background:rgba(244,63,94,0.16); color:#fb7185; border:1px solid rgba(244,63,94,0.35); }
+  .gear-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:5px; margin-top:10px; }
+  .gear-btn {
+    background:#111a2d; border:1px solid var(--line); color:var(--sub);
+    font-size:11px; font-weight:800; padding:6px 4px; border-radius:9px;
+    cursor:pointer; text-align:center; white-space:nowrap;
+  }
+  .gear-btn.active { background:rgba(56,189,248,0.2); border-color:var(--acc); color:#fff; box-shadow:0 2px 8px rgba(56,189,248,0.15); }
   .sub-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:10px; padding-top:10px; border-top:1px solid var(--line); }
   .sm-lbl { font-size:10.5px; color:var(--sub); }
   .sm-val { font-size:12.5px; font-weight:800; margin-top:2px; font-variant-numeric:tabular-nums; }
@@ -118,15 +135,14 @@
   }
   .chip.active { background:rgba(56,189,248,0.2); border-color:var(--acc); color:#fff; }
 
-  /* 대기주문 & 포지션 카드 */
-  .ord-summary-bar {
-    display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;
-    background:#111a2e; border:1px solid rgba(148,163,184,0.13); border-radius:10px;
-    padding:7px 11px; margin-top:9px; font-size:11.5px; font-weight:800;
+  /* 대기주문 노출 브리핑 & 카드 */
+  .ord-exp-box {
+    background:#10192c; border:1px solid rgba(148,163,184,0.14); border-radius:11px;
+    padding:8px 11px; margin-top:9px; display:flex; flex-direction:column; gap:5px; font-size:11.5px;
   }
   .ord-card { background:#111a2c; border:1px solid var(--line); border-radius:14px; padding:12px 13px; margin-top:9px; }
   .ord-price-btn { font-size:19px; font-weight:900; cursor:pointer; border-bottom:1px dashed rgba(148,163,184,0.35); font-variant-numeric:tabular-nums; }
-  .prox-track { width:100%; height:4px; background:#090e1a; border-radius:999px; overflow:hidden; margin-top:8px; }
+  .prox-track { width:100%; height:4.5px; background:#080d19; border-radius:999px; overflow:hidden; margin-top:8px; }
   .prox-fill { height:100%; border-radius:999px; transition:width 0.25s ease; }
 
   /* 마스터 보드 갤러리 */
@@ -138,7 +154,7 @@
   .b-title { font-size:12px; font-weight:800; color:#f1f5f9; line-height:1.35; word-break:keep-all; }
   .b-desc { font-size:10.5px; color:var(--sub); margin-top:3px; line-height:1.35; word-break:keep-all; }
 
-  /* 기관급 실시간 반응형 Performance 카드 */
+  /* 기관급 실시간 반응형 Performance 카드 + 예상 월수익 시뮬레이터 */
   .pf-card { background:#0b111e; border:1px solid rgba(148,163,184,0.18); border-radius:20px; padding:18px 16px; margin-bottom:10px; }
   .pf-hdr { font-size:17px; font-weight:900; color:#f8fafc; letter-spacing:-0.3px; margin-bottom:13px; }
   .pf-seg {
@@ -151,42 +167,39 @@
     padding:6px 11px; border-radius:8px; cursor:pointer; white-space:nowrap;
   }
   .pf-seg-btn.active { background:#25324b; color:#ffffff; box-shadow:0 2px 6px rgba(0,0,0,0.35); }
-  .pf-metrics-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px 14px; margin:18px 0 16px 0; }
-  .pf-m-lbl { font-size:12px; font-weight:600; color:#7f8ea8; margin-bottom:5px; }
-  .pf-m-val { font-size:22px; font-weight:900; color:#f8fafc; letter-spacing:-0.5px; line-height:1.15; font-variant-numeric:tabular-nums; }
+  .pf-metrics-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:15px 14px; margin:17px 0 15px 0; }
+  .pf-m-lbl { font-size:12px; font-weight:600; color:#7f8ea8; margin-bottom:4px; }
+  .pf-m-val { font-size:21px; font-weight:900; color:#f8fafc; letter-spacing:-0.5px; line-height:1.15; font-variant-numeric:tabular-nums; }
   .pf-ts-row {
     display:flex; align-items:center; justify-content:space-between;
-    font-size:11px; font-weight:600; color:#64748b; padding:5px 4px 0 42px; font-variant-numeric:tabular-nums;
+    font-size:11px; font-weight:600; color:#64748b; padding:6px 4px 0 46px; font-variant-numeric:tabular-nums;
+  }
+  .pf-proj-box {
+    margin-top:14px; background:#111a2d; border:1px solid rgba(56,189,248,0.24);
+    border-radius:14px; padding:12px 14px;
   }
   .pf-last-bar {
-    margin-top:14px; background:#121a2b; border:1px solid rgba(148,163,184,0.13);
+    margin-top:10px; background:#121a2b; border:1px solid rgba(148,163,184,0.13);
     border-radius:13px; padding:13px 15px; display:flex; align-items:center; justify-content:space-between;
     cursor:pointer;
   }
   .pf-last-bar:active { background:#18233a; }
 
   /* 경제소식 타임라인 & 섹션 카드 */
-  .econ-jump-bar {
-    display:flex; gap:6px; overflow-x:auto; padding-bottom:8px; margin-bottom:10px; scrollbar-width:none;
-  }
+  .econ-jump-bar { display:flex; gap:6px; overflow-x:auto; padding-bottom:8px; margin-bottom:10px; scrollbar-width:none; }
   .econ-jump-bar::-webkit-scrollbar { display:none; }
   .econ-wrap { display:flex; flex-direction:column; gap:12px; }
   .econ-sec {
     background:#111a2d; border:1px solid rgba(148,163,184,0.16);
-    border-left:3.5px solid var(--acc); border-radius:15px; padding:14px 15px;
-    scroll-margin-top:16px;
+    border-left:3.5px solid var(--acc); border-radius:15px; padding:14px 15px; scroll-margin-top:16px;
   }
   .econ-sec.sched-sec { border-left-color:#f59e0b; }
   .econ-sec-title {
     font-size:15px; font-weight:900; color:#f8fafc; line-height:1.4;
-    padding-bottom:9px; margin-bottom:11px; border-bottom:1px solid rgba(148,163,184,0.14);
-    word-break:keep-all;
+    padding-bottom:9px; margin-bottom:11px; border-bottom:1px solid rgba(148,163,184,0.14); word-break:keep-all;
   }
   .econ-list { display:flex; flex-direction:column; gap:11px; }
-  .econ-row {
-    background:rgba(7,11,20,0.42); border:1px solid rgba(148,163,184,0.1);
-    border-radius:11px; padding:10px 12px;
-  }
+  .econ-row { background:rgba(7,11,20,0.42); border:1px solid rgba(148,163,184,0.1); border-radius:11px; padding:10px 12px; }
   .econ-row-top { display:flex; align-items:center; gap:7px; flex-wrap:wrap; margin-bottom:5px; }
   .econ-time-badge {
     display:inline-flex; align-items:center; padding:2px 8px; border-radius:6px;
@@ -200,8 +213,15 @@
   .econ-ev-title { font-size:13.5px; font-weight:900; color:#f8fafc; word-break:keep-all; }
   .econ-row-body { font-size:13.5px; line-height:1.72; color:#dbeafe; word-break:keep-all; overflow-wrap:anywhere; }
   .econ-row-body b { color:#f8fafc; font-weight:800; }
+  .price-hl { color:#7dd3fc; font-weight:800; }
 
-  /* 하단 네비게이션 + 미확인 알림 숫자 배지 */
+  /* 실현손익 전략 성적표 박스 */
+  .sc-grid {
+    display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px;
+    background:#10192d; border:1px solid var(--line); border-radius:13px; padding:11px 12px; margin-bottom:10px;
+  }
+
+  /* 하단 네비게이션 */
   .bnav {
     position:fixed; left:0; right:0; bottom:0; z-index:900;
     background:rgba(9,14,26,0.96); backdrop-filter:blur(12px); border-top:1px solid var(--line);
@@ -236,16 +256,14 @@
   <!-- 자동 소멸 토스트 알림 -->
   <div class="kj-toast" id="kjToast"></div>
 
-  <!-- 상단 헤더 -->
+  <!-- 최상단 헤더 (우측 잘림 해결 완료: 방어막 · 정지 · 분석 3버튼 깔끔 배치) -->
   <div class="top-hdr">
     <div class="brand-wrap">
       <div class="brand-name" id="brandLogo">KingJae</div>
       <span class="pill" id="liveDot" style="color:#10b981;">● 가동 중</span>
     </div>
     <div class="hdr-actions owner-only">
-      <button class="btn" data-lev="50">50x</button>
-      <button class="btn" data-lev="75">75x</button>
-      <button class="btn acc" data-lev="100">100x</button>
+      <button class="btn acc" id="btnShieldToggle" title="지표 발표 15분 전 자동 방어막">🛡️ 방어 ON</button>
       <button class="btn" id="btnPauseToggle">⏸ 정지</button>
       <button class="btn acc" id="btnForceRun">⚡ 분석</button>
     </div>
@@ -254,7 +272,7 @@
   <!-- [탭 1] 메인 대시보드 -->
   <div class="tab-pane active" id="pane-dash">
 
-    <!-- BTC 24시간 웹소켓 초실시간 시세 & 김프 -->
+    <!-- BTC 24h 웹소켓 초실시간 시세 · 펀딩비 · 24h 레인지 바 -->
     <div class="card" id="btcHeroCard" style="cursor:pointer;">
       <div class="row-sb">
         <div style="display:flex;align-items:center;gap:6px;">
@@ -270,42 +288,75 @@
           <span class="pill" id="kimpBadge">김프 --%</span>
         </div>
       </div>
+      <div class="range-meta">
+        <span id="btcLow24Txt">24h 저가 --</span>
+        <span id="btcFundingTxt" style="color:#cbd5e1;font-weight:700;">펀딩 --%</span>
+        <span id="btcHigh24Txt">24h 고가 --</span>
+      </div>
+      <div class="range-track"><div class="range-fill" id="btcRangeFill" style="width:50%;"></div></div>
     </div>
 
-    <!-- 실시간 상태 & 다음 01/31분 스케줄 -->
+    <!-- 실시간 상태 & 예정 지표 방어막 배너 -->
     <div class="card" style="padding:10px 13px;">
       <div class="row-sb" style="align-items:flex-start;gap:10px;">
         <span id="statusHeadline" style="font-size:12.5px;font-weight:800;color:#f1f5f9;line-height:1.45;word-break:keep-all;">데이터 동기화 중...</span>
         <span id="nextRunLabel" style="font-size:12px;font-weight:800;color:var(--acc);white-space:nowrap;flex-shrink:0;margin-top:1px;">분석 --:--</span>
       </div>
+      <div id="newsShieldBanner" class="owner-only" style="display:none;margin-top:7px;padding-top:7px;border-top:1px solid var(--line);font-size:11.5px;color:#fcd34d;font-weight:700;line-height:1.4;"></div>
     </div>
 
-    <!-- 4대 글로벌 매크로 카드 (장 상태 배지 자동 표시) -->
+    <!-- 4대 글로벌 매크로 2단 카드 (가격 전체 노출 · 말줄임 ... 완전 제거) -->
     <div class="macro-grid">
-      <div class="m-box" data-msym="NQ100"><span class="m-sym">NQ100 <b id="p-NQ100">--</b></span><span class="m-chg" id="c-NQ100">--%</span></div>
-      <div class="m-box" data-msym="NVDA"><span class="m-sym">NVDA <b id="p-NVDA">--</b></span><span class="m-chg" id="c-NVDA">--%</span></div>
-      <div class="m-box" data-msym="SOXL"><span class="m-sym">SOXL <b id="p-SOXL">--</b></span><span class="m-chg" id="c-SOXL">--%</span></div>
-      <div class="m-box" data-msym="GOLD"><span class="m-sym">GOLD <b id="p-GOLD">--</b></span><span class="m-chg" id="c-GOLD">--%</span></div>
+      <div class="m-box" data-msym="NQ100">
+        <div class="m-top"><span class="m-name">NQ100 선물</span><span id="s-NQ100"></span></div>
+        <div class="m-bot"><span class="m-prc" id="p-NQ100">--</span><span class="m-chg" id="c-NQ100">--%</span></div>
+      </div>
+      <div class="m-box" data-msym="NVDA">
+        <div class="m-top"><span class="m-name">NVDA 엔비디아</span><span id="s-NVDA"></span></div>
+        <div class="m-bot"><span class="m-prc" id="p-NVDA">--</span><span class="m-chg" id="c-NVDA">--%</span></div>
+      </div>
+      <div class="m-box" data-msym="SOXL">
+        <div class="m-top"><span class="m-name">SOXL 반도체3X</span><span id="s-SOXL"></span></div>
+        <div class="m-bot"><span class="m-prc" id="p-SOXL">--</span><span class="m-chg" id="c-SOXL">--%</span></div>
+      </div>
+      <div class="m-box" data-msym="GOLD">
+        <div class="m-top"><span class="m-name">GOLD 국제금</span><span id="s-GOLD"></span></div>
+        <div class="m-bot"><span class="m-prc" id="p-GOLD">--</span><span class="m-chg" id="c-GOLD">--%</span></div>
+      </div>
     </div>
 
     <!-- 시드(AUM) 카드 (미인증 게스트는 오직 '전체 시드' 숫자만 노출) -->
     <div class="card">
       <div class="row-sb">
         <div style="font-size:12px;color:var(--sub);font-weight:700;">전체 시드 (AUM)</div>
-        <div class="owner-only" style="display:flex;gap:5px;">
-          <span class="pill" id="aumLevTag">AI 100x</span>
+        <!-- 레버리지 스위치를 시드 카드 우측 상단으로 통합 (PIN 승인 필수) -->
+        <div class="owner-only" style="display:flex;gap:4px;align-items:center;">
+          <button class="btn" data-lev="50" style="padding:4px 7px;font-size:11px;">50x</button>
+          <button class="btn" data-lev="75" style="padding:4px 7px;font-size:11px;">75x</button>
+          <button class="btn acc" data-lev="100" style="padding:4px 7px;font-size:11px;">100x</button>
           <span class="pill">헤지</span>
         </div>
       </div>
-      <div style="margin-top:5px;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px;">
+      <div style="margin-top:6px;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px;">
         <span style="font-size:26px;font-weight:900;letter-spacing:-0.6px;font-variant-numeric:tabular-nums;" id="totalSeedVal">--,--</span>
         <span style="font-size:13.5px;color:var(--sub);font-weight:700;">USDT</span>
         <span class="upnl-pill pos owner-only" id="liveUpnlPill" style="display:none;">미실현 +0.00</span>
       </div>
-      <div class="owner-only" style="margin-top:7px;font-size:11.5px;color:var(--sub);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;">
-        <span id="riskAllowanceTxt">1회 한도: 단타 --$ (0.9%) · 심층 --$ (1.4%)</span>
+
+      <!-- 4단계 상향 리스크 기어 스위치 (오너 전용 · PIN 승인 필수) -->
+      <div class="gear-grid owner-only" id="riskGearBar">
+        <button class="gear-btn" data-rmode="SAFE">🛡 안정+</button>
+        <button class="gear-btn active" data-rmode="BALANCE">⚖️ 밸런스+</button>
+        <button class="gear-btn" data-rmode="AGGRESSIVE">🔥 공격+</button>
+        <button class="gear-btn" data-rmode="AUTO">🤖 AI자동</button>
+      </div>
+
+      <div class="owner-only" style="margin-top:8px;font-size:11.5px;color:var(--sub);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;">
+        <span id="riskAllowanceTxt">1회 한도: 단타 --$ · 심층 --$</span>
         <span>확정손익 <b id="totalRealizedBadge">--</b></span>
       </div>
+      <div id="guardBrakeBanner" class="owner-only" style="display:none;margin-top:6px;font-size:11px;font-weight:800;color:#fde68a;"></div>
+
       <div class="sub-metrics owner-only">
         <div><div class="sm-lbl">확정원금</div><div class="sm-val" id="wbVal">--</div></div>
         <div><div class="sm-lbl">가용잔고</div><div class="sm-val" id="avVal">--</div></div>
@@ -313,27 +364,33 @@
       </div>
     </div>
 
-    <!-- 보유 포지션 (웹소켓 실시간 손익 연동 + 오너 원클릭 반익절·본절잠금·전량청산) -->
-    <div class="card" id="posSection" style="display:none;">
+    <!-- 보유 포지션 (미인증 기기 완전 은닉! 오너에게만 1R 게이지·청산안전·긴급제어 노출) -->
+    <div class="card owner-only" id="posSection" style="display:none;">
       <div class="row-sb"><span style="font-size:14.5px;font-weight:900;">보유 포지션</span><span class="pill" id="posCountBadge">0건</span></div>
       <div id="posListWrap"></div>
     </div>
 
-    <!-- 다중 대기주문 (미인증 기기 진입%·증거금·손익%·1R가격 완전 비노출) -->
+    <!-- 다중 대기주문 (미인증 기기에도 기본 주문 정보 노출 / %·증거금·노출합산·취소는 오너 전용) -->
     <div class="card">
       <div class="row-sb">
         <span style="font-size:14.5px;font-weight:900;">대기주문</span>
-        <div style="display:flex;align-items:center;gap:6px;">
+        <div style="display:flex;align-items:center;gap:5px;">
           <span class="pill" id="ordCountBadge">0건 대기 중</span>
           <button class="btn danger owner-only" id="btnCancelAll">전체취소</button>
+          <button class="btn" id="btnToggleOrdFold" style="padding:5px 8px;">접기 ▲</button>
         </div>
       </div>
-      <div class="ord-summary-bar" id="ordDirSummary" style="display:none;"></div>
+      <div class="tabs-line" id="ordFilterBar" style="margin-top:9px;display:none;">
+        <button class="chip active" data-oflt="ALL" id="ofltAll">전체</button>
+        <button class="chip" data-oflt="LONG" id="ofltLong">🟢 롱</button>
+        <button class="chip" data-oflt="SHORT" id="ofltShort">🔴 숏</button>
+      </div>
+      <div class="ord-exp-box owner-only" id="ordExposureBox" style="display:none;"></div>
       <div id="ordListWrap"></div>
     </div>
 
-    <!-- AI 타점 근거 요약 -->
-    <div class="card">
+    <!-- AI 타점 근거 요약 (미인증 기기 완전 은닉!) -->
+    <div class="card owner-only" id="ratCard">
       <div class="row-sb">
         <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
           <span style="font-size:14.5px;font-weight:900;">AI 타점 근거 요약</span>
@@ -363,7 +420,7 @@
       <div class="b-grid" id="boardGrid"></div>
     </div>
 
-    <!-- 실시간 반응형 Performance 카드 (최하단 배치 & 오너 전용 잠금) -->
+    <!-- 실시간 반응형 Performance 카드 (Baseline 0선 엔진 + 예상 월수익 & 복리 시뮬레이터) -->
     <div class="pf-card owner-only" id="perfCardHost">
       <div class="row-sb" style="margin-bottom:12px;">
         <div class="pf-hdr" style="margin-bottom:0;">Performance</div>
@@ -418,10 +475,23 @@
         <span id="pfHoverVal" style="font-size:11.5px;font-weight:800;color:var(--sub);">실시간 웹소켓 연동 중</span>
       </div>
 
-      <div id="perfChartBox" style="width:100%;height:185px;"></div>
+      <div id="perfChartBox" style="width:100%;height:195px;"></div>
       <div class="pf-ts-row">
         <span id="pfStartTs">--</span>
         <span id="pfEndTs">--</span>
+      </div>
+
+      <!-- 실시간 예상 월수익(30D Pace) & 3개월 복리 시뮬레이터 -->
+      <div class="pf-proj-box">
+        <div class="row-sb">
+          <span style="font-size:12px;font-weight:900;color:#7dd3fc;" id="pfProjTitle">📈 예상 월수익 시뮬레이션</span>
+          <span class="pill" id="pfProjModeTag" style="font-size:10px;">⚖️ 밸런스+</span>
+        </div>
+        <div style="font-size:16px;font-weight:900;color:#34d399;margin-top:6px;font-variant-numeric:tabular-nums;" id="pfProjMonthlyTxt">+20% ~ +26%</div>
+        <div style="font-size:11.5px;color:var(--sub);margin-top:4px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;">
+          <span id="pfProjNoteTxt">표준 변동성장 기대치 기준</span>
+          <span>3개월 복리 추정 <b style="color:#f8fafc;" id="pfProj3mTxt">-- USDT</b></span>
+        </div>
       </div>
 
       <div class="pf-last-bar" id="pfLastTradeBar">
@@ -449,7 +519,7 @@
     </div>
   </div>
 
-  <!-- [탭 3] 기록 (오너 전용: 실현손익 재집계 초기화 + 사이클 기록 비우기) -->
+  <!-- [탭 3] 기록 (오너 전용: 전략 성적표 + 실현손익 재집계 초기화 + 사이클 기록 비우기) -->
   <div class="tab-pane owner-only" id="pane-rec">
     <div class="card">
       <div class="row-sb" style="margin-bottom:11px;">
@@ -461,6 +531,14 @@
       </div>
 
       <div id="recPnlPane">
+        <!-- 전략 성적표 요약 박스 (Scorecard) -->
+        <div class="sc-grid">
+          <div><div class="sm-lbl">손익팩터 (Profit Factor)</div><div class="sm-val" id="scPfVal">--</div></div>
+          <div><div class="sm-lbl">평균 익절 / 평균 손절</div><div class="sm-val" id="scAvgWlVal">--</div></div>
+          <div><div class="sm-lbl">롱 승률 / 숏 승률</div><div class="sm-val" id="scDirWinVal">--</div></div>
+          <div><div class="sm-lbl">최고 효자 / 최대 손실</div><div class="sm-val" id="scBestWorstVal">--</div></div>
+        </div>
+
         <div class="row-sb" style="background:#111a2e;border:1px solid var(--line);border-radius:11px;padding:9px 11px;margin-bottom:10px;flex-wrap:wrap;">
           <span style="font-size:11.5px;color:var(--sub);font-weight:700;" id="recEpochStatusTxt">전체 누적 실현손익 집계 중</span>
           <div style="display:flex;gap:6px;">
@@ -547,14 +625,29 @@
     </div>
   </div>
 
-  <!-- [모달 3] 스텔스 5클릭 오너 PIN 인증 모달 -->
+  <!-- [모달 3] 스텔스 5클릭 오너 화면 잠금해제 모달 -->
   <div class="modal-bg" id="pinModal">
     <div class="modal-card" style="max-width:340px;padding:18px;">
-      <div style="font-size:15px;font-weight:900;margin-bottom:10px;">관리자 기기 인증</div>
-      <input type="password" id="pinInput" inputmode="numeric" placeholder="관리자 PIN 입력" style="width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:#090e1a;color:#fff;font-size:15px;font-weight:800;margin-bottom:10px;">
+      <div style="font-size:15px;font-weight:900;margin-bottom:6px;">관리자 화면 잠금 해제</div>
+      <div style="font-size:11.5px;color:var(--sub);margin-bottom:12px;">오너 전용 포지션·차트·성과 보드를 표시합니다 (모든 버튼 조작 시에는 별도 PIN 재승인 필수)</div>
+      <input type="password" id="pinInput" inputmode="numeric" autocomplete="off" placeholder="관리자 PIN 입력" style="width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:#090e1a;color:#fff;font-size:15px;font-weight:800;margin-bottom:10px;">
       <div class="row-sb">
         <button class="btn" id="pinCancelBtn" style="flex:1;">취소</button>
-        <button class="btn acc" id="pinOkBtn" style="flex:1;">인증 확인</button>
+        <button class="btn acc" id="pinOkBtn" style="flex:1;">화면 열기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- [모달 4] 전 조작 버튼 전용 개별 PIN 보안 승인 게이트 모달 -->
+  <div class="modal-bg" id="cmdPinModal">
+    <div class="modal-card" style="max-width:350px;padding:18px;">
+      <div style="font-size:15px;font-weight:900;color:#f8fafc;">🔐 원격 조작 보안 승인</div>
+      <div id="cmdPinSummary" style="margin:9px 0 11px;padding:8px 11px;border-radius:9px;background:#111b30;border:1px solid rgba(56,189,248,0.35);font-size:12.5px;font-weight:800;color:#7dd3fc;line-height:1.4;word-break:keep-all;">승인 대기 명령</div>
+      <input type="password" id="cmdPinInput" inputmode="numeric" autocomplete="off" placeholder="비밀번호(PIN) 입력" style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#080d19;color:#fff;font-size:16px;font-weight:900;letter-spacing:2px;text-align:center;margin-bottom:11px;">
+      <div style="font-size:10.5px;color:var(--sub);margin-bottom:11px;text-align:center;">5회 연속 오입력 시 해당 IP가 30분간 자동 차단됩니다.</div>
+      <div class="row-sb">
+        <button class="btn" id="cmdPinCancelBtn" style="flex:1;padding:9px;">취소</button>
+        <button class="btn acc" id="cmdPinOkBtn" style="flex:1;padding:9px;">승인 실행</button>
       </div>
     </div>
   </div>
@@ -563,16 +656,18 @@
 (() => {
   'use strict';
   const PIN_HASH = '7d186020da364fae037b8988d1d2ee5e157b61c0168cafa0519470c2bc4778c5';
-  let S = null, directApi = '', activeTab = 'dash', logFilter = 'ALL';
+  let S = null, directApi = '', activeTab = 'dash', logFilter = 'ALL', ordFilter = 'ALL', ordFolded = false;
   let perfPeriod = 'd7', perfMode = 'roi', boardGrp = 'ALL', pingDone = false;
-  let ordSig = '', ordSumSig = '', posSig = '', brdSig = '', ratSig = '', econSig = '', pnlSig = '', logSig = '', perfSig = '';
+  let ordSig = '', ordExpSig = '', posSig = '', brdSig = '', ratSig = '', econSig = '', pnlSig = '', scSig = '', logSig = '', perfSig = '';
   let perfChart = null, perfSeries = null, perfLastPointTime = 0, perfPeakEq = 0, perfBaseStartEq = 53000;
   let cmChart = null, cmSeries = null, cmSym = 'BTC', cmTf = '15m', showLines = true, showMarks = true, cmPriceLines = [], lastTradeTs = 0, cmLastCandle = null;
   let curLbArr = [], curLbIdx = 0;
+  let pendingCmd = null, cmdInFlight = false;
 
-  // 24시간 무중단 브라우저 직결 웹소켓 시세 상태 (PC 종료 시에도 실시간 작동!)
+  // 24시간 브라우저 직결 웹소켓 시세 상태
   const wsLive = {
     btcPrice: 0, prevBtcPrice: 0, btcChg24h: null,
+    high24h: 0, low24h: 0, turnover24h: 0, fundingPct: null, nextFundingMs: 0,
     upBtcKrw: 0, usdtKrw: 0, fxKrw: 1380,
     lastBtcTs: 0, lastUpTs: 0, rafPending: false, flashTmr: null
   };
@@ -580,18 +675,18 @@
 
   const $ = (id) => document.getElementById(id);
   const setTxt = (id, v) => { const el = $(id); const s = String(v ?? ''); if (el && el.textContent !== s) el.textContent = s; };
-  const fmt = (n, d=1) => Number(n || 0).toLocaleString('en-US', { minimumFractionDigits:d, maximumFractionDigits:d });
+  const cleanZero = (n, eps=0.005) => Math.abs(Number(n || 0)) < eps ? 0 : Number(n);
+  const fmt = (n, d=1) => cleanZero(n, Math.pow(10, -(d + 1))).toLocaleString('en-US', { minimumFractionDigits:d, maximumFractionDigits:d });
   const escHtml = (s) => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   const isOwner = () => document.documentElement.getAttribute('data-auth') === 'owner';
 
-  // 0) 부드러운 다크 토스트 알림 (기존 사파리 alert 전면 대체)
   function showToast(msg, isErr=false) {
     const el = $('kjToast');
     if (!el) return;
     el.textContent = msg;
     el.className = 'kj-toast show' + (isErr ? ' err' : '');
     clearTimeout(toastTmr);
-    toastTmr = setTimeout(() => { el.classList.remove('show'); }, 2500);
+    toastTmr = setTimeout(() => { el.classList.remove('show'); }, 2600);
   }
 
   function syncBodyModalLock() {
@@ -616,7 +711,14 @@
     return { date:`${mm}/${dd}`, full:`${mm}/${dd} ${hh}:${mi}`, isDayStart:(hh === '00' && mi === '00') || (hh === '09' && mi === '00') };
   }
 
-  // 미국 동부시간(ET) 기준 매크로 4종목 실시간 장 상태 배지 판별
+  function fmtFundingCountdown(nextMs) {
+    const remSec = Math.max(0, Math.floor((Number(nextMs || 0) - Date.now()) / 1000));
+    if (!nextMs || remSec <= 0) return '';
+    const hh = String(Math.floor(remSec / 3600)).padStart(2, '0');
+    const mm = String(Math.floor((remSec % 3600) / 60)).padStart(2, '0');
+    return ` (${hh}:${mm} 후)`;
+  }
+
   function getMacroSessionBadge(sym) {
     try {
       const parts = new Intl.DateTimeFormat('en-US', {
@@ -644,8 +746,10 @@
     } catch(e) { return ''; }
   }
 
-  // 1초 시계 & PC 엔진 생존 신호(Heartbeat) 상시 점검
   function updateTopHeartbeatBadge() {
+    const wsAlive = (bybitWs && bybitWs.readyState === 1) || (Date.now() - wsLive.lastBtcTs < 12000);
+    $('wsStreamDot').style.background = wsAlive ? '#10b981' : '#f59e0b';
+
     if (!S) return;
     const dotEl = $('liveDot');
     const ageSec = (Date.now() - Number(S.ts || 0)) / 1000.0;
@@ -664,6 +768,22 @@
     }
   }
 
+  function updateFundingAndRangeBar(bp) {
+    const hi = wsLive.high24h || Number((S && S.high24h) || 0);
+    const lo = wsLive.low24h || Number((S && S.low24h) || 0);
+    const fd = wsLive.fundingPct !== null ? wsLive.fundingPct : Number((S && S.fundingRatePct) || 0);
+    const nfMs = wsLive.nextFundingMs || Number((S && S.nextFundingTimeMs) || 0);
+
+    if (lo > 0 && hi > lo && bp > 0) {
+      setTxt('btcLow24Txt', `24h 저 ${fmt(lo, 0)}`);
+      setTxt('btcHigh24Txt', `24h 고 ${fmt(hi, 0)}`);
+      const pctPos = Math.max(3, Math.min(97, ((bp - lo) / (hi - lo)) * 100.0));
+      $('btcRangeFill').style.width = `${pctPos.toFixed(1)}%`;
+    }
+    const fSign = fd >= 0 ? '+' : '';
+    setTxt('btcFundingTxt', `펀딩 ${fSign}${Number(fd).toFixed(4)}%${fmtFundingCountdown(nfMs)}`);
+  }
+
   setInterval(() => {
     const k = new Date(Date.now() + 9 * 3600000);
     const fullNow = k.toISOString().replace('T', ' ').slice(0, 19);
@@ -671,10 +791,11 @@
     setTxt('nextRunLabel', '분석 ' + next01Or31());
     if (isOwner()) setTxt('pfEndTs', fullNow);
     updateTopHeartbeatBadge();
+    if (wsLive.btcPrice > 0) updateFundingAndRangeBar(wsLive.btcPrice);
   }, 1000);
 
   // ============================================================================
-  // [핵심] 24시간 무중단 브라우저 직결 웹소켓 엔진 (Bybit BTC + Upbit USDT/김프)
+  // [핵심] 24시간 무중단 브라우저 직결 웹소켓 시세 엔진
   // ============================================================================
   function scheduleLiveTickRender() {
     if (wsLive.rafPending) return;
@@ -689,7 +810,6 @@
     const bp = wsLive.btcPrice > 0 ? wsLive.btcPrice : Number((S && S.btcPrice) || 0);
     if (bp <= 0) return;
 
-    // 1) BTC 현재가 & 0.22초 미세 틱 컬러 피드백
     const heroEl = $('btcLivePrice');
     setTxt('btcLivePrice', fmt(bp, 1));
     if (wsLive.prevBtcPrice > 0 && bp !== wsLive.prevBtcPrice && heroEl) {
@@ -705,11 +825,9 @@
       $('btcChg24').className = 'pill ' + (bc >= 0 ? 'up' : 'dn');
       setTxt('btcChg24', `${bc >= 0 ? '+' : ''}${bc.toFixed(2)}%`);
     }
+    updateFundingAndRangeBar(bp);
 
-    // 2) 업비트 테더 & 김치프리미엄 실시간 재계산
-    if (wsLive.usdtKrw > 0) {
-      setTxt('usdtKrw', Math.round(wsLive.usdtKrw).toLocaleString('en-US'));
-    }
+    if (wsLive.usdtKrw > 0) setTxt('usdtKrw', Math.round(wsLive.usdtKrw).toLocaleString('en-US'));
     const fx = Number(wsLive.fxKrw || (S && S.fxKrw) || 1380);
     if (wsLive.upBtcKrw > 0 && fx > 0) {
       const kp = ((wsLive.upBtcKrw / (bp * fx)) - 1.0) * 100.0;
@@ -717,7 +835,6 @@
       setTxt('kimpBadge', `김프 ${kp >= 0 ? '+' : ''}${kp.toFixed(2)}%`);
     }
 
-    // 3) 팝업 캔들 모달(BTC 열림 상태) 실시간 봉 무빙 연동
     if ($('candleModal').classList.contains('open') && cmSym === 'BTC') {
       setTxt('cmPrice', fmt(bp, 1));
       if (wsLive.btcChg24h !== null) {
@@ -735,27 +852,37 @@
 
     if (!S) return;
     S.btcPrice = bp;
-
-    // 4) 오너 기기: 포지션 미실현손익 · 총시드(AUM) · 대기주문 진입% · Performance 실시간 연동!
     if (!isOwner()) return;
 
+    // 오너 전용: 보유포지션 손익 · 1R 도달 게이지 · 시드 · Performance 0.1초 연동
     const posArr = S.positions || [];
     let liveTotalUpnl = 0;
     if (posArr.length > 0) {
       posArr.forEach(p => {
         const ep = Number(p.entry || 0), sz = Number(p.size || 0), lv = Math.max(1, Number(p.leverage || 100));
         if (ep > 0 && sz > 0) {
-          const upnl = (p.side === 'LONG' ? (bp - ep) : (ep - bp)) * sz;
+          const diffP = p.side === 'LONG' ? (bp - ep) : (ep - bp);
+          const upnl = diffP * sz;
           const margin = (ep * sz) / lv;
           const roe = (upnl / Math.max(margin, 1)) * 100.0;
+          const rDist = Math.max(Number(p.rDist || ep * 0.008), 1);
+          const rMult = diffP / rDist;
+          const rProg = Math.max(0, Math.min(100, Math.round(Math.max(0, rMult) * 100)));
+
           p.pnlUsd = Number(upnl.toFixed(2));
           p.roePct = Number(roe.toFixed(2));
+          p.rMultiple = Number(rMult.toFixed(2));
+          p.rProgressPct = rProg;
           liveTotalUpnl += upnl;
+
           const el = $('posPnl-' + p.side);
           if (el) {
             el.className = 'owner-only ' + (upnl >= 0 ? 'up' : 'dn');
             setTxt('posPnl-' + p.side, `${upnl >= 0 ? '+' : ''}${fmt(upnl, 2)}$ (${roe >= 0 ? '+' : ''}${roe.toFixed(2)}%)`);
           }
+          setTxt('posRmult-' + p.side, `1R 진행률: ${rMult >= 0 ? '+' : ''}${rMult.toFixed(2)}R / 목표 +1.00R (${fmt(p.r1Price, 1)}$)`);
+          const rbEl = $('posRbar-' + p.side);
+          if (rbEl) rbEl.style.width = `${rProg}%`;
         }
       });
 
@@ -769,19 +896,18 @@
 
       if (!S.cycleRunning) {
         const p0 = posArr[0];
-        setTxt('statusHeadline', `${p0.side === 'LONG' ? '🟢 롱' : '🔴 숏'} 보유 ${p0.size.toFixed(3)} BTC (${p0.pnlUsd >= 0 ? '+' : ''}${Math.round(p0.pnlUsd).toLocaleString()}$)`);
+        setTxt('statusHeadline', `${p0.side === 'LONG' ? '🟢 롱' : '🔴 숏'} 보유 ${p0.size.toFixed(3)} BTC (${p0.pnlUsd >= 0 ? '+' : ''}${Math.round(p0.pnlUsd).toLocaleString()}$ · ${p0.rMultiple >= 0 ? '+' : ''}${p0.rMultiple.toFixed(2)}R)`);
       }
 
-      // Performance 카드 실시간 끝점 & ROI/PnL/MDD 동시 반응
       const pf = S.performance;
       const pObj = pf && pf.periods && pf.periods[perfPeriod];
       if (pObj && perfBaseStartEq > 0) {
-        const netPnl = Number(pObj.realizedUsd || 0) + liveTotalUpnl;
-        const roiPct = (netPnl / perfBaseStartEq) * 100.0;
+        const netPnl = cleanZero(Number(pObj.realizedUsd || 0) + liveTotalUpnl);
+        const roiPct = cleanZero((netPnl / perfBaseStartEq) * 100.0);
         const curEq = perfBaseStartEq + netPnl;
         if (curEq > perfPeakEq) perfPeakEq = curEq;
         const curDd = perfPeakEq > 0 ? ((perfPeakEq - curEq) / perfPeakEq) * 100.0 : 0;
-        const mddShow = Math.max(Number(pObj.mddPct || 0), curDd);
+        const mddShow = cleanZero(Math.max(Number(pObj.mddPct || 0), curDd));
 
         const roiEl = $('pfRoiVal'), pnlEl = $('pfPnlVal');
         roiEl.className = 'pf-m-val ' + (netPnl > 0 ? 'up' : (netPnl < 0 ? 'dn' : ''));
@@ -801,7 +927,6 @@
       }
     }
 
-    // 대기주문 현재가 대비 % & 체결 임박 게이지 0.1초 갱신
     const ords = S.openOrders || [];
     if (ords.length > 0) {
       let nearestOrd = null;
@@ -842,26 +967,23 @@
           const msg = JSON.parse(ev.data);
           if (msg.topic === 'tickers.BTCUSDT' && msg.data) {
             const d = msg.data;
-            if (d.lastPrice !== undefined) {
-              wsLive.btcPrice = Number(d.lastPrice);
-              wsLive.lastBtcTs = Date.now();
-            }
-            if (d.price24hPcnt !== undefined) {
-              wsLive.btcChg24h = Number(d.price24hPcnt) * 100.0;
-            }
+            if (d.lastPrice !== undefined) { wsLive.btcPrice = Number(d.lastPrice); wsLive.lastBtcTs = Date.now(); }
+            if (d.price24hPcnt !== undefined) wsLive.btcChg24h = Number(d.price24hPcnt) * 100.0;
+            if (d.highPrice24h !== undefined) wsLive.high24h = Number(d.highPrice24h);
+            if (d.lowPrice24h !== undefined) wsLive.low24h = Number(d.lowPrice24h);
+            if (d.turnover24h !== undefined) wsLive.turnover24h = Number(d.turnover24h);
+            if (d.fundingRate !== undefined) wsLive.fundingPct = Number(d.fundingRate) * 100.0;
+            if (d.nextFundingTime !== undefined) wsLive.nextFundingMs = Number(d.nextFundingTime);
             scheduleLiveTickRender();
           }
         } catch(e){}
       };
       bybitWs.onclose = () => {
-        $('wsStreamDot').style.background = '#f59e0b';
         clearInterval(bybitPingTmr);
         setTimeout(connectBybitPublicWs, 2500);
       };
       bybitWs.onerror = () => { try { bybitWs.close(); } catch(e){} };
-    } catch(e) {
-      setTimeout(connectBybitPublicWs, 4000);
-    }
+    } catch(e) { setTimeout(connectBybitPublicWs, 4000); }
   }
 
   function connectUpbitPublicWs() {
@@ -880,24 +1002,16 @@
           else if (ev.data && ev.data.text) txt = await ev.data.text();
           if (!txt) return;
           const d = JSON.parse(txt);
-          if (d.code === 'KRW-BTC' && d.trade_price) {
-            wsLive.upBtcKrw = Number(d.trade_price);
-            wsLive.lastUpTs = Date.now();
-          } else if (d.code === 'KRW-USDT' && d.trade_price) {
-            wsLive.usdtKrw = Number(d.trade_price);
-            wsLive.lastUpTs = Date.now();
-          }
+          if (d.code === 'KRW-BTC' && d.trade_price) { wsLive.upBtcKrw = Number(d.trade_price); wsLive.lastUpTs = Date.now(); }
+          else if (d.code === 'KRW-USDT' && d.trade_price) { wsLive.usdtKrw = Number(d.trade_price); wsLive.lastUpTs = Date.now(); }
           scheduleLiveTickRender();
         } catch(e){}
       };
       upbitWs.onclose = () => { setTimeout(connectUpbitPublicWs, 3500); };
       upbitWs.onerror = () => { try { upbitWs.close(); } catch(e){} };
-    } catch(e) {
-      setTimeout(connectUpbitPublicWs, 5000);
-    }
+    } catch(e) { setTimeout(connectUpbitPublicWs, 5000); }
   }
 
-  // 방화벽 환경 대비 REST 백업 폴링 (웹소켓 정상 작동 중에는 자동 생략)
   setInterval(async () => {
     if (Date.now() - wsLive.lastBtcTs > 6500) {
       try {
@@ -908,6 +1022,10 @@
           if (tk && tk.lastPrice) {
             wsLive.btcPrice = Number(tk.lastPrice);
             wsLive.btcChg24h = Number(tk.price24hPcnt || 0) * 100.0;
+            if (tk.highPrice24h) wsLive.high24h = Number(tk.highPrice24h);
+            if (tk.lowPrice24h) wsLive.low24h = Number(tk.lowPrice24h);
+            if (tk.fundingRate) wsLive.fundingPct = Number(tk.fundingRate) * 100.0;
+            if (tk.nextFundingTime) wsLive.nextFundingMs = Number(tk.nextFundingTime);
             wsLive.lastBtcTs = Date.now();
             scheduleLiveTickRender();
           }
@@ -933,7 +1051,6 @@
   connectBybitPublicWs();
   connectUpbitPublicWs();
 
-  // 사파리 화면 복귀 시 0.1초 즉시 상태 및 웹소켓 복구
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
       connectBybitPublicWs();
@@ -947,7 +1064,7 @@
     return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
-  // 1) 모달 바깥 배경 터치 닫기 & 배경 터치스크롤 간섭 차단
+  // 모달 공통 닫기
   document.querySelectorAll('.modal-bg').forEach(bg => {
     bg.addEventListener('click', (ev) => { if (ev.target === bg) closeModalById(bg.id); });
     bg.addEventListener('touchmove', (ev) => { if (ev.target === bg) ev.preventDefault(); }, { passive:false });
@@ -955,18 +1072,19 @@
   $('cmCloseBtn').onclick = () => closeModalById('candleModal');
   $('lbClose').onclick = () => closeModalById('lbModal');
   $('pinCancelBtn').onclick = () => closeModalById('pinModal');
+  $('cmdPinCancelBtn').onclick = () => { pendingCmd = null; closeModalById('cmdPinModal'); };
 
-  // 2) KingJae 로고 정확히 5회 연속 터치 -> 관리자 PIN 모달
+  // 스텔스 5클릭 오너 화면 잠금/해제 (해시만 저장하며 평문 PIN은 절대 저장하지 않음!)
   let taps = 0, tapTmr = null;
   $('brandLogo').addEventListener('click', () => {
     taps++; clearTimeout(tapTmr);
     if (taps >= 5) {
       taps = 0;
       if (isOwner()) {
-        if (confirm('관리자 인증을 해제(미인증 게스트 화면 전환)하시겠습니까?')) {
+        if (confirm('관리자 화면을 잠그고 미인증 게스트 화면으로 전환하시겠습니까?')) {
           localStorage.removeItem('kj_v40_auth_hash');
           document.documentElement.setAttribute('data-auth', 'guest');
-          ordSig = ''; posSig = '';
+          ordSig = ''; posSig = ''; ratSig = '';
           if (S) applyState(S);
           switchMainTab('dash');
           showToast('🔒 게스트 스텔스 모드로 전환되었습니다.');
@@ -981,22 +1099,23 @@
 
   $('pinOkBtn').onclick = async () => {
     const raw = $('pinInput').value.trim();
+    $('pinInput').value = '';
     const h = await sha256Hex(raw);
     if (h === PIN_HASH) {
       localStorage.setItem('kj_v40_auth_hash', h);
-      localStorage.setItem('kj_v40_raw_pin', raw);
       localStorage.setItem('kj_owner_mark', '1');
       document.documentElement.setAttribute('data-auth', 'owner');
       closeModalById('pinModal');
-      ordSig = ''; posSig = ''; perfSig = ''; brdSig = '';
+      ordSig = ''; posSig = ''; perfSig = ''; brdSig = ''; ratSig = '';
       setTimeout(() => { if (S) applyState(S); }, 40);
-      showToast('✅ 관리자 기기 인증 완료');
+      showToast('✅ 관리자 화면 잠금 해제 완료');
     } else {
       showToast('❌ PIN 번호가 일치하지 않습니다.', true);
     }
   };
+  $('pinInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('pinOkBtn').click(); });
 
-  // 3) 외부 방문자 스텔스 핑
+  // 외부 방문자 스텔스 핑
   async function checkVisitorPing(seed) {
     if (pingDone || !seed) return;
     pingDone = true;
@@ -1019,7 +1138,9 @@
     } catch(e){}
   }
 
-  // 4) 5G 원격 제어 명령 전송 (터널 주소 변경 시 자동 재획득 후 즉시 재시도!)
+  // ============================================================================
+  // [보안 핵심] 전 조작 버튼 개별 PIN 승인 게이트 (매 클릭마다 PIN 입력 필수!)
+  // ============================================================================
   async function refreshDirectUrlFromGh() {
     try {
       const r = await fetch('state.json?t=' + Date.now(), { cache:'no-store' });
@@ -1030,69 +1151,158 @@
     } catch(e){}
   }
 
-  async function sendCmd(action, payload={}) {
-    let pin = localStorage.getItem('kj_v40_raw_pin') || '';
-    if (!pin && isOwner()) {
-      pin = prompt('보안 확인을 위해 관리자 PIN을 한 번 입력해 주세요:') || '';
-      if (pin) localStorage.setItem('kj_v40_raw_pin', pin.trim());
+  function requestPinAndSendCmd(actionLabel, action, payload={}) {
+    if (!isOwner()) return;
+    pendingCmd = { actionLabel, action, payload };
+    setTxt('cmdPinSummary', actionLabel);
+    $('cmdPinInput').value = '';
+    $('cmdPinOkBtn').disabled = false;
+    setTxt('cmdPinOkBtn', '승인 실행');
+    openModalById('cmdPinModal');
+    setTimeout(() => $('cmdPinInput').focus(), 80);
+  }
+
+  async function executeApprovedCmd() {
+    if (!pendingCmd || cmdInFlight) return;
+    const pinVal = $('cmdPinInput').value.trim();
+    if (!pinVal) {
+      showToast('⚠️ 비밀번호(PIN)를 입력해 주세요.', true);
+      $('cmdPinInput').focus();
+      return;
     }
+
+    cmdInFlight = true;
+    $('cmdPinOkBtn').disabled = true;
+    setTxt('cmdPinOkBtn', '승인 중...');
+    $('cmdPinInput').value = '';
+
+    const { actionLabel, action, payload } = pendingCmd;
     const isLocal = (location.origin.includes('127.0.0.1') || location.origin.includes('localhost'));
     if (!isLocal && !directApi) await refreshDirectUrlFromGh();
 
     const tryPost = async (baseUrl) => {
       const r = await fetch(baseUrl + '/api/cmd', {
         method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({ pin: pin.trim(), action, ...payload })
+        body:JSON.stringify({ pin: pinVal, actionLabel, action, ...payload })
       });
-      return await r.json();
+      const j = await r.json();
+      return { status: r.status, body: j };
     };
 
     let base = isLocal ? location.origin : directApi;
     if (!base) {
+      cmdInFlight = false;
+      $('cmdPinOkBtn').disabled = false;
+      setTxt('cmdPinOkBtn', '승인 실행');
       showToast('⚠️ PC 엔진이 오프라인이거나 터널 연결 대기 중입니다.', true);
       return;
     }
 
     try {
-      const j = await tryPost(base);
-      showToast((j.ok ? '✅ ' : '⚠️ ') + (j.msg || '명령 반영 완료'), !j.ok);
-      perfSig = ''; pnlSig = ''; logSig = ''; ordSig = ''; posSig = '';
-      fetchStateTick();
+      let res = await tryPost(base);
+      if (res.status === 403 || !res.body.ok) {
+        showToast('❌ ' + (res.body.msg || '보안 승인 거부'), true);
+        if (String(res.body.msg || '').includes('잠겼습니다') || String(res.body.msg || '').includes('잠금')) {
+          pendingCmd = null;
+          closeModalById('cmdPinModal');
+        } else {
+          $('cmdPinInput').focus();
+        }
+      } else {
+        pendingCmd = null;
+        closeModalById('cmdPinModal');
+        showToast('✅ ' + (res.body.msg || '명령 반영 완료'));
+        perfSig = ''; pnlSig = ''; scSig = ''; logSig = ''; ordSig = ''; posSig = '';
+        fetchStateTick();
+      }
     } catch(e) {
       if (!isLocal) {
         await refreshDirectUrlFromGh();
         if (directApi && directApi !== base) {
           try {
-            const j2 = await tryPost(directApi);
-            showToast((j2.ok ? '✅ ' : '⚠️ ') + (j2.msg || '명령 반영 완료'), !j2.ok);
-            fetchStateTick();
-            return;
+            const res2 = await tryPost(directApi);
+            if (res2.body.ok) {
+              pendingCmd = null;
+              closeModalById('cmdPinModal');
+              showToast('✅ ' + (res2.body.msg || '명령 반영 완료'));
+              fetchStateTick();
+              cmdInFlight = false;
+              return;
+            } else {
+              showToast('❌ ' + (res2.body.msg || '보안 승인 거부'), true);
+              cmdInFlight = false;
+              $('cmdPinOkBtn').disabled = false;
+              setTxt('cmdPinOkBtn', '승인 실행');
+              return;
+            }
           } catch(e2){}
         }
       }
-      showToast('⚠️ PC 봇 응답 지연 — 봇 실행 상태를 확인해 주세요.', true);
+      showToast('⚠️ PC 봇 응답 지연 — 가동 상태를 확인해 주세요.', true);
     }
+
+    cmdInFlight = false;
+    $('cmdPinOkBtn').disabled = false;
+    setTxt('cmdPinOkBtn', '승인 실행');
   }
 
-  $('btnForceRun').onclick = () => sendCmd('force_run');
-  $('btnForceNews').onclick = () => sendCmd('force_news');
-  $('btnPauseToggle').onclick = () => sendCmd('toggle_pause');
-  $('btnCancelAll').onclick = () => { if (confirm('모든 미체결 대기주문을 취소하시겠습니까?')) sendCmd('cancel_all'); };
-  document.querySelectorAll('[data-lev]').forEach(b => { b.onclick = () => sendCmd('set_leverage', { leverage:Number(b.dataset.lev) }); });
+  $('cmdPinOkBtn').onclick = executeApprovedCmd;
+  $('cmdPinInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') executeApprovedCmd(); });
 
-  $('btnResetPnl').onclick = () => {
-    if (confirm('지금 이 순간부터 실현손익과 Performance 수익률을 0에서 새로 집계하시겠습니까?\n(기존 원장 데이터는 안전하게 보관되어 언제든 복원 가능합니다.)')) {
-      sendCmd('reset_pnl_epoch');
-    }
+  // 모든 조작 버튼을 개별 PIN 보안 승인 게이트로 연결!
+  $('btnForceRun').onclick = () => requestPinAndSendCmd('⚡ [타점 분석] 즉시 AI 마스터 보드 분석 실행', 'force_run');
+  $('btnForceNews').onclick = () => requestPinAndSendCmd('🌐 [경제 브리핑] 즉시 실시간 검색 실행', 'force_news');
+  $('btnPauseToggle').onclick = () => {
+    const nxt = (S && S.orderPaused) ? '정상 자동 발주 재개' : '신규 발주 일시정지 (브리핑 전용)';
+    requestPinAndSendCmd(`⏸ [발주 모드 전환] ${nxt}`, 'toggle_pause');
   };
-  $('btnRestorePnl').onclick = () => {
-    if (confirm('직전 실현손익 집계 기준점으로 복원하시겠습니까?')) sendCmd('restore_pnl_epoch');
+  $('btnShieldToggle').onclick = () => {
+    const curOn = !(S && S.newsShield === false);
+    requestPinAndSendCmd(`🛡️ [지표 방어막] ${curOn ? 'OFF 해제' : 'ON 활성화 (발표 15분 전 단타철수)'}`, 'toggle_news_shield');
   };
-  $('btnClearLogs').onclick = () => {
-    if (confirm('사이클 운용 기록을 모두 비우시겠습니까?')) sendCmd('clear_logs');
+  $('btnCancelAll').onclick = () => requestPinAndSendCmd('🚨 [대기주문 전체취소] 미체결 지정가 일괄 취소', 'cancel_all');
+
+  document.querySelectorAll('[data-lev]').forEach(b => {
+    b.onclick = () => {
+      const lv = Number(b.dataset.lev);
+      if (S && Number(S.leverage) === lv) {
+        showToast(`이미 교차 ${lv}x 레버리지가 적용 중입니다.`);
+        return;
+      }
+      requestPinAndSendCmd(`⚙️ [레버리지 변경] 교차 ${lv}x 적용`, 'set_leverage', { leverage: lv });
+    };
+  });
+
+  document.querySelectorAll('[data-rmode]').forEach(b => {
+    b.onclick = () => {
+      const rm = b.dataset.rmode;
+      if (S && String(S.riskMode || 'BALANCE') === rm) {
+        showToast(`이미 [${b.textContent}] 기어가 적용 중입니다.`);
+        return;
+      }
+      requestPinAndSendCmd(`🎯 [리스크 기어 전환] ${b.textContent} 적용`, 'set_risk_mode', { riskMode: rm });
+    };
+  });
+
+  $('btnResetPnl').onclick = () => requestPinAndSendCmd('🔄 [실현손익 초기화] 지금 이 시각부터 0.00$ 재집계', 'reset_pnl_epoch');
+  $('btnRestorePnl').onclick = () => requestPinAndSendCmd('↩ [실현손익 복원] 직전 집계 기준점으로 되돌리기', 'restore_pnl_epoch');
+  $('btnClearLogs').onclick = () => requestPinAndSendCmd('🗑 [사이클 기록] 운용 로그 전체 비우기', 'clear_logs');
+
+  // 대기주문 방향 필터 & 접기/펼치기
+  $('btnToggleOrdFold').onclick = () => {
+    ordFolded = !ordFolded;
+    $('ordListWrap').style.display = ordFolded ? 'none' : 'block';
+    setTxt('btnToggleOrdFold', ordFolded ? '펼치기 ▼' : '접기 ▲');
+  };
+  $('ordFilterBar').onclick = (ev) => {
+    const b = ev.target.closest('.chip'); if (!b) return;
+    ordFilter = b.dataset.oflt || 'ALL';
+    document.querySelectorAll('#ordFilterBar .chip').forEach(x => x.classList.toggle('active', x === b));
+    ordSig = '';
+    if (S) renderOpenOrdersSection(S);
   };
 
-  // 5) 하단 탭 전환 (클릭 시 즉시 최상단 이동)
+  // 하단 탭 전환 (클릭 시 무조건 최상단 이동)
   function markRecAsSeen() {
     if (!S) return;
     const latestLogId = ((S.logs || [])[0] || {}).id || 0;
@@ -1121,10 +1331,7 @@
     if (targetTab === 'rec') markRecAsSeen();
     if (targetTab === 'dash' && isOwner()) { perfSig = ''; setTimeout(renderPerfCard, 35); }
   }
-
-  document.querySelectorAll('.bnav-btn').forEach(btn => {
-    btn.onclick = () => switchMainTab(btn.dataset.tab);
-  });
+  document.querySelectorAll('.bnav-btn').forEach(btn => { btn.onclick = () => switchMainTab(btn.dataset.tab); });
 
   $('btnToggleRat').onclick = () => {
     const rb = $('ratBody');
@@ -1148,12 +1355,13 @@
     if (S) renderLogsList(S.logs || []);
   };
 
-  // 6) 경제소식 타임라인 & 키워드 카드 렌더러
+  // 텍스트 내 가격/퍼센트 가독성 하이라이트
   function fmtInlineRich(str) {
     let s = escHtml(str || '');
     s = s.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
     s = s.replace(/(\+\d+(?:\.\d+)?%)/g, '<span class="up" style="font-weight:800;">$1</span>');
     s = s.replace(/(-\d+(?:\.\d+)?%)/g, '<span class="dn" style="font-weight:800;">$1</span>');
+    s = s.replace(/(\b\d{2,3}(?:,\d{3})?(?:\.\d+)?달러)/g, '<span class="price-hl">$1</span>');
     return s;
   }
 
@@ -1197,7 +1405,9 @@
     }).join('');
   }
 
-  // 7) 실시간 반응형 Performance 카드
+  // ============================================================================
+  // [교정 완결] Performance 카드 (Baseline 0선 차트 · -0.00% 방지 · 월수익 시뮬레이터)
+  // ============================================================================
   function renderPerfCard() {
     if (!isOwner() || !S || !S.performance || !window.LightweightCharts) return;
     const pf = S.performance;
@@ -1216,20 +1426,40 @@
     perfBaseStartEq = Math.max(1000, eqNow - Number(pObj.pnlUsd || 0));
     perfPeakEq = Math.max(perfBaseStartEq, eqNow);
 
-    const isPos = Number(pObj.pnlUsd || 0) >= 0;
+    const netVal = cleanZero(pObj.pnlUsd);
+    const roiVal = cleanZero(pObj.pnlPct);
     const roiEl = $('pfRoiVal'), pnlEl = $('pfPnlVal');
-    roiEl.className = 'pf-m-val ' + (pObj.pnlUsd > 0 ? 'up' : (pObj.pnlUsd < 0 ? 'dn' : ''));
-    pnlEl.className = 'pf-m-val ' + (pObj.pnlUsd > 0 ? 'up' : (pObj.pnlUsd < 0 ? 'dn' : ''));
+    roiEl.className = 'pf-m-val ' + (netVal > 0 ? 'up' : (netVal < 0 ? 'dn' : ''));
+    pnlEl.className = 'pf-m-val ' + (netVal > 0 ? 'up' : (netVal < 0 ? 'dn' : ''));
 
-    setTxt('pfRoiVal', `${Number(pObj.pnlPct || 0).toFixed(2)}%`);
-    setTxt('pfPnlVal', `${pObj.pnlUsd >= 0 ? '+' : ''}${fmt(pObj.pnlUsd, 2)}`);
+    setTxt('pfRoiVal', `${roiVal.toFixed(2)}%`);
+    setTxt('pfPnlVal', `${netVal >= 0 ? '+' : ''}${fmt(netVal, 2)}`);
     setTxt('pfSharpeVal', pObj.sharpe || '--');
-    setTxt('pfMddVal', `${Number(pObj.mddPct || 0).toFixed(2)}%`);
-    setTxt('pfWinRateVal', `${Number(pObj.winRate || 0).toFixed(2)}%`);
+    setTxt('pfMddVal', `${cleanZero(pObj.mddPct).toFixed(2)}%`);
+    setTxt('pfWinRateVal', `${cleanZero(pObj.winRate).toFixed(2)}%`);
     setTxt('pfWinsVal', String(pObj.wins || 0));
     setTxt('pfTotalPosVal', String(pObj.count || 0));
     setTxt('pfStartTs', pObj.startTimeStr || '--');
     setTxt('pfEndTs', pObj.endTimeStr || '--');
+
+    // 예상 월수익(30D Pace) & 3개월 복리 시뮬레이터 렌더링
+    const mp = pf.monthlyProjection || {};
+    setTxt('pfProjModeTag', mp.modeLabel || '⚖️ 밸런스+');
+    if (mp.livePaceAvailable) {
+      const pPct = Number(mp.paceMonthlyPct || 0);
+      const pUsd = Number(mp.paceMonthlyUsd || 0);
+      $('pfProjMonthlyTxt').style.color = pPct >= 0 ? '#34d399' : '#fb7185';
+      setTxt('pfProjTitle', '📈 실전 페이스 기반 예상 월수익 (30D)');
+      setTxt('pfProjMonthlyTxt', `${pPct >= 0 ? '+' : ''}${pPct.toFixed(1)}% (${pUsd >= 0 ? '+' : ''}${pUsd.toLocaleString()}$)`);
+      setTxt('pfProjNoteTxt', '실제 체결 수익 속도 환산치');
+      setTxt('pfProj3mTxt', `${Number(mp.pace3mEquity || eqNow).toLocaleString()} USDT`);
+    } else {
+      $('pfProjMonthlyTxt').style.color = '#34d399';
+      setTxt('pfProjTitle', '📈 기어별 표준 예상 월수익 시뮬레이션');
+      setTxt('pfProjMonthlyTxt', `${mp.modelRangePct || '+20%~+26%'} (${mp.modelUsdRange || ''})`);
+      setTxt('pfProjNoteTxt', '체결 3건 누적 시 실전 페이스로 자동 전환');
+      setTxt('pfProj3mTxt', `${Number(mp.model3mEquity || eqNow).toLocaleString()} USDT`);
+    }
 
     if (pf.lastTrade && pf.lastTrade.timeStr) {
       setTxt('pfLastTradeTxt', `${pf.lastTrade.timeStr}  ›`);
@@ -1244,45 +1474,50 @@
     const box = $('perfChartBox');
     if (!box || box.clientWidth < 40) return;
 
-    const lineClr = isPos ? '#10b981' : '#f43f5e';
-    const topClr = isPos ? 'rgba(16, 185, 129, 0.28)' : 'rgba(244, 63, 94, 0.28)';
-    const botClr = isPos ? 'rgba(16, 185, 129, 0.0)' : 'rgba(244, 63, 94, 0.0)';
-
     const priceFmt = perfMode === 'roi'
-      ? { type:'custom', minMove:0.01, formatter:(v) => `${Number(v).toFixed(2)}%` }
-      : { type:'custom', minMove:0.1, formatter:(v) => `${Number(v) >= 0 ? '+' : ''}${Number(v).toFixed(1)}$` };
+      ? { type:'custom', minMove:0.01, formatter:(v) => `${cleanZero(v, 0.005).toFixed(2)}%` }
+      : { type:'custom', minMove:0.1, formatter:(v) => { const z = cleanZero(v, 0.05); return `${z > 0 ? '+' : ''}${z.toFixed(1)}$`; } };
 
     if (!perfChart) {
       perfChart = LightweightCharts.createChart(box, {
-        width: box.clientWidth, height: 185,
+        width: box.clientWidth, height: 195,
         layout: { background:{ color:'transparent' }, textColor:'#64748b', fontSize:11, attributionLogo:false },
         grid: { vertLines:{ visible:false }, horzLines:{ color:'rgba(148,163,184,0.08)', style:2 } },
-        leftPriceScale: { visible:true, borderVisible:false, scaleMargins:{ top:0.12, bottom:0.08 } },
+        leftPriceScale: { visible:true, borderVisible:false, scaleMargins:{ top:0.18, bottom:0.18 } },
         rightPriceScale: { visible:false },
         timeScale: { visible:false, borderVisible:false },
         crosshair: { vertLine:{ color:'rgba(148,163,184,0.35)', labelVisible:false }, horzLine:{ color:'rgba(148,163,184,0.35)' } }
       });
-      perfSeries = perfChart.addAreaSeries({
-        lineColor: lineClr, topColor: topClr, bottomColor: botClr, lineWidth: 2,
-        priceLineVisible: false, lastValueVisible: false, priceFormat: priceFmt
+      perfSeries = perfChart.addBaselineSeries({
+        baseValue: { type: 'price', price: 0 },
+        topLineColor: '#10b981',
+        topFillColor1: 'rgba(16, 185, 129, 0.30)',
+        topFillColor2: 'rgba(16, 185, 129, 0.02)',
+        bottomLineColor: '#f43f5e',
+        bottomFillColor1: 'rgba(244, 63, 94, 0.02)',
+        bottomFillColor2: 'rgba(244, 63, 94, 0.30)',
+        lineWidth: 2,
+        priceLineVisible: false,
+        lastValueVisible: false,
+        priceFormat: priceFmt
       });
       perfChart.subscribeCrosshairMove((param) => {
         if (!param || !param.time || !param.seriesData || !param.seriesData.get(perfSeries)) {
           setTxt('pfHoverVal', '실시간 웹소켓 연동 중');
           return;
         }
-        const val = Number(param.seriesData.get(perfSeries).value || 0);
+        const val = cleanZero(param.seriesData.get(perfSeries).value);
         const dt = fmtKstTs(param.time).full;
-        setTxt('pfHoverVal', `${dt} · ${perfMode === 'roi' ? val.toFixed(2) + '%' : (val >= 0 ? '+' : '') + fmt(val, 2) + '$'}`);
+        setTxt('pfHoverVal', `${dt} · ${perfMode === 'roi' ? val.toFixed(2) + '%' : (val > 0 ? '+' : '') + fmt(val, 2) + '$'}`);
       });
     } else {
       perfChart.applyOptions({ width: box.clientWidth });
-      perfSeries.applyOptions({ lineColor: lineClr, topColor: topClr, bottomColor: botClr, priceFormat: priceFmt });
+      perfSeries.applyOptions({ priceFormat: priceFmt });
     }
 
     const pts = (pObj.points || []).map(p => ({
       time: Number(p.t) + 9 * 3600,
-      value: Number(perfMode === 'roi' ? p.pct : p.pnl)
+      value: cleanZero(perfMode === 'roi' ? p.pct : p.pnl)
     }));
 
     const newSig = `${perfPeriod}:${perfMode}:${box.clientWidth}:${pts.length}:${pts.length ? pts[pts.length - 1].value : 0}`;
@@ -1316,7 +1551,7 @@
     }
   });
 
-  // 8) 5종목 × 6타임프레임 실시간 캔들 모달 (PC 오프라인 시에도 BTC 최신 캔들 직접 수신!)
+  // 5종목 × 6타임프레임 실시간 캔들 차트 모달
   const SYM_TITLES = { BTC:'BYBIT BTCUSDT Perp', NQ100:'NQ100 나스닥100 선물', NVDA:'NVDA 엔비디아', SOXL:'SOXL 반도체 3X', GOLD:'GOLD 국제 금 선물' };
   const BYBIT_IV_MAP = { '1m':'1', '5m':'5', '15m':'15', '1h':'60', '4h':'240', '1D':'D' };
 
@@ -1410,14 +1645,17 @@
 
     if (sym === 'BTC' && S) {
       if (showLines) {
-        (S.positions || []).forEach(p => {
-          cmPriceLines.push(cmSeries.createPriceLine({ price:p.entry, color:'#38bdf8', lineWidth:2, lineStyle:0, axisLabelVisible:true, title:`${p.side==='LONG'?'롱':'숏'} 진입` }));
-          if (isOwner() && p.r1Price > 0 && p.stage === 0) {
-            cmPriceLines.push(cmSeries.createPriceLine({ price:p.r1Price, color:'#f59e0b', lineWidth:1, lineStyle:3, axisLabelVisible:true, title:'1R 반익절' }));
-          }
-          if (p.sl > 0) cmPriceLines.push(cmSeries.createPriceLine({ price:p.sl, color:'#f43f5e', lineWidth:1, lineStyle:2, axisLabelVisible:true, title:'보유 손절' }));
-          if (p.tp > 0) cmPriceLines.push(cmSeries.createPriceLine({ price:p.tp, color:'#10b981', lineWidth:1, lineStyle:2, axisLabelVisible:true, title:'보유 익절' }));
-        });
+        // 미인증 게스트에게는 보유 포지션 수평선도 완전히 숨김!
+        if (isOwner()) {
+          (S.positions || []).forEach(p => {
+            cmPriceLines.push(cmSeries.createPriceLine({ price:p.entry, color:'#38bdf8', lineWidth:2, lineStyle:0, axisLabelVisible:true, title:`${p.side==='LONG'?'롱':'숏'} 진입` }));
+            if (p.r1Price > 0 && p.stage === 0) {
+              cmPriceLines.push(cmSeries.createPriceLine({ price:p.r1Price, color:'#f59e0b', lineWidth:1, lineStyle:3, axisLabelVisible:true, title:'1R(35%익절)' }));
+            }
+            if (p.sl > 0) cmPriceLines.push(cmSeries.createPriceLine({ price:p.sl, color:'#f43f5e', lineWidth:1, lineStyle:2, axisLabelVisible:true, title:'보유 손절' }));
+            if (p.tp > 0) cmPriceLines.push(cmSeries.createPriceLine({ price:p.tp, color:'#10b981', lineWidth:1, lineStyle:2, axisLabelVisible:true, title:'보유 익절' }));
+          });
+        }
         (S.openOrders || []).forEach(o => {
           const clr = o.side === 'LONG' ? '#10b981' : '#f43f5e';
           const isSnp = o.track === 'SNIPER';
@@ -1497,7 +1735,7 @@
     if (cmChart && lastTradeTs > 0) cmChart.timeScale().setVisibleRange({ from: lastTradeTs - 3600 * 5, to: lastTradeTs + 3600 * 2 });
   };
 
-  // 9) 마스터 보드 뷰어 (좌우 스와이프 넘김 지원)
+  // 마스터 보드 뷰어 (좌우 스와이프)
   function openLb(idx) {
     if (!curLbArr.length) return;
     curLbIdx = (idx + curLbArr.length) % curLbArr.length;
@@ -1534,7 +1772,7 @@
   };
 
   function renderBoards() {
-    if (!S || !Array.isArray(S.boards)) return;
+    if (!isOwner() || !S || !Array.isArray(S.boards)) return;
     const flt = boardGrp === 'ALL' ? S.boards : S.boards.filter(x => x.group === boardGrp);
     curLbArr = flt;
     const sig = boardGrp + ':' + flt.map(x => x.full).join('|');
@@ -1569,9 +1807,91 @@
       </div>`).join('') : '<div style="color:var(--sub);font-size:12.5px;padding:12px 0;">표시할 운용 기록이 없습니다.</div>';
   }
 
-  // 10) 무깜빡임 상태 반영기 (웹소켓 최신 시세와 충돌 없이 병합!)
+  // 다중 대기주문 렌더링 (필터 · 방향별 전량체결 노출 합산 · 게스트 보안 분리)
+  function renderOpenOrdersSection(d) {
+    const allOrds = d.openOrders || [];
+    const sumInfo = d.orderSummary || {};
+    setTxt('ordCountBadge', `${allOrds.length}건 대기 중`);
+
+    if (allOrds.length > 0) {
+      $('ordFilterBar').style.display = 'flex';
+      setTxt('ofltAll', `전체 (${allOrds.length})`);
+      setTxt('ofltLong', `🟢 롱 (${sumInfo.longCount || 0}) · ${sumInfo.longNearest ? fmt(sumInfo.longNearest, 0) : '-'}`);
+      setTxt('ofltShort', `🔴 숏 (${sumInfo.shortCount || 0}) · ${sumInfo.shortNearest ? fmt(sumInfo.shortNearest, 0) : '-'}`);
+    } else {
+      $('ordFilterBar').style.display = 'none';
+    }
+
+    // 오너 전용: 방향별 전량 체결 시 가중평단 & 합산 기대수익/최대손실 브리핑 박스
+    if (isOwner() && allOrds.length > 0) {
+      $('ordExposureBox').style.display = 'flex';
+      const le = sumInfo.longExposure || {}, se = sumInfo.shortExposure || {};
+      const expLines = [];
+      if (le.count > 0) {
+        expLines.push(`<div>🟢 <b>롱 ${le.count}건 전량 체결 시:</b> 평단 <b>${fmt(le.wAvg,1)}$</b> (${le.totQty} BTC) · <span class="up">익절 +${le.fullTpPct}% (+${fmt(le.fullTpUsd,0)}$)</span> / <span class="dn">손실 ${le.maxLossPct}% (${fmt(le.maxLossUsd,0)}$)</span></div>`);
+      }
+      if (se.count > 0) {
+        expLines.push(`<div>🔴 <b>숏 ${se.count}건 전량 체결 시:</b> 평단 <b>${fmt(se.wAvg,1)}$</b> (${se.totQty} BTC) · <span class="up">익절 +${se.fullTpPct}% (+${fmt(se.fullTpUsd,0)}$)</span> / <span class="dn">손실 ${se.maxLossPct}% (${fmt(se.maxLossUsd,0)}$)</span></div>`);
+      }
+      const nExpSig = expLines.join('|');
+      if (ordExpSig !== nExpSig) {
+        ordExpSig = nExpSig;
+        $('ordExposureBox').innerHTML = expLines.join('');
+      }
+    } else {
+      $('ordExposureBox').style.display = 'none';
+    }
+
+    const ords = ordFilter === 'ALL' ? allOrds : allOrds.filter(o => o.side === ordFilter);
+    const nOrdSig = isOwner() + ':' + ordFilter + ':' + JSON.stringify(ords.map(o => [o.orderId, o.price, o.qty, o.sl, o.tp, o.badge]));
+    if (ordSig !== nOrdSig) {
+      ordSig = nOrdSig;
+      $('ordListWrap').innerHTML = ords.length ? ords.map(o => {
+        const ladNote = (o.track === 'LADDER' && o.ladderFullTpUsd > 0)
+          ? `<div style="font-size:11px;color:#7dd3fc;margin-top:3px;">🛡 심층 3분할 전량 체결 익절 시: <b>+${o.ladderFullTpPct}% (+${fmt(o.ladderFullTpUsd,0)}$)</b></div>`
+          : '';
+        return `
+        <div class="ord-card">
+          <div class="row-sb">
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span class="pill ${o.side==='LONG'?'up':'dn'}">${o.sideKo}</span>
+              <span style="font-size:12px;color:var(--sub);font-weight:800;">지정가 · ${o.leverage}x</span>
+              <span class="pill" style="color:#c4b5fd;border-color:rgba(167,139,250,0.35);">${escHtml(o.badge)}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:7px;">
+              <span class="ord-price-btn" data-oprice="${o.price}" title="차트에서 보기">${fmt(o.price,1)}</span>
+              <button class="btn danger owner-only" data-coid="${o.orderId}" data-cdesc="${escHtml(o.badge)} ${o.sideKo} ${fmt(o.price,1)}$">취소</button>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:9px;font-size:12px;">
+            <div><div class="sm-lbl">수량</div><b>${o.qty}</b></div>
+            <div><div class="sm-lbl">익절</div><b class="up">${fmt(o.tp,1)}</b></div>
+            <div><div class="sm-lbl">손절</div><b class="dn">${fmt(o.sl,1)}</b></div>
+            <div><div class="sm-lbl">손익비</div><b>1 : ${o.rr}</b></div>
+          </div>
+          <div class="owner-only">
+            <div class="prox-track"><div class="prox-fill" id="oprox-${o.orderId}" style="width:${o.proximityPct || 20}%;background:${o.side==='LONG'?'#10b981':'#f43f5e'};"></div></div>
+            <div style="font-size:11.5px;color:var(--sub);margin-top:7px;" id="odist-${o.orderId}">현재가 대비 ${o.distPct>=0?'+':''}${o.distPct}% (${o.distUsd>=0?'+':''}${fmt(o.distUsd,0)}$) · 증거금 ${o.marginUsd}$</div>
+            <div style="font-size:11.5px;font-weight:800;margin-top:4px;">
+              <span class="up">단독 익절 +${o.tpSeedPct}% (+${fmt(o.tpUsd,0)}$)</span> · <span class="dn">손실 ${o.slSeedPct}% (${fmt(o.slUsd,0)}$)</span>
+            </div>
+            ${ladNote}
+            <div style="font-size:11.5px;color:#cbd5e1;margin-top:4px;">1R(35%익절·65%본절런너): <b>${fmt(o.r1Price,1)}</b></div>
+          </div>
+        </div>`;
+      }).join('') : '<div style="color:var(--sub);font-size:12.5px;margin-top:10px;">해당 조건에 대기 중인 지정가 주문이 없습니다.</div>';
+
+      $('ordListWrap').querySelectorAll('[data-coid]').forEach(b => {
+        b.onclick = () => requestPinAndSendCmd(`🗑 [개별 주문 취소] ${b.dataset.cdesc}`, 'cancel_order', { orderId: b.dataset.coid });
+      });
+      $('ordListWrap').querySelectorAll('[data-oprice]').forEach(el => {
+        el.onclick = () => openCandleModal('BTC', '15m');
+      });
+    }
+  }
+
+  // 무깜빡임 상태 반영기
   function applyState(d) {
-    // 웹소켓 시세가 활성화되어 있으면 구형 state.json 가격이 덮어쓰지 않도록 최신값 보존
     const hasFreshBtc = wsLive.btcPrice > 0 && (Date.now() - wsLive.lastBtcTs) < 15000;
     const hasFreshUp = wsLive.upBtcKrw > 0 && (Date.now() - wsLive.lastUpTs) < 15000;
     if (d.fxKrw && d.fxKrw > 900) wsLive.fxKrw = Number(d.fxKrw);
@@ -1592,14 +1912,24 @@
 
     updateTopHeartbeatBadge();
 
+    // 상단 스위치 상태 동기화
     const pBtn = $('btnPauseToggle');
     if (pBtn) {
       pBtn.className = d.orderPaused ? 'btn warn' : 'btn';
       setTxt('btnPauseToggle', d.orderPaused ? '▶ 재개' : '⏸ 정지');
     }
+    const shOn = d.newsShield !== false;
+    const shBtn = $('btnShieldToggle');
+    if (shBtn) {
+      shBtn.className = shOn ? 'btn acc' : 'btn';
+      setTxt('btnShieldToggle', shOn ? '🛡️ 방어 ON' : '🛡️ 방어 OFF');
+    }
+
     const curLev = Number(d.leverage || 100);
-    setTxt('aumLevTag', `AI ${curLev}x`);
     document.querySelectorAll('[data-lev]').forEach(b => b.classList.toggle('acc', Number(b.dataset.lev) === curLev));
+
+    const curRmode = String(d.riskMode || 'BALANCE').toUpperCase();
+    document.querySelectorAll('[data-rmode]').forEach(b => b.classList.toggle('active', b.dataset.rmode === curRmode));
 
     setTxt('btcLivePrice', fmt(d.btcPrice, 1));
     const bc = Number(d.btcChg24h || 0);
@@ -1609,6 +1939,7 @@
     const kp = Number(d.kimpPct || 0);
     $('kimpBadge').className = 'pill ' + (kp >= 0 ? 'up' : 'dn');
     setTxt('kimpBadge', `김프 ${kp >= 0 ? '+' : ''}${kp.toFixed(2)}%`);
+    updateFundingAndRangeBar(d.btcPrice);
 
     const sumInfo = d.orderSummary || {};
     const hlText = d.cycleRunning
@@ -1616,20 +1947,38 @@
       : (isOwner() ? (sumInfo.ownerHeadline || d.statusHeadline) : (sumInfo.guestHeadline || '양방향 지정가 감시 중'));
     setTxt('statusHeadline', hlText);
 
-    // 매크로 4종목 + 장 상태 배지 표시
+    // News Shield 배너 표시 (가동 중이거나 180분 이내 중요 지표 예정 시)
+    const ns = sumInfo.newsShield || {};
+    const nsEl = $('newsShieldBanner');
+    if (isOwner() && ns.active && ns.event) {
+      nsEl.style.display = 'block';
+      nsEl.style.color = '#fb7185';
+      setTxt('newsShieldBanner', `🛡️ [지표 방어막 작동 중] ${ns.event.timeStr} ${ns.event.title} (${ns.phase})`);
+    } else if (isOwner() && ns.enabled && ns.nextEvent && Number(ns.nextEvent.diffMin) <= 180 && Number(ns.nextEvent.diffMin) > 0) {
+      nsEl.style.display = 'block';
+      nsEl.style.color = '#fcd34d';
+      setTxt('newsShieldBanner', `🕒 예정 지표: ${ns.nextEvent.timeStr} ${ns.nextEvent.title} (발표 15분 전 단타 자동 철수 대기)`);
+    } else {
+      nsEl.style.display = 'none';
+    }
+
+    // 4대 글로벌 매크로 2단 카드 업데이트 (잘림 0%)
     const mq = d.macroQuotes || {};
     ['NQ100', 'NVDA', 'SOXL', 'GOLD'].forEach(sym => {
       const q = mq[sym] || {};
       const dec = Number(q.price || 0) >= 1000 ? 1 : 2;
       setTxt('p-' + sym, q.price ? fmt(q.price, dec) : '--');
+      const sEl = $('s-' + sym);
+      if (sEl) sEl.innerHTML = getMacroSessionBadge(sym);
       const ce = $('c-' + sym);
       if (ce && q.chgPct !== undefined) {
         const c = Number(q.chgPct || 0);
         ce.className = 'm-chg ' + (c >= 0 ? 'up' : 'dn');
-        ce.innerHTML = `${c >= 0 ? '+' : ''}${c.toFixed(2)}%${getMacroSessionBadge(sym)}`;
+        setTxt('c-' + sym, `${c >= 0 ? '+' : ''}${c.toFixed(2)}%`);
       }
     });
 
+    // 시드(AUM) & 리스크 기어 한도 업데이트
     const w = d.wallet || {};
     const eqVal = Number(w.totalEquity || d.publicTotalSeed || 0);
     setTxt('totalSeedVal', fmt(eqVal, 2));
@@ -1644,21 +1993,51 @@
       } else {
         upEl.style.display = 'none';
       }
-      setTxt('riskAllowanceTxt', `1회 한도: 단타 ${Math.round(eqVal * 0.009).toLocaleString()}$ (0.9%) · 심층 ${Math.round(eqVal * 0.014).toLocaleString()}$ (1.4%)`);
+
+      const rg = d.riskGear || {};
+      const snpPct = Number(rg.sniperPct || 1.8);
+      const ladPct = Number(rg.ladderPct || 3.0);
+      const snpUsd = Math.round(eqVal * (snpPct / 100.0));
+      const ladUsd = Math.round(eqVal * (ladPct / 100.0));
+      setTxt('riskAllowanceTxt', `1회 한도: 단타 ${snpUsd.toLocaleString()}$ (${snpPct}%) · 심층 ${ladUsd.toLocaleString()}$ (${ladPct}%)`);
+
+      const gbEl = $('guardBrakeBanner');
+      if (rg.dailyBrakeApplied) {
+        gbEl.style.display = 'block';
+        setTxt('guardBrakeBanner', '🛑 [일일 손실 브레이크(-6%) 작동] 당일 보호를 위해 신규 진입 물량 50% 자동 축소 중');
+      } else if (rg.profitLockApplied) {
+        gbEl.style.display = 'block';
+        setTxt('guardBrakeBanner', '🔒 [Profit Lock 작동] 고점 수익 보존을 위해 리스크 기어 1단계 자동 감속 중');
+      } else {
+        gbEl.style.display = 'none';
+      }
+
       setTxt('wbVal', fmt(w.walletBalance || 0, 2) + '$');
       setTxt('avVal', fmt(w.availableBalance || 0, 2) + '$');
       setTxt('omVal', fmt(w.orderMargin || 0, 2) + '$');
     }
 
+    // Performance · 성적표 · 실현손익 · 미확인 배지 (오너 전용)
     if (d.performance && isOwner()) {
       const pf = d.performance;
-      const tr = Number(pf.totalRealizedUsd || 0);
+      const tr = cleanZero(pf.totalRealizedUsd);
       const rb = $('totalRealizedBadge');
       rb.className = tr >= 0 ? 'up' : 'dn';
       setTxt('totalRealizedBadge', `${tr >= 0 ? '+' : ''}${fmt(tr, 2)}$`);
 
       $('btnRestorePnl').style.display = pf.canRestoreEpoch ? 'inline-block' : 'none';
       setTxt('recEpochStatusTxt', pf.resetAt ? `기준점: ${pf.resetAt} 이후 재집계 중` : '전체 누적 실현손익 집계 중');
+
+      // 성적표 요약(Scorecard) 업데이트
+      const sc = pf.scorecard || {};
+      const newScSig = JSON.stringify(sc);
+      if (scSig !== newScSig) {
+        scSig = newScSig;
+        setTxt('scPfVal', sc.profitFactor || '--');
+        setTxt('scAvgWlVal', `+${fmt(sc.avgWinUsd || 0, 0)}$ / ${fmt(sc.avgLossUsd || 0, 0)}$`);
+        setTxt('scDirWinVal', `롱 ${sc.longWinRate || 0}% (${sc.longCount || 0}) · 숏 ${sc.shortWinRate || 0}% (${sc.shortCount || 0})`);
+        setTxt('scBestWorstVal', `+${fmt(sc.bestTradeUsd || 0, 0)}$ / ${fmt(sc.worstTradeUsd || 0, 0)}$`);
+      }
 
       renderPerfCard();
 
@@ -1691,99 +2070,60 @@
       }
     }
 
-    // 보유 포지션 렌더링
+    // 보유 포지션 (미인증 기기에서는 DOM에서조차 100% 비우고 완전 은닉!)
     const posArr = d.positions || [];
-    $('posSection').style.display = posArr.length ? 'block' : 'none';
-    setTxt('posCountBadge', `${posArr.length}건 보유`);
-    const nPosSig = isOwner() + ':' + JSON.stringify(posArr.map(p => [p.side, p.size, p.entry, p.sl, p.tp, p.stageNote]));
-    if (posSig !== nPosSig) {
-      posSig = nPosSig;
-      $('posListWrap').innerHTML = posArr.map(p => `
-        <div class="ord-card">
-          <div class="row-sb">
-            <span style="font-weight:900;font-size:13.5px;" class="${p.side==='LONG'?'up':'dn'}">${p.side==='LONG'?'🟢 롱':'🔴 숏'} ${p.leverage}x · ${p.size} BTC</span>
-            <span style="font-weight:900;font-size:14px;" id="posPnl-${p.side}" class="owner-only ${p.pnlUsd>=0?'up':'dn'}">${p.pnlUsd>=0?'+':''}${fmt(p.pnlUsd,2)}$ (${p.roePct>=0?'+':''}${p.roePct}%)</span>
-          </div>
-          <div style="font-size:11.5px;color:var(--sub);margin-top:6px;">진입 <b>${fmt(p.entry,1)}</b> · 익절 <b class="up">${fmt(p.tp,1)}</b> · 손절 <b class="dn">${fmt(p.sl,1)}</b></div>
-          <div class="owner-only" style="font-size:11.5px;color:#7dd3fc;margin-top:4px;">상태: ${escHtml(p.stageNote)}</div>
-          <div class="owner-only" style="display:flex;gap:6px;margin-top:9px;padding-top:9px;border-top:1px solid var(--line);">
-            <button class="btn acc" data-pact="half_tp" data-pside="${p.side}" style="flex:1;">⚡ 50% 반익절</button>
-            <button class="btn" data-pact="lock_be" data-pside="${p.side}" style="flex:1;">🛡 본절 잠금</button>
-            <button class="btn danger" data-pact="close_all" data-pside="${p.side}" style="flex:1;">🚨 100% 청산</button>
-          </div>
-        </div>`).join('');
-      $('posListWrap').querySelectorAll('[data-pact]').forEach(btn => {
-        btn.onclick = () => {
-          const s = btn.dataset.pside, m = btn.dataset.pact;
-          const label = m === 'half_tp' ? '50% 시장가 반익절' : (m === 'lock_be' ? '본절(BE+) 즉시 잠금' : '100% 시장가 전량 청산');
-          if (confirm(`[${s}] 포지션에 대해 '${label}'을 실행하시겠습니까?`)) {
-            sendCmd('pos_action', { side: s, mode: m });
-          }
-        };
-      });
-    }
-
-    // 다중 대기주문 렌더링
-    const ords = d.openOrders || [];
-    setTxt('ordCountBadge', `${ords.length}건 대기 중`);
-
-    if (ords.length > 0) {
-      $('ordDirSummary').style.display = 'flex';
-      const lTxt = sumInfo.longCount ? `🟢 롱 ${sumInfo.longCount}건 (최우선 ${fmt(sumInfo.longNearest,1)})` : '🟢 롱 0건';
-      const sTxt = sumInfo.shortCount ? `🔴 숏 ${sumInfo.shortCount}건 (최우선 ${fmt(sumInfo.shortNearest,1)})` : '🔴 숏 0건';
-      const nSumSig = lTxt + '|' + sTxt;
-      if (ordSumSig !== nSumSig) {
-        ordSumSig = nSumSig;
-        $('ordDirSummary').innerHTML = `<span>${lTxt}</span><span>${sTxt}</span>`;
-      }
+    if (!isOwner() || !posArr.length) {
+      $('posSection').style.display = 'none';
+      if (!isOwner()) $('posListWrap').innerHTML = '';
     } else {
-      $('ordDirSummary').style.display = 'none';
+      $('posSection').style.display = 'block';
+      setTxt('posCountBadge', `${posArr.length}건 보유`);
+      const nPosSig = JSON.stringify(posArr.map(p => [p.side, p.size, p.entry, p.sl, p.tp, p.stageNote, p.liqSafe]));
+      if (posSig !== nPosSig) {
+        posSig = nPosSig;
+        $('posListWrap').innerHTML = posArr.map(p => {
+          const liqBadge = p.liqSafe
+            ? `<span class="pill up" style="font-size:10px;">청산가 안전 (이격 ${p.liqGapPct}%)</span>`
+            : `<span class="pill dn" style="font-size:10px;">⚠️ 청산가 근접 주의</span>`;
+          return `
+          <div class="ord-card">
+            <div class="row-sb">
+              <span style="font-weight:900;font-size:13.5px;" class="${p.side==='LONG'?'up':'dn'}">${p.side==='LONG'?'🟢 롱':'🔴 숏'} ${p.leverage}x · ${p.size} BTC</span>
+              <span style="font-weight:900;font-size:14px;" id="posPnl-${p.side}" class="owner-only ${p.pnlUsd>=0?'up':'dn'}">${p.pnlUsd>=0?'+':''}${fmt(p.pnlUsd,2)}$ (${p.roePct>=0?'+':''}${p.roePct}%)</span>
+            </div>
+            <div class="row-sb" style="margin-top:6px;font-size:11.5px;color:var(--sub);flex-wrap:wrap;">
+              <span>진입 <b>${fmt(p.entry,1)}</b> · 익절 <b class="up">${fmt(p.tp,1)}</b> · 손절 <b class="dn">${fmt(p.sl,1)}</b></span>
+              ${liqBadge}
+            </div>
+            <div style="font-size:11px;color:#cbd5e1;margin-top:7px;" id="posRmult-${p.side}">1R 진행률: ${p.rMultiple>=0?'+':''}${p.rMultiple}R / 목표 +1.00R (${fmt(p.r1Price,1)}$)</div>
+            <div class="prox-track"><div class="prox-fill" id="posRbar-${p.side}" style="width:${p.rProgressPct || 0}%;background:#38bdf8;"></div></div>
+            <div style="font-size:11.5px;color:#7dd3fc;margin-top:6px;">상태: ${escHtml(p.stageNote)}</div>
+            <div style="display:flex;gap:6px;margin-top:9px;padding-top:9px;border-top:1px solid var(--line);">
+              <button class="btn acc" data-pact="half_tp" data-pside="${p.side}" style="flex:1;">⚡ 50% 익절</button>
+              <button class="btn" data-pact="lock_be" data-pside="${p.side}" style="flex:1;">🛡 본절 잠금</button>
+              <button class="btn danger" data-pact="close_all" data-pside="${p.side}" style="flex:1;">🚨 100% 청산</button>
+            </div>
+          </div>`;
+        }).join('');
+        $('posListWrap').querySelectorAll('[data-pact]').forEach(btn => {
+          btn.onclick = () => {
+            const s = btn.dataset.pside, m = btn.dataset.pact;
+            const label = m === 'half_tp' ? '50% 시장가 부분익절' : (m === 'lock_be' ? '본절(BE+) 즉시 잠금' : '100% 시장가 전량 청산');
+            requestPinAndSendCmd(`🚨 [${s} 포지션 제어] ${label}`, 'pos_action', { side: s, mode: m });
+          };
+        });
+      }
     }
 
-    const nOrdSig = isOwner() + ':' + JSON.stringify(ords.map(o => [o.orderId, o.price, o.qty, o.sl, o.tp, o.badge]));
-    if (ordSig !== nOrdSig) {
-      ordSig = nOrdSig;
-      $('ordListWrap').innerHTML = ords.length ? ords.map(o => `
-        <div class="ord-card">
-          <div class="row-sb">
-            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-              <span class="pill ${o.side==='LONG'?'up':'dn'}">${o.sideKo}</span>
-              <span style="font-size:12px;color:var(--sub);font-weight:800;">지정가 · ${o.leverage}x</span>
-              <span class="pill" style="color:#c4b5fd;border-color:rgba(167,139,250,0.35);">${escHtml(o.badge)}</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:7px;">
-              <span class="ord-price-btn" data-oprice="${o.price}" title="차트에서 보기">${fmt(o.price,1)}</span>
-              <button class="btn danger owner-only" data-coid="${o.orderId}">취소</button>
-            </div>
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:9px;font-size:12px;">
-            <div><div class="sm-lbl">수량</div><b>${o.qty}</b></div>
-            <div><div class="sm-lbl">익절</div><b class="up">${fmt(o.tp,1)}</b></div>
-            <div><div class="sm-lbl">손절</div><b class="dn">${fmt(o.sl,1)}</b></div>
-            <div><div class="sm-lbl">손익비</div><b>1 : ${o.rr}</b></div>
-          </div>
-          <div class="owner-only">
-            <div class="prox-track"><div class="prox-fill" id="oprox-${o.orderId}" style="width:${o.proximityPct || 20}%;background:${o.side==='LONG'?'#10b981':'#f43f5e'};"></div></div>
-            <div style="font-size:11.5px;color:var(--sub);margin-top:7px;" id="odist-${o.orderId}">현재가 대비 ${o.distPct>=0?'+':''}${o.distPct}% (${o.distUsd>=0?'+':''}${fmt(o.distUsd,0)}$) · 증거금 ${o.marginUsd}$</div>
-            <div style="font-size:11.5px;font-weight:800;margin-top:4px;">
-              <span class="up">익절 +${o.tpSeedPct}% (+${fmt(o.tpUsd,0)}$)</span> · <span class="dn">손실 ${o.slSeedPct}% (${fmt(o.slUsd,0)}$)</span>
-            </div>
-            <div style="font-size:11.5px;color:#cbd5e1;margin-top:4px;">1R 50%반익절·본절잠금: <b>${fmt(o.r1Price,1)}</b></div>
-          </div>
-        </div>`).join('') : '<div style="color:var(--sub);font-size:12.5px;margin-top:10px;">현재 대기 중인 지정가 주문이 없습니다.</div>';
+    // 대기주문 렌더링 (미인증 기기에도 기본 항목 노출, %/취소는 오너 전용)
+    renderOpenOrdersSection(d);
 
-      $('ordListWrap').querySelectorAll('[data-coid]').forEach(b => {
-        b.onclick = () => { if (confirm('이 대기주문을 취소하시겠습니까?')) sendCmd('cancel_order', { orderId:b.dataset.coid }); };
-      });
-      $('ordListWrap').querySelectorAll('[data-oprice]').forEach(el => {
-        el.onclick = () => openCandleModal('BTC', '15m');
-      });
-    }
-
-    // 웹소켓 시세가 있을 경우 즉시 포지션·이격률 재보정
     if (hasFreshBtc) applyRealtimeQuoteTick();
 
-    if (d.rationaleInfo) {
+    // AI 타점 근거 요약 (미인증 기기에서는 DOM까지 완전히 비우고 은닉!)
+    if (!isOwner()) {
+      $('ratBody').innerHTML = '';
+    } else if (d.rationaleInfo) {
       const ri = d.rationaleInfo;
       setTxt('ratTime', String(ri.updatedAt || '--:--').slice(-8));
       setTxt('regimeBadge', ri.marketRegimeKo || '수급 분석');
@@ -1791,12 +2131,14 @@
       if (ratSig !== rs) {
         ratSig = rs;
         const subCards = [];
-        if (ri.longSniper) subCards.push(`<div class="econ-row"><div class="econ-row-top"><span class="pill up">⚡ 단타 롱 · ${fmt(ri.longSniper.entry,1)}$</span></div><div class="econ-row-body">${escHtml(ri.longSniper.reason)}</div></div>`);
-        if (ri.longLadder) subCards.push(`<div class="econ-row"><div class="econ-row-top"><span class="pill up">🛡 심층 3분할 롱 · ${fmt(ri.longLadder.zone_high,0)}~${fmt(ri.longLadder.zone_low,0)}$</span></div><div class="econ-row-body">${escHtml(ri.longLadder.reason)}</div></div>`);
-        if (ri.shortSniper) subCards.push(`<div class="econ-row"><div class="econ-row-top"><span class="pill dn">⚡ 단타 숏 · ${fmt(ri.shortSniper.entry,1)}$</span></div><div class="econ-row-body">${escHtml(ri.shortSniper.reason)}</div></div>`);
-        if (ri.shortLadder) subCards.push(`<div class="econ-row"><div class="econ-row-top"><span class="pill dn">🛡 심층 3분할 숏 · ${fmt(ri.shortLadder.zone_low,0)}~${fmt(ri.shortLadder.zone_high,0)}$</span></div><div class="econ-row-body">${escHtml(ri.shortLadder.reason)}</div></div>`);
-        $('ratBody').innerHTML = `<div style="line-height:1.72;">${escHtml(ri.rationale || '')}</div>` +
-          (subCards.length ? `<div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">${subCards.join('')}</div>` : '');
+        if (ri.longSniper) subCards.push(`<div class="econ-row"><div class="econ-row-top"><span class="pill up">⚡ 단타 롱(${ri.longSniper.grade || 'A'}급) · ${fmt(ri.longSniper.entry,1)}$</span></div><div class="econ-row-body">${fmtInlineRich(ri.longSniper.reason)}</div></div>`);
+        if (ri.longLadder) subCards.push(`<div class="econ-row"><div class="econ-row-top"><span class="pill up">🛡 심층 3분할 롱(${ri.longLadder.grade || 'S'}급) · ${fmt(ri.longLadder.zone_high,0)}~${fmt(ri.longLadder.zone_low,0)}$</span></div><div class="econ-row-body">${fmtInlineRich(ri.longLadder.reason)}</div></div>`);
+        if (ri.shortSniper) subCards.push(`<div class="econ-row"><div class="econ-row-top"><span class="pill dn">⚡ 단타 숏(${ri.shortSniper.grade || 'A'}급) · ${fmt(ri.shortSniper.entry,1)}$</span></div><div class="econ-row-body">${fmtInlineRich(ri.shortSniper.reason)}</div></div>`);
+        if (ri.shortLadder) subCards.push(`<div class="econ-row"><div class="econ-row-top"><span class="pill dn">🛡 심층 3분할 숏(${ri.shortLadder.grade || 'S'}급) · ${fmt(ri.shortLadder.zone_low,0)}~${fmt(ri.shortLadder.zone_high,0)}$</span></div><div class="econ-row-body">${fmtInlineRich(ri.shortLadder.reason)}</div></div>`);
+        const skipNotes = (ri.skippedNotes || []).map(sn => `<div style="font-size:11.5px;color:var(--sub);padding:4px 8px;background:rgba(148,163,184,0.08);border-radius:7px;">• ${escHtml(sn)}</div>`).join('');
+        $('ratBody').innerHTML = `<div style="line-height:1.72;">${fmtInlineRich(ri.rationale || '')}</div>` +
+          (subCards.length ? `<div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">${subCards.join('')}</div>` : '') +
+          (skipNotes ? `<div style="margin-top:8px;display:flex;flex-direction:column;gap:5px;">${skipNotes}</div>` : '');
       }
     }
 
