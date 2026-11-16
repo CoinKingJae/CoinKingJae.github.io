@@ -96,7 +96,7 @@
   .hdr-actions { display:flex; align-items:center; gap:4px; flex-wrap:nowrap; flex-shrink:0; }
   .hdr-actions .btn { padding:5.5px 7.5px; font-size:11px; }
 
-  /* BTC 히어로 카드 + 앰비언트 광원 + 24h 발광 위치 핀 + 실시간 초시계 펀딩 */
+  /* BTC 히어로 카드 (6자리 가격 돌파 시에도 테더·김프 배지 무충돌) */
   .hero-card {
     position:relative; overflow:hidden; cursor:pointer;
     background:radial-gradient(120% 90% at 15% 0%, rgba(56,189,248,0.09) 0%, rgba(13,20,36,1) 62%);
@@ -104,7 +104,7 @@
   .hero-card.glow-up { background:radial-gradient(120% 90% at 15% 0%, rgba(16,185,129,0.11) 0%, rgba(13,20,36,1) 62%); }
   .hero-card.glow-dn { background:radial-gradient(120% 90% at 15% 0%, rgba(244,63,94,0.11) 0%, rgba(13,20,36,1) 62%); }
   .hero-price {
-    font-size:clamp(25px, 7.2vw, 29px); font-weight:900; letter-spacing:-0.7px; line-height:1.15;
+    font-size:clamp(24px, 6.8vw, 28.5px); font-weight:900; letter-spacing:-0.7px; line-height:1.15;
     white-space:nowrap; font-variant-numeric:tabular-nums; transition:color 0.22s ease;
   }
   .hero-price.tick-up { color:#34d399; }
@@ -127,6 +127,14 @@
     transform:translate(-50%, -50%); background:#38bdf8; border:2px solid #f8fafc;
     box-shadow:0 0 9px rgba(56,189,248,0.95); transition:left 0.3s ease;
   }
+
+  /* 예정 지표 배너 2단 고정 구조 */
+  .shield-banner-box {
+    display:none; margin-top:8px; padding-top:8px; border-top:1px solid var(--line);
+    font-size:11.5px; line-height:1.45;
+  }
+  .shield-l1 { font-weight:800; color:#fde68a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .shield-l2 { font-weight:700; color:#cbd5e1; padding-left:18px; margin-top:2px; font-variant-numeric:tabular-nums; }
 
   /* 4대 글로벌 매크로 2단 카드 */
   .macro-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-bottom:10px; }
@@ -160,6 +168,7 @@
     cursor:pointer; text-align:center; white-space:nowrap;
   }
   .gear-btn.active { background:rgba(56,189,248,0.2); border-color:var(--acc); color:#fff; box-shadow:0 2px 8px rgba(56,189,248,0.15); }
+  .seed-meta-rows { display:flex; flex-direction:column; gap:5px; margin-top:9px; font-size:11.5px; color:var(--sub); }
   .sub-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:10px; padding-top:10px; border-top:1px solid var(--line); }
   .sm-lbl { font-size:10.5px; color:var(--sub); }
   .sm-val { font-size:12.5px; font-weight:800; margin-top:2px; font-variant-numeric:tabular-nums; }
@@ -174,24 +183,47 @@
   }
   .chip.active { background:rgba(56,189,248,0.2); border-color:var(--acc); color:#fff; }
 
-  /* 차트 패키지 4열 & 경제소식 5열 균등 수납 그리드 (우측 탭 잘림 0%) */
+  /* 대기주문 3열 고정 필터 & 차트 패키지 4열 & 경제소식 5열 균등 수납 그리드 */
+  .ord-filter-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:5px; margin-top:9px; }
+  .ord-filter-grid .chip { padding:5.5px 3px; font-size:10.5px; text-align:center; overflow:hidden; text-overflow:ellipsis; }
   .board-tabs-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:4px; }
-  .board-tabs-grid .chip {
-    padding:5px 2px; font-size:10.2px; text-align:center;
-    overflow:hidden; text-overflow:ellipsis;
-  }
+  .board-tabs-grid .chip { padding:5px 2px; font-size:10.2px; text-align:center; overflow:hidden; text-overflow:ellipsis; }
   .econ-jump-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:4px; margin-bottom:10px; }
-  .econ-jump-grid .chip {
-    padding:5.5px 1px; font-size:10.2px; text-align:center;
-    overflow:hidden; text-overflow:ellipsis;
+  .econ-jump-grid .chip { padding:5.5px 1px; font-size:10.2px; text-align:center; overflow:hidden; text-overflow:ellipsis; }
+
+  /* 실시간 현재가 스펙트럼 바 & 2열 대칭 합산 노출 박스 */
+  .spec-box {
+    background:#0c1322; border:1px solid rgba(148,163,184,0.14); border-radius:12px;
+    padding:9px 11px; margin-top:9px;
+  }
+  .spec-labels { display:flex; justify-content:space-between; align-items:center; font-size:10.5px; font-weight:800; font-variant-numeric:tabular-nums; }
+  .spec-track {
+    position:relative; width:100%; height:6px; border-radius:999px; margin-top:6px;
+    background:linear-gradient(90deg, rgba(16,185,129,0.35) 0%, rgba(56,189,248,0.22) 50%, rgba(244,63,94,0.35) 100%);
+    border:1px solid rgba(148,163,184,0.16);
+  }
+  .spec-pin {
+    position:absolute; top:50%; left:50%; width:11px; height:11px; border-radius:50%;
+    transform:translate(-50%, -50%); background:#38bdf8; border:2px solid #f8fafc;
+    box-shadow:0 0 8px rgba(56,189,248,0.9); transition:left 0.3s ease;
   }
 
-  /* 대기주문 2단 합산 박스 & 방향별 컬러 엣지 카드 */
   .ord-exp-box {
     background:#10192c; border:1px solid rgba(148,163,184,0.14); border-radius:12px;
-    padding:9px 11px; margin-top:9px; display:flex; flex-direction:column; gap:7px; font-size:11.5px;
+    padding:9px 10px; margin-top:8px; display:flex; flex-direction:column; gap:8px;
   }
-  .ord-exp-item { line-height:1.45; }
+  .exp-dir-card {
+    background:rgba(7,11,20,0.45); border:1px solid rgba(148,163,184,0.11);
+    border-radius:10px; padding:8px 10px;
+  }
+  .exp-pair-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; margin-top:6px; }
+  .exp-cell {
+    background:#0d1526; border:1px solid rgba(148,163,184,0.1); border-radius:8px;
+    padding:5.5px 8px;
+  }
+  .exp-cell-lbl { font-size:10px; color:var(--sub); font-weight:700; }
+  .exp-cell-val { font-size:11.5px; font-weight:900; margin-top:2px; white-space:nowrap; font-variant-numeric:tabular-nums; }
+
   .ord-card {
     background:#111a2c; border:1px solid var(--line); border-radius:14px;
     padding:12px 13px; margin-top:9px; border-left:3.5px solid rgba(148,163,184,0.3);
@@ -334,6 +366,10 @@
   .modal-bg.sheet-align { align-items:flex-end; padding:0; }
   .modal-card { width:100%; max-width:540px; background:var(--card); border:1px solid rgba(56,189,248,0.35); border-radius:16px; overflow:hidden; box-shadow:0 22px 55px rgba(0,0,0,0.7); }
 
+  /* 캔들 모달 6열 균등 타임프레임 바 */
+  .cm-tf-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:4px; width:100%; }
+  .cm-tf-grid .chip { padding:5px 2px; font-size:10.5px; text-align:center; }
+
   /* 바텀시트 (Days Trading 상세 & 전용 6자리 보안 터치 키패드) */
   .sheet-card {
     width:100%; max-width:540px; background:#131b2b; border-top:1px solid rgba(148,163,184,0.25);
@@ -368,7 +404,7 @@
   <!-- 자동 소멸 토스트 알림 -->
   <div class="kj-toast" id="kjToast"></div>
 
-  <!-- 최상단 헤더 (슬림 상태 배지 + 3분 세션 타이머 + 3버튼 무절단 고정) -->
+  <!-- 최상단 헤더 -->
   <div class="top-hdr">
     <div class="brand-wrap">
       <div class="brand-name" id="brandLogo">KingJae</div>
@@ -385,7 +421,7 @@
   <!-- [탭 1] 메인 대시보드 -->
   <div class="tab-pane active" id="pane-dash">
 
-    <!-- BTC 24h 웹소켓 초실시간 시세 · 실시간 초시계 펀딩비 · 24h 발광 위치 핀 -->
+    <!-- BTC 24h 웹소켓 초실시간 시세 -->
     <div class="card hero-card" id="btcHeroCard">
       <div class="row-sb">
         <div style="display:flex;align-items:center;gap:6px;">
@@ -394,10 +430,10 @@
         </div>
         <span class="pill" id="btcChg24">--%</span>
       </div>
-      <div class="row-sb" style="margin-top:9px;align-items:baseline;flex-wrap:wrap;">
+      <div class="row-sb" style="margin-top:9px;align-items:baseline;flex-wrap:wrap;gap:6px;">
         <div class="hero-price" id="btcLivePrice">--,--</div>
-        <div style="display:flex;align-items:center;gap:7px;font-size:12px;margin-left:auto;">
-          <span style="color:var(--sub);white-space:nowrap;">업비트 테더 <b style="color:#e2e8f0;" id="usdtKrw">--</b>원</span>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11.5px;margin-left:auto;">
+          <span style="color:var(--sub);white-space:nowrap;">테더 <b style="color:#e2e8f0;" id="usdtKrw">--</b>원</span>
           <span class="pill" id="kimpBadge">김프 --%</span>
         </div>
       </div>
@@ -409,13 +445,16 @@
       <div class="range-track"><div class="range-pin" id="btcRangePin" style="left:50%;"></div></div>
     </div>
 
-    <!-- 실시간 상태 & 예정 지표 방어막 배너 (오너 전용 · 1줄 고정 + 실시간 남은 분) -->
+    <!-- 실시간 상태 & 예정 지표 2단 고정 배너 (오너 전용) -->
     <div class="card owner-only" id="ownerStatusCard" style="padding:10px 13px;">
       <div class="row-sb" style="align-items:center;gap:8px;">
         <span id="statusHeadline" style="font-size:12px;font-weight:800;color:#f1f5f9;line-height:1.4;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">데이터 동기화 중...</span>
         <span id="nextRunLabel" style="font-size:11px;font-weight:800;color:var(--acc);white-space:nowrap;flex-shrink:0;font-variant-numeric:tabular-nums;">분석 --:--</span>
       </div>
-      <div id="newsShieldBanner" style="display:none;margin-top:7px;padding-top:7px;border-top:1px solid var(--line);font-size:11.5px;color:#fcd34d;font-weight:700;line-height:1.45;word-break:keep-all;"></div>
+      <div id="newsShieldBanner" class="shield-banner-box">
+        <div class="shield-l1" id="shieldLine1"></div>
+        <div class="shield-l2" id="shieldLine2"></div>
+      </div>
     </div>
 
     <!-- 4대 글로벌 매크로 2단 카드 -->
@@ -438,7 +477,7 @@
       </div>
     </div>
 
-    <!-- 시드(AUM) 카드 (미인증 게스트는 오직 '전체 시드' 숫자만 노출) -->
+    <!-- 시드(AUM) 카드 -->
     <div class="card">
       <div class="row-sb">
         <div style="font-size:12px;color:var(--sub);font-weight:700;">전체 시드 (AUM)</div>
@@ -455,7 +494,7 @@
         <span class="upnl-pill pos owner-only" id="liveUpnlPill" style="display:none;">미실현 +0.00</span>
       </div>
 
-      <!-- 4단계 상향 리스크 기어 스위치 (오너 전용 · PIN 승인) -->
+      <!-- 4단계 리스크 기어 스위치 -->
       <div class="gear-grid owner-only" id="riskGearBar">
         <button class="gear-btn" data-rmode="SAFE">🛡 안정+</button>
         <button class="gear-btn active" data-rmode="BALANCE">⚖️ 밸런스+</button>
@@ -463,11 +502,18 @@
         <button class="gear-btn" data-rmode="AUTO">🤖 AI자동</button>
       </div>
 
-      <div class="owner-only" style="margin-top:8px;font-size:11.5px;color:var(--sub);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;">
-        <span id="riskAllowanceTxt">1회 한도: 단타 --$ · 심층 --$</span>
-        <span>확정손익 <b id="totalRealizedBadge">--</b></span>
+      <!-- 1회 한도 & 누적 확정손익 독립 정렬 행 (숫자 길어져도 무충돌) -->
+      <div class="seed-meta-rows owner-only">
+        <div class="row-sb">
+          <span>1회 리스크 한도</span>
+          <b style="color:#e2e8f0;" id="riskAllowanceTxt">단타 --$ · 심층 --$</b>
+        </div>
+        <div class="row-sb">
+          <span>누적 확정손익</span>
+          <b id="totalRealizedBadge">--</b>
+        </div>
       </div>
-      <div id="guardBrakeBanner" class="owner-only" style="display:none;margin-top:6px;font-size:11px;font-weight:800;color:#fde68a;line-height:1.4;"></div>
+      <div id="guardBrakeBanner" class="owner-only" style="display:none;margin-top:7px;font-size:11px;font-weight:800;color:#fde68a;line-height:1.4;"></div>
 
       <div class="sub-metrics owner-only">
         <div><div class="sm-lbl">확정원금</div><div class="sm-val" id="wbVal">--</div></div>
@@ -476,13 +522,13 @@
       </div>
     </div>
 
-    <!-- 보유 포지션 (오너 전용) -->
+    <!-- 보유 포지션 (오너 전용 · 3열 대칭 그리드) -->
     <div class="card owner-only" id="posSection" style="display:none;">
       <div class="row-sb"><span style="font-size:14.5px;font-weight:900;">보유 포지션</span><span class="pill" id="posCountBadge">0건</span></div>
       <div id="posListWrap"></div>
     </div>
 
-    <!-- 다중 대기주문 -->
+    <!-- 다중 대기주문 (3열 고정 필터 + 스펙트럼 위치 게이지 + 2열 대칭 합산 박스) -->
     <div class="card">
       <div class="row-sb">
         <span style="font-size:14.5px;font-weight:900;">대기주문</span>
@@ -492,31 +538,39 @@
           <button class="btn" id="btnToggleOrdFold" style="padding:5px 8px;">접기 ▲</button>
         </div>
       </div>
-      <div class="tabs-line" id="ordFilterBar" style="margin-top:9px;display:none;">
+      <div class="ord-filter-grid" id="ordFilterBar" style="display:none;">
         <button class="chip active" data-oflt="ALL" id="ofltAll">전체</button>
         <button class="chip" data-oflt="LONG" id="ofltLong">🟢 롱</button>
         <button class="chip" data-oflt="SHORT" id="ofltShort">🔴 숏</button>
+      </div>
+      <div class="spec-box owner-only" id="ordSpectrumBox" style="display:none;">
+        <div class="spec-labels">
+          <span class="up" id="specLongTxt">🟢 --</span>
+          <span style="color:#7dd3fc;" id="specMidTxt">⚡ 현재가 위치</span>
+          <span class="dn" id="specShortTxt">🔴 --</span>
+        </div>
+        <div class="spec-track"><div class="spec-pin" id="specBtcPin" style="left:50%;"></div></div>
       </div>
       <div class="ord-exp-box owner-only" id="ordExposureBox" style="display:none;"></div>
       <div id="ordListWrap"></div>
     </div>
 
-    <!-- AI 타점 근거 요약 (오너 전용) -->
+    <!-- AI 타점 근거 요약 (취소 주문 실시간 자동 제거 연동) -->
     <div class="card owner-only" id="ratCard">
       <div class="row-sb">
-        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
-          <span style="font-size:14.5px;font-weight:900;">AI 타점 근거 요약</span>
-          <span class="pill" id="regimeBadge" style="color:#7dd3fc;border-color:rgba(56,189,248,0.35);">분석 대기</span>
+        <div style="display:flex;align-items:center;gap:6px;min-width:0;">
+          <span style="font-size:14.5px;font-weight:900;white-space:nowrap;">AI 타점 근거 요약</span>
+          <span class="pill" id="regimeBadge" style="color:#7dd3fc;border-color:rgba(56,189,248,0.35);font-size:10.5px;">분석 대기</span>
         </div>
-        <div style="display:flex;gap:5px;align-items:center;">
-          <span class="pill" id="ratTime">--:--</span>
+        <div style="display:flex;gap:5px;align-items:center;flex-shrink:0;">
+          <span class="pill" id="ratTime" style="font-size:10.5px;">--:--</span>
           <button class="btn" id="btnToggleRat">접기 ▲</button>
         </div>
       </div>
       <div id="ratBody" style="margin-top:10px;font-size:13px;line-height:1.68;color:#dbeafe;word-break:keep-all;"></div>
     </div>
 
-    <!-- 차트 패키지 (오너 전용 · 1줄 부제목 + 4열 완벽 수납 탭 그리드) -->
+    <!-- 차트 패키지 (4열 완벽 수납 탭 그리드) -->
     <div class="card owner-only">
       <div class="row-sb">
         <span style="font-size:14.5px;font-weight:900;">차트 패키지</span>
@@ -609,32 +663,33 @@
           <span style="font-size:18px;font-weight:900;color:#34d399;font-variant-numeric:tabular-nums;" id="pfProjMonthlyPct">+20% ~ +26%</span>
           <span class="pill up" style="font-size:11px;" id="pfProjMonthlyUsd">월 +10,600$ ~ +13,780$</span>
         </div>
-        <div style="font-size:11.5px;color:var(--sub);margin-top:6px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;">
-          <span id="pfProjNoteTxt">체결 3건 누적 시 실전 페이스로 자동 전환</span>
-          <span>3개월 복리 추정 <b style="color:#f8fafc;" id="pfProj3mTxt">-- USDT</b></span>
+        <div class="row-sb" style="margin-top:8px;padding-top:7px;border-top:1px solid rgba(148,163,184,0.12);font-size:11.5px;">
+          <span style="color:var(--sub);">3개월 복리 추정 시드</span>
+          <b style="color:#f8fafc;font-variant-numeric:tabular-nums;" id="pfProj3mTxt">-- USDT</b>
         </div>
+        <div style="font-size:10.5px;color:#64748b;margin-top:4px;" id="pfProjNoteTxt">체결 3건 누적 시 실전 페이스로 자동 전환</div>
       </div>
 
       <div class="pf-nav-bar" id="pfLastTradeBar">
         <span style="font-size:13px;font-weight:700;color:#7f8ea8;">Last Trade</span>
-        <span style="font-size:13.5px;font-weight:800;color:#f8fafc;" id="pfLastTradeTxt">체결 대기 중 &nbsp;&rsaquo;</span>
+        <span style="font-size:13.5px;font-weight:800;color:#f8fafc;" id="pfLastTradeTxt">체결 대기 중  ›</span>
       </div>
 
       <div class="pf-nav-bar" id="pfDaysTradingBar">
         <span style="font-size:13px;font-weight:700;color:#7f8ea8;">Days Trading</span>
-        <span style="font-size:13.5px;font-weight:800;color:#f8fafc;" id="pfDaysTradingTxt">1일차 &nbsp;&rsaquo;</span>
+        <span style="font-size:13.5px;font-weight:800;color:#f8fafc;" id="pfDaysTradingTxt">1일차  ›</span>
       </div>
     </div>
 
   </div>
 
-  <!-- [탭 2] 경제소식 (5열 균등 점프 탭 바 · 우측 잘림 0%) -->
+  <!-- [탭 2] 경제소식 (5열 균등 점프 탭 바 · 소수점/괄호 무결점 줄바꿈 보호) -->
   <div class="tab-pane" id="pane-econ">
     <div class="card">
       <div class="row-sb" style="margin-bottom:10px;">
         <div style="min-width:0;">
           <div style="font-size:15.5px;font-weight:900;">실시간 경제 · 시황 브리핑</div>
-          <div style="font-size:11.5px;color:var(--sub);margin-top:3px;">Google 실시간 검색 · 3시간 주기 (<span id="econUpdTime">--:--</span>)</div>
+          <div style="font-size:11.5px;color:var(--sub);margin-top:3px;">3시간 주기 · <span id="econUpdTime">--:--</span> <span id="econNextUpdTag" style="color:#7dd3fc;"></span></div>
         </div>
         <button class="btn acc owner-only" id="btnForceNews">🔄 즉시 검색</button>
       </div>
@@ -672,11 +727,11 @@
           <div class="cal-grid" id="pnlCalGrid"></div>
         </div>
 
-        <div class="row-sb" style="background:#111a2e;border:1px solid var(--line);border-radius:11px;padding:9px 11px;margin-bottom:10px;flex-wrap:wrap;">
-          <span style="font-size:11.5px;color:var(--sub);font-weight:700;" id="recEpochStatusTxt">전체 누적 실현손익 집계 중</span>
-          <div style="display:flex;gap:6px;">
-            <button class="btn" id="btnRestorePnl" style="display:none;">↩ 복원</button>
-            <button class="btn danger" id="btnResetPnl">🔄 지금부터 재집계</button>
+        <div class="row-sb" style="background:#111a2e;border:1px solid var(--line);border-radius:11px;padding:9px 11px;margin-bottom:10px;gap:6px;">
+          <span style="font-size:11px;color:var(--sub);font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="recEpochStatusTxt">전체 누적 집계 중</span>
+          <div style="display:flex;gap:5px;flex-shrink:0;">
+            <button class="btn" id="btnRestorePnl" style="display:none;padding:5px 7px;font-size:11px;">↩ 복원</button>
+            <button class="btn danger" id="btnResetPnl" style="padding:5px 7px;font-size:11px;">🔄 지금부터 재집계</button>
           </div>
         </div>
 
@@ -716,7 +771,7 @@
     </div>
   </div>
 
-  <!-- [모달 1] 5종목 통합 6타임프레임 실시간 캔들 차트 (0.01초 선렌더링 + 직통 라이브 스트리밍) -->
+  <!-- [모달 1] 5종목 통합 6타임프레임 실시간 캔들 차트 -->
   <div class="modal-bg" id="candleModal">
     <div class="modal-card">
       <div class="row-sb" style="padding:11px 14px;border-bottom:1px solid var(--line);">
@@ -727,13 +782,13 @@
           </div>
           <div style="display:flex;align-items:baseline;gap:8px;margin-top:2px;flex-wrap:wrap;">
             <div style="font-size:18px;font-weight:900;font-variant-numeric:tabular-nums;"><span id="cmPrice">--</span> <span style="font-size:12px;" id="cmChg">--</span></div>
-            <span style="font-size:10.5px;font-weight:800;color:#64748b;"><span style="color:#f59e0b;">━</span> EMA20 &nbsp;<span style="color:#8b5cf6;">━</span> EMA50</span>
+            <span style="font-size:10.5px;font-weight:800;color:#64748b;"><span style="color:#f59e0b;">━</span> EMA20  <span style="color:#8b5cf6;">━</span> EMA50</span>
           </div>
         </div>
         <button class="btn danger" id="cmCloseBtn">✕ 닫기</button>
       </div>
-      <div class="row-sb" style="padding:7px 12px;background:#090e1a;border-bottom:1px solid var(--line);flex-wrap:wrap;">
-        <div class="tabs-line" id="cmTfBar">
+      <div style="padding:7px 12px;background:#090e1a;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:6px;">
+        <div class="cm-tf-grid" id="cmTfBar">
           <button class="chip" data-tf="1m">1분</button>
           <button class="chip" data-tf="5m">5분</button>
           <button class="chip active" data-tf="15m">15분</button>
@@ -741,7 +796,7 @@
           <button class="chip" data-tf="4h">4시간</button>
           <button class="chip" data-tf="1D">일봉</button>
         </div>
-        <div class="tabs-line" id="cmBtcTools" style="margin-top:4px;">
+        <div class="tabs-line" id="cmBtcTools">
           <button class="chip active" id="btnToggleLines">🎯 타점선 ON</button>
           <button class="chip active owner-only" id="btnToggleMarks">📍 체결기록 ON</button>
         </div>
@@ -866,7 +921,7 @@
   const setTxt = (id, v) => { const el = $(id); const s = String(v ?? ''); if (el && el.textContent !== s) el.textContent = s; };
   const cleanZero = (n, eps=0.005) => Math.abs(Number(n || 0)) < eps ? 0 : Number(n);
   const fmt = (n, d=1) => cleanZero(n, Math.pow(10, -(d + 1))).toLocaleString('en-US', { minimumFractionDigits:d, maximumFractionDigits:d });
-  const escHtml = (s) => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const escHtml = (s) => String(s || '').replace(/&/g,'&').replace(/</g,'<').replace(/>/g,'>').replace(/"/g,'"');
   const isOwner = () => document.documentElement.getAttribute('data-auth') === 'owner';
 
   function showToast(msg, isErr=false) {
@@ -1112,7 +1167,7 @@
   }
 
   // ============================================================================
-  // [핵심] 24시간 브라우저 직결 웹소켓 시세 엔진 + 괄호 찢어짐 없는 상태바 렌더러
+  // [핵심] 24시간 웹소켓 시세 엔진 + 탭 타이틀 실시간 시세 + 스펙트럼 핀 실시간 이동
   // ============================================================================
   function renderOwnerStatusHeadlineHtml(badgeTxt, sideKo, priceVal, distPctVal) {
     const sg = distPctVal >= 0 ? '+' : '';
@@ -1132,6 +1187,8 @@
   function applyRealtimeQuoteTick() {
     const bp = wsLive.btcPrice > 0 ? wsLive.btcPrice : Number((S && S.btcPrice) || 0);
     if (bp <= 0) return;
+
+    document.title = `${fmt(bp, 1)} · KingJae`;
 
     const heroEl = $('btcLivePrice');
     setTxt('btcLivePrice', fmt(bp, 1));
@@ -1254,7 +1311,7 @@
 
     const ords = S.openOrders || [];
     if (ords.length > 0) {
-      let nearestOrd = null;
+      let nearestOrd = null, maxLongP = 0, minShortP = 0;
       ords.forEach(o => {
         const distUsd = o.price - bp;
         const distPct = (distUsd / bp) * 100.0;
@@ -1263,11 +1320,21 @@
         o.distUsd = Number(distUsd.toFixed(1));
         o.distPct = Number(distPct.toFixed(2));
         o.proximityPct = prox;
-        setTxt('odist-' + o.orderId, `현재가 대비 ${distPct >= 0 ? '+' : ''}${distPct.toFixed(2)}% (${distUsd >= 0 ? '+' : ''}${fmt(distUsd, 0)}$) · 증거금 ${o.marginUsd}$`);
+        setTxt('odist-' + o.orderId, `현재가 대비 ${distPct >= 0 ? '+' : ''}${distPct.toFixed(2)}% (${distUsd >= 0 ? '+' : ''}${fmt(distUsd, 0)}$)`);
         const pfEl = $('oprox-' + o.orderId);
         if (pfEl) pfEl.style.width = `${prox}%`;
         if (!nearestOrd || absD < Math.abs(nearestOrd.distPct)) nearestOrd = o;
+        if (o.side === 'LONG' && o.price > maxLongP) maxLongP = o.price;
+        if (o.side === 'SHORT' && (minShortP === 0 || o.price < minShortP)) minShortP = o.price;
       });
+      if (maxLongP > 0 && minShortP > maxLongP && $('ordSpectrumBox').style.display !== 'none') {
+        const posPct = Math.max(4, Math.min(96, ((bp - maxLongP) / (minShortP - maxLongP)) * 100.0));
+        $('specBtcPin').style.left = `${posPct.toFixed(1)}%`;
+        const lgGap = ((maxLongP - bp) / bp) * 100.0;
+        const shGap = ((minShortP - bp) / bp) * 100.0;
+        setTxt('specLongTxt', `🟢 ${fmt(maxLongP, 0)} (${lgGap.toFixed(2)}%)`);
+        setTxt('specShortTxt', `🔴 ${fmt(minShortP, 0)} (+${shGap.toFixed(2)}%)`);
+      }
       if ((!S.cycleRunning || offline) && posArr.length === 0 && nearestOrd) {
         renderOwnerStatusHeadlineHtml(nearestOrd.badge, nearestOrd.sideKo, nearestOrd.price, nearestOrd.distPct);
       }
@@ -1547,26 +1614,81 @@
     } else tapTmr = setTimeout(() => { taps = 0; }, 2200);
   });
 
-  // 외부 방문자 스텔스 핑
+  // ============================================================================
+  // [업그레이드] 외부 방문자 초정밀 스텔스 감시 (통신사 · 기기/OS · 인앱브라우저 · 재방문 · 해상도)
+  // ============================================================================
+  function detectClientEnvSummary() {
+    const ua = navigator.userAgent || '';
+    let dev = 'PC/기타';
+    if (/iPhone/i.test(ua)) dev = 'iPhone (iOS)';
+    else if (/iPad/i.test(ua)) dev = 'iPad (iPadOS)';
+    else if (/Android/i.test(ua)) {
+      const mAnd = ua.match(/;\s*([^;)]+?)\s+Build\//i);
+      dev = mAnd ? `Android (${mAnd[1].trim()})` : 'Android';
+    } else if (/Macintosh|Mac OS X/i.test(ua)) dev = 'Mac (macOS)';
+    else if (/Windows NT/i.test(ua)) dev = 'Windows PC';
+
+    let app = '일반 브라우저';
+    if (/KAKAOTALK/i.test(ua)) app = '카카오톡 인앱';
+    else if (/Telegram/i.test(ua) || (window.TelegramWebviewProxy !== undefined)) app = '텔레그램 인앱';
+    else if (/NAVER\(inapp/i.test(ua)) app = '네이버 앱';
+    else if (/Instagram/i.test(ua)) app = '인스타그램 인앱';
+    else if (/Line\//i.test(ua)) app = '라인 인앱';
+    else if (/EdgA?|Edge/i.test(ua)) app = 'Edge';
+    else if (/SamsungBrowser/i.test(ua)) app = '삼성 인터넷';
+    else if (/CriOS|Chrome/i.test(ua) && !/Edg/i.test(ua)) app = 'Chrome';
+    else if (/Safari/i.test(ua) && !/Chrome|CriOS/i.test(ua)) app = 'Safari';
+
+    const scr = `${window.screen ? window.screen.width : 0}×${window.screen ? window.screen.height : 0}`;
+    const lang = navigator.language || 'ko-KR';
+    let tz = 'Asia/Seoul';
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || tz; } catch(e){}
+    return { dev, app, scr, lang, tz };
+  }
+
   async function checkVisitorPing(seed) {
     if (pingDone || !seed) return;
     pingDone = true;
     const host = (location.hostname || '').toLowerCase();
     if (!host || host === 'localhost' || host === '127.0.0.1' || isOwner()) return;
     try { if (localStorage.getItem('kj_owner_mark') === '1') return; } catch(e){}
-    if (/bot|crawl|spider|preview/i.test(navigator.userAgent || '')) return;
+    if (/bot|crawl|spider|preview|headless/i.test(navigator.userAgent || '')) return;
     try {
       const bin = atob(seed), mk = 'KJ_STEALTH_PING_2026_MASK_KEY', out = new Uint8Array(bin.length);
       for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i) ^ mk.charCodeAt(i % mk.length);
       const ch = JSON.parse(new TextDecoder().decode(out));
       const r = await fetch('https://ipwho.is/', { cache:'no-store' });
       const j = r.ok ? await r.json() : {};
-      const ip = j.ip || '확인불가', ck = 'kj_vcool_' + ip;
+      const ip = j.ip || '확인불가', ck = 'kj_vcool_' + ip, vcntKey = 'kj_vcnt_total';
       if (Date.now() - Number(localStorage.getItem(ck) || 0) < 1800000) return;
       localStorage.setItem(ck, String(Date.now()));
+      const visitNum = Number(localStorage.getItem(vcntKey) || 0) + 1;
+      localStorage.setItem(vcntKey, String(visitNum));
+      const visitBadge = visitNum <= 1 ? '🆕 최초 접속' : `🔁 재방문 ${visitNum}회차`;
+
+      const locStr = [j.country_code, j.region, j.city].filter(Boolean).join(' ') || '위치 미상';
+      const ispStr = ((j.connection || {}).isp || (j.connection || {}).org || '통신사 미상');
+      const env = detectClientEnvSummary();
+      const refRaw = document.referrer ? document.referrer.replace(/^https?:\/\//, '').slice(0, 48) : '직접 링크/주소 입력';
+      const pathTag = (location.pathname + location.search).slice(0, 32) || '/';
       const kst = new Date(Date.now() + 9 * 3600000).toISOString().replace('T', ' ').slice(0, 19);
-      const msg = `👀 <b>[KingJae 웹 외부 접속 감지]</b>\n• 시간: ${kst}\n• IP: <code>${ip}</code> (${[j.country_code, j.region, j.city].filter(Boolean).join(' ')})`;
-      fetch(`https://api.telegram.org/bot${ch.b}/sendMessage`, { method:'POST', body:new URLSearchParams({ chat_id:String(ch.c), text:msg, parse_mode:'HTML' }), keepalive:true }).catch(()=>{});
+
+      const msg =
+        `👀 <b>KingJae 웹 외부 접속 감지 · ${visitBadge}</b>\n` +
+        `<blockquote>` +
+        `<b>시각</b>  ${kst} KST\n` +
+        `<b>위치</b>  ${locStr} (${ispStr})\n` +
+        `<b>IP주소</b>  <code>${ip}</code>\n` +
+        `<b>기기</b>  ${env.dev} · ${env.app}\n` +
+        `<b>환경</b>  ${env.scr} · ${env.lang} · ${env.tz}\n` +
+        `<b>유입</b>  ${refRaw} (${pathTag})` +
+        `</blockquote>`;
+
+      fetch(`https://api.telegram.org/bot${ch.b}/sendMessage`, {
+        method:'POST',
+        body:new URLSearchParams({ chat_id:String(ch.c), text:msg, parse_mode:'HTML' }),
+        keepalive:true
+      }).catch(()=>{});
     } catch(e){}
   }
 
@@ -1654,7 +1776,7 @@
         pendingCmd = null;
         closeModalById('keypadModal');
         showToast('✅ ' + (res.body.msg || '명령 반영 완료'));
-        perfSig = ''; pnlSig = ''; scSig = ''; calSig = ''; logSig = ''; ordSig = ''; posSig = '';
+        perfSig = ''; pnlSig = ''; scSig = ''; calSig = ''; logSig = ''; ordSig = ''; posSig = ''; ratSig = '';
         fetchStateTick();
       }
     } catch(e) {
@@ -1770,6 +1892,12 @@
   }
   document.querySelectorAll('.bnav-btn').forEach(btn => { btn.onclick = () => switchMainTab(btn.dataset.tab); });
 
+  // URL 파라미터(?tab=econ) 진입 시 경제소식 탭 바로 열기
+  try {
+    const initTabQ = new URLSearchParams(location.search).get('tab');
+    if (initTabQ === 'econ') switchMainTab('econ');
+  } catch(e){}
+
   $('btnToggleRat').onclick = () => {
     const rb = $('ratBody');
     const hid = rb.style.display === 'none';
@@ -1815,15 +1943,25 @@
     if (S) renderLogsList(S.logs || []);
   };
 
-  // 본문 내 단어(수치) 연결부 및 모든 금액·등락률 줄바꿈 보호 (비트코인(\n65,000달러) 방지)
+  // ============================================================================
+  // [교정 완결] 소수점(159.54달러) 및 한글 여는 괄호(+2.46%(테더 1,367원)) 줄바꿈 원천 보호
+  // ============================================================================
   function fmtInlineRich(str) {
     let s = escHtml(str || '');
     s = s.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
-    s = s.replace(/([가-힣A-Za-z0-9]+)\(\s*([+-]?\d[\d,.]*(?:\s*(?:억\s*)?달러|%))\s*\)/g, (_, w, inner) => {
-      const isPct = inner.endsWith('%');
-      const cls = isPct ? (inner.startsWith('-') ? 'dn' : 'up') : 'price-hl';
-      return `<span class="num-nw">${w}(<span class="${cls}" style="font-weight:800;">${inner}</span>)</span>`;
+    // 1) 수치/단어 + 괄호 전체를 한 덩어리(num-nw)로 묶어 '(' 뒤 외톨이 줄바꿈 차단
+    s = s.replace(/([가-힣A-Za-z0-9.,+-]+(?:달러|%))\(\s*([^()]{1,28})\s*\)/g, (_, head, inner) => {
+      const hHtml = head.endsWith('%')
+        ? `<span class="${head.startsWith('-') ? 'dn' : 'up'}" style="font-weight:800;">${head}</span>`
+        : `<span class="price-hl">${head}</span>`;
+      const iHtml = inner.endsWith('%')
+        ? `<span class="${inner.startsWith('-') ? 'dn' : 'up'}" style="font-weight:800;">${inner}</span>`
+        : inner;
+      return `<span class="num-nw">${hHtml}(${iHtml})</span>`;
     });
+    // 2) 소수점 포함 달러 금액 전체를 단일 색상·단일 블록으로 보호 (159. / 54달러 분리 차단)
+    s = s.replace(/(\d[\d,]*(?:\.\d+)?\s*(?:억\s*)?달러)/g, '<span class="price-hl">$1</span>');
+    // 3) 단독 괄호 등락률 및 일반 등락률
     s = s.replace(/\(\s*([+-]\d[\d,.]*%)\s*\)/g, (_, p1) => {
       const cls = p1.startsWith('+') ? 'up' : 'dn';
       return `<span class="${cls} num-nw" style="font-weight:800;">(${p1})</span>`;
@@ -1832,8 +1970,7 @@
       const cls = p1.startsWith('+') ? 'up' : 'dn';
       return `<span class="${cls} num-nw" style="font-weight:800;">${p1}</span>`;
     });
-    s = s.replace(/(\b\d[\d,]*(?:\.\d+)?\s*(?:억\s*)?달러)/g, '<span class="price-hl">$1</span>');
-    s = s.replace(/(\b\d[\d,]*(?:\.\d+)?\s*(?:원|건|배|만\s*건))/g, '<span class="num-nw">$1</span>');
+    s = s.replace(/(\d[\d,]*(?:\.\d+)?\s*(?:원|건|배|만\s*건))/g, '<span class="num-nw">$1</span>');
     return s;
   }
 
@@ -1846,9 +1983,13 @@
     }
 
     $('econJumpBar').style.gridTemplateColumns = `repeat(${Math.min(5, Math.max(1, secs.length))}, minmax(0, 1fr))`;
-    $('econJumpBar').innerHTML = secs.map(sec =>
-      `<button type="button" class="chip" data-ejump="${escHtml(sec.id)}">${escHtml(sec.shortTab || sec.title)}</button>`
-    ).join('');
+    $('econJumpBar').innerHTML = secs.map(sec => {
+      const rawTab = String(sec.shortTab || sec.title || '');
+      const styledTab = rawTab.startsWith('₿')
+        ? `<span style="color:#fbbf24;">₿</span>${escHtml(rawTab.slice(1))}`
+        : escHtml(rawTab);
+      return `<button type="button" class="chip" data-ejump="${escHtml(sec.id)}">${styledTab}</button>`;
+    }).join('');
 
     $('econJumpBar').querySelectorAll('[data-ejump]').forEach(btn => {
       btn.onclick = () => {
@@ -2128,7 +2269,6 @@
     if (cmChart) { try { cmChart.remove(); } catch(e){} cmChart = null; cmSeries = null; cmPriceLines = []; }
     wrap.innerHTML = '';
 
-    // 1단계: 기다림 없이 state.json 캐시 캔들로 0.01초 만에 즉시 선(先) 렌더링!
     let rawRows = ((((S && S.allOhlc) || {})[sym] || {})[tf]) || [];
     if (!rawRows.length && sym === 'BTC') {
       const fresh = await fetchFreshBtcKlinesDirect(tf);
@@ -2268,7 +2408,6 @@
       updateCrossBar({ time:lastBar.time, seriesData:new Map([[cmSeries, lastBar]]) });
     }
 
-    // 2단계: 매크로 4종목은 차트 선렌더링 직후 내 PC 서버(/api/macro_klines)에서 4초마다 실시간 라이브 업데이트
     if (sym !== 'BTC') {
       const syncMacroLiveTick = async () => {
         if (!$('candleModal').classList.contains('open') || cmSym !== sym || cmTf !== tf) return;
@@ -2429,7 +2568,7 @@
     setTxt('ordCountBadge', `${allOrds.length}건 대기 중`);
 
     if (allOrds.length > 0) {
-      $('ordFilterBar').style.display = 'flex';
+      $('ordFilterBar').style.display = 'grid';
       setTxt('ofltAll', `전체 (${allOrds.length})`);
       setTxt('ofltLong', `🟢 롱 (${sumInfo.longCount || 0}) · ${sumInfo.longNearest ? fmt(sumInfo.longNearest, 0) : '-'}`);
       setTxt('ofltShort', `🔴 숏 (${sumInfo.shortCount || 0}) · ${sumInfo.shortNearest ? fmt(sumInfo.shortNearest, 0) : '-'}`);
@@ -2437,20 +2576,62 @@
       $('ordFilterBar').style.display = 'none';
     }
 
+    const sp = sumInfo.spectrum || {};
+    if (isOwner() && d._vaultUnlocked && sp.ready) {
+      $('ordSpectrumBox').style.display = 'block';
+      $('specBtcPin').style.left = `${Number(sp.btcPosPct || 50).toFixed(1)}%`;
+      setTxt('specLongTxt', `🟢 ${fmt(sp.longNearest, 0)} (${Number(sp.longGapPct).toFixed(2)}%)`);
+      setTxt('specShortTxt', `🔴 ${fmt(sp.shortNearest, 0)} (+${Number(sp.shortGapPct).toFixed(2)}%)`);
+    } else {
+      $('ordSpectrumBox').style.display = 'none';
+    }
+
     if (isOwner() && d._vaultUnlocked && allOrds.length > 0) {
       $('ordExposureBox').style.display = 'flex';
       const le = sumInfo.longExposure || {}, se = sumInfo.shortExposure || {};
-      const expLines = [];
+      const expCards = [];
       if (le.count > 0) {
-        expLines.push(`<div class="ord-exp-item"><div>🟢 <b>롱 ${le.count}건 합산:</b> 평단 <b>${fmt(le.wAvg,1)}$</b> (${le.totQty} BTC)</div><div style="padding-left:16px;margin-top:2px;">전량 익절 <span class="up num-nw" style="font-weight:800;">+${le.fullTpPct}% (+${fmt(le.fullTpUsd,0)}$)</span> · 최대 손실 <span class="dn num-nw" style="font-weight:800;">${le.maxLossPct}% (${fmt(le.maxLossUsd,0)}$)</span></div></div>`);
+        expCards.push(`
+          <div class="exp-dir-card">
+            <div class="row-sb" style="font-size:11.5px;">
+              <span>🟢 <b>롱 ${le.count}건 합산</b></span>
+              <span class="num-nw" style="color:#cbd5e1;">평단 <b>${fmt(le.wAvg,1)}$</b> · ${le.totQty} BTC</span>
+            </div>
+            <div class="exp-pair-grid">
+              <div class="exp-cell">
+                <div class="exp-cell-lbl">전량 익절 시</div>
+                <div class="exp-cell-val up">+${fmt(le.fullTpPct, 2)}% (+${fmt(le.fullTpUsd, 0)}$)</div>
+              </div>
+              <div class="exp-cell">
+                <div class="exp-cell-lbl">최대 손실 시</div>
+                <div class="exp-cell-val dn">${fmt(le.maxLossPct, 2)}% (${fmt(le.maxLossUsd, 0)}$)</div>
+              </div>
+            </div>
+          </div>`);
       }
       if (se.count > 0) {
-        expLines.push(`<div class="ord-exp-item"><div>🔴 <b>숏 ${se.count}건 합산:</b> 평단 <b>${fmt(se.wAvg,1)}$</b> (${se.totQty} BTC)</div><div style="padding-left:16px;margin-top:2px;">전량 익절 <span class="up num-nw" style="font-weight:800;">+${se.fullTpPct}% (+${fmt(se.fullTpUsd,0)}$)</span> · 최대 손실 <span class="dn num-nw" style="font-weight:800;">${se.maxLossPct}% (${fmt(se.maxLossUsd,0)}$)</span></div></div>`);
+        expCards.push(`
+          <div class="exp-dir-card">
+            <div class="row-sb" style="font-size:11.5px;">
+              <span>🔴 <b>숏 ${se.count}건 합산</b></span>
+              <span class="num-nw" style="color:#cbd5e1;">평단 <b>${fmt(se.wAvg,1)}$</b> · ${se.totQty} BTC</span>
+            </div>
+            <div class="exp-pair-grid">
+              <div class="exp-cell">
+                <div class="exp-cell-lbl">전량 익절 시</div>
+                <div class="exp-cell-val up">+${fmt(se.fullTpPct, 2)}% (+${fmt(se.fullTpUsd, 0)}$)</div>
+              </div>
+              <div class="exp-cell">
+                <div class="exp-cell-lbl">최대 손실 시</div>
+                <div class="exp-cell-val dn">${fmt(se.maxLossPct, 2)}% (${fmt(se.maxLossUsd, 0)}$)</div>
+              </div>
+            </div>
+          </div>`);
       }
-      const nExpSig = expLines.join('|');
+      const nExpSig = expCards.join('|');
       if (ordExpSig !== nExpSig) {
         ordExpSig = nExpSig;
-        $('ordExposureBox').innerHTML = expLines.join('');
+        $('ordExposureBox').innerHTML = expCards.join('');
       }
     } else {
       $('ordExposureBox').style.display = 'none';
@@ -2465,7 +2646,7 @@
         const dispBadge = showOwnerDetails ? o.badge : (o.guestBadge || o.badge);
         const edgeCls = o.side === 'LONG' ? 'edge-long' : 'edge-short';
         const ladNote = (showOwnerDetails && o.track === 'LADDER' && o.ladderFullTpUsd > 0)
-          ? `<div style="font-size:11px;color:#7dd3fc;margin-top:3px;">🛡 심층 3분할 전량 체결 익절 시: <b>+${o.ladderFullTpPct}% (+${fmt(o.ladderFullTpUsd,0)}$)</b></div>`
+          ? `<div class="row-sb" style="font-size:11px;color:#7dd3fc;margin-top:6px;"><span>🛡 심층 3분할 전량 익절 시</span><b class="num-nw">+${fmt(o.ladderFullTpPct, 2)}% (+${fmt(o.ladderFullTpUsd, 0)}$)</b></div>`
           : '';
         return `
         <div class="ord-card ${edgeCls}">
@@ -2489,12 +2670,25 @@
           ${showOwnerDetails ? `
           <div class="owner-only">
             <div class="prox-track"><div class="prox-fill" id="oprox-${o.orderId}" style="width:${o.proximityPct || 20}%;background:${o.side==='LONG'?'#10b981':'#f43f5e'};"></div></div>
-            <div style="font-size:11.5px;color:var(--sub);margin-top:7px;" id="odist-${o.orderId}">현재가 대비 ${o.distPct>=0?'+':''}${o.distPct}% (${o.distUsd>=0?'+':''}${fmt(o.distUsd,0)}$) · 증거금 ${o.marginUsd}$</div>
-            <div style="font-size:11.5px;font-weight:800;margin-top:4px;">
-              <span class="up">단독 익절 +${o.tpSeedPct}% (+${fmt(o.tpUsd,0)}$)</span> · <span class="dn">손실 ${o.slSeedPct}% (${fmt(o.slUsd,0)}$)</span>
+            <div class="row-sb" style="font-size:11px;color:var(--sub);margin-top:7px;">
+              <span id="odist-${o.orderId}">현재가 대비 ${o.distPct>=0?'+':''}${o.distPct}% (${o.distUsd>=0?'+':''}${fmt(o.distUsd,0)}$)</span>
+              <span class="num-nw">증거금 <b style="color:#e2e8f0;">${o.marginUsd}$</b></span>
+            </div>
+            <div class="exp-pair-grid" style="margin-top:7px;">
+              <div class="exp-cell">
+                <div class="exp-cell-lbl">단독 익절 시</div>
+                <div class="exp-cell-val up">+${fmt(o.tpSeedPct, 2)}% (+${fmt(o.tpUsd, 0)}$)</div>
+              </div>
+              <div class="exp-cell">
+                <div class="exp-cell-lbl">단독 손실 시</div>
+                <div class="exp-cell-val dn">${fmt(o.slSeedPct, 2)}% (${fmt(o.slUsd, 0)}$)</div>
+              </div>
             </div>
             ${ladNote}
-            <div style="font-size:11.5px;color:#cbd5e1;margin-top:4px;">1R(35%익절·65%본절런너): <b>${fmt(o.r1Price,1)}</b></div>
+            <div class="row-sb" style="font-size:11px;color:#cbd5e1;margin-top:6px;">
+              <span>1R 방어선 (35%익절·BE+)</span>
+              <b class="num-nw">${fmt(o.r1Price,1)}$</b>
+            </div>
           </div>` : ''}
         </div>`;
       }).join('') : '<div style="color:var(--sub);font-size:12.5px;margin-top:10px;">해당 조건에 대기 중인 지정가 주문이 없습니다.</div>';
@@ -2508,7 +2702,7 @@
     }
   }
 
-  // 무깜빡임 상태 반영기 (사파리 볼트 자동 복호화 & 키 누락 시 원탭 복구)
+  // 무깜빡임 상태 반영기
   async function applyState(rawObj) {
     let d = { ...rawObj, _vaultUnlocked: false };
     if (isOwner() && d.ownerVault) {
@@ -2584,9 +2778,10 @@
     const offline = isEngineOffline();
     const sumInfo = d.orderSummary || {};
     if (isOwner()) {
+      const nsBox = $('newsShieldBanner');
       if (!d._vaultUnlocked) {
         setTxt('statusHeadline', '🔐 볼트 동기화 대기 중 (로고 5회 터치로 복구)');
-        $('newsShieldBanner').style.display = 'none';
+        nsBox.style.display = 'none';
       } else {
         if (d.cycleRunning && !offline) {
           setTxt('statusHeadline', d.phaseNote || '오더플로우 마스터 보드 6/6장 분석 중');
@@ -2597,20 +2792,23 @@
         }
 
         const ns = sumInfo.newsShield || {};
-        const nsEl = $('newsShieldBanner');
         if (ns.active && ns.event) {
-          nsEl.style.display = 'block';
-          nsEl.style.color = '#fb7185';
-          setTxt('newsShieldBanner', `🛡️ [지표 방어막 가동 중] ${ns.event.timeStr} ${ns.event.title} (${ns.phase})`);
+          nsBox.style.display = 'block';
+          $('shieldLine1').style.color = '#fb7185';
+          setTxt('shieldLine1', `🛡️ [지표 방어막 가동] ${ns.event.timeStr} · ${ns.event.title}`);
+          setTxt('shieldLine2', `${ns.phase} · 원거리 심층 분할만 유지 중`);
         } else if (ns.enabled && ns.nextEvent && Number(ns.nextEvent.diffMin) <= 240 && Number(ns.nextEvent.diffMin) > 0) {
           const dm = Math.max(1, Math.round(Number(ns.nextEvent.diffMin)));
           const shieldIn = Math.max(0, dm - 15);
-          const cdNote = shieldIn > 0 ? `발표 ${dm}분 전 · 방어막 가동 ${shieldIn}분 전` : `방어막 가동 임박 (발표 ${dm}분 전)`;
-          nsEl.style.display = 'block';
-          nsEl.style.color = '#fcd34d';
-          setTxt('newsShieldBanner', `🕒 예정 지표: ${ns.nextEvent.timeStr} ${ns.nextEvent.title} (${cdNote})`);
+          const l2Txt = shieldIn > 0
+            ? `발표 ${dm}분 전 · 🛡️ 방어막 가동 ${shieldIn}분 전`
+            : `발표 ${dm}분 전 · 🛡️ 방어막 가동 임박`;
+          nsBox.style.display = 'block';
+          $('shieldLine1').style.color = '#fde68a';
+          setTxt('shieldLine1', `🕒 ${ns.nextEvent.timeStr} · ${ns.nextEvent.title}`);
+          setTxt('shieldLine2', l2Txt);
         } else {
-          nsEl.style.display = 'none';
+          nsBox.style.display = 'none';
         }
       }
     }
@@ -2637,7 +2835,7 @@
     if (isOwner()) {
       if (!d._vaultUnlocked) {
         $('liveUpnlPill').style.display = 'none';
-        setTxt('riskAllowanceTxt', '1회 한도: 보안 볼트 동기화 후 표시');
+        setTxt('riskAllowanceTxt', '보안 볼트 동기화 후 표시');
         setTxt('totalRealizedBadge', '--');
         $('guardBrakeBanner').style.display = 'none';
         setTxt('wbVal', '--');
@@ -2659,7 +2857,7 @@
         const ladPct = Number(rg.ladderPct || 3.0);
         const snpUsd = Math.round(eqVal * (snpPct / 100.0));
         const ladUsd = Math.round(eqVal * (ladPct / 100.0));
-        setTxt('riskAllowanceTxt', `1회 한도: 단타 ${snpUsd.toLocaleString()}$ (${snpPct}%) · 심층 ${ladUsd.toLocaleString()}$ (${ladPct}%)`);
+        setTxt('riskAllowanceTxt', `단타 ${snpUsd.toLocaleString()}$ (${snpPct}%) · 심층 ${ladUsd.toLocaleString()}$ (${ladPct}%)`);
 
         const gbEl = $('guardBrakeBanner');
         const pfObj = d.performance || {};
@@ -2693,7 +2891,7 @@
       setTxt('totalRealizedBadge', `${tr >= 0 ? '+' : ''}${fmt(tr, 2)}$`);
 
       $('btnRestorePnl').style.display = pf.canRestoreEpoch ? 'inline-block' : 'none';
-      setTxt('recEpochStatusTxt', pf.resetAt ? `기준점: ${pf.resetAt} 이후 재집계 중` : '전체 누적 실현손익 집계 중');
+      setTxt('recEpochStatusTxt', pf.resetAt ? `${pf.resetAt.slice(5, 16)} 이후 집계` : '전체 누적 집계 중');
 
       const sc = pf.scorecard || {};
       const newScSig = JSON.stringify(sc);
@@ -2701,7 +2899,7 @@
         scSig = newScSig;
         setTxt('scPfVal', sc.profitFactor || '--');
         setTxt('scAvgWlVal', `+${fmt(sc.avgWinUsd || 0, 0)}$ / ${fmt(sc.avgLossUsd || 0, 0)}$`);
-        setTxt('scDirWinVal', `롱 ${sc.longWinRate || 0}% (${sc.longCount || 0}) · 숏 ${sc.shortWinRate || 0}% (${sc.shortCount || 0})`);
+        setTxt('scDirWinVal', `롱 ${sc.longWinRate || 0}% · 숏 ${sc.shortWinRate || 0}%`);
         setTxt('scBestWorstVal', `+${fmt(sc.bestTradeUsd || 0, 0)}$ / ${fmt(sc.worstTradeUsd || 0, 0)}$`);
       }
 
@@ -2744,7 +2942,7 @@
             const lUsd = Number(p.lockedPnlUsd);
             const lCls = lUsd >= 0 ? 'up' : 'dn';
             const lLbl = lUsd >= 0 ? '🛡 현재 스탑 보장 최소 수익' : '🛡 현재 스탑 최대 제한 손실';
-            lockBanner = `<div style="font-size:11.5px;margin-top:6px;padding:5px 9px;border-radius:8px;background:rgba(7,11,20,0.45);border:1px solid rgba(148,163,184,0.12);">${lLbl}: <b class="${lCls} num-nw">${lUsd >= 0 ? '+' : ''}${fmt(lUsd, 2)}$ (${p.lockedPnlPct >= 0 ? '+' : ''}${p.lockedPnlPct}%)</b></div>`;
+            lockBanner = `<div class="row-sb" style="font-size:11px;margin-top:7px;padding:6px 9px;border-radius:8px;background:rgba(7,11,20,0.45);border:1px solid rgba(148,163,184,0.12);"><span>${lLbl}</span><b class="${lCls} num-nw">${lUsd >= 0 ? '+' : ''}${fmt(lUsd, 2)}$ (${p.lockedPnlPct >= 0 ? '+' : ''}${p.lockedPnlPct}%)</b></div>`;
           }
           return `
           <div class="ord-card ${edgeCls}">
@@ -2752,8 +2950,13 @@
               <span style="font-weight:900;font-size:13.5px;" class="${p.side==='LONG'?'up':'dn'}">${p.side==='LONG'?'🟢 롱':'🔴 숏'} ${p.leverage}x · ${p.size} BTC</span>
               <span style="font-weight:900;font-size:14px;" id="posPnl-${p.side}" class="owner-only ${p.pnlUsd>=0?'up':'dn'}">${p.pnlUsd>=0?'+':''}${fmt(p.pnlUsd,2)}$ (${p.roePct>=0?'+':''}${p.roePct}%)</span>
             </div>
-            <div class="row-sb" style="margin-top:6px;font-size:11.5px;color:var(--sub);flex-wrap:wrap;">
-              <span>진입 <b>${fmt(p.entry,1)}</b> · 익절 <b class="up">${fmt(p.tp,1)}</b> · 손절 <b class="dn">${fmt(p.sl,1)}</b></span>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;font-size:12px;">
+              <div><div class="sm-lbl">진입평단</div><b>${fmt(p.entry,1)}</b></div>
+              <div><div class="sm-lbl">목표익절</div><b class="up">${fmt(p.tp,1)}</b></div>
+              <div><div class="sm-lbl">보호손절</div><b class="dn">${fmt(p.sl,1)}</b></div>
+            </div>
+            <div class="row-sb" style="margin-top:7px;font-size:11px;color:var(--sub);">
+              <span>증거금 <b style="color:#e2e8f0;">${p.marginUsd}$</b></span>
               ${liqBadge}
             </div>
             ${lockBanner}
@@ -2761,7 +2964,7 @@
             <div class="prox-track">
               <div class="ms-tick" style="left:37.5%;" title="0.75R 손실압축"></div>
               <div class="ms-tick" style="left:50%;" title="1.0R 35%익절·BE+"></div>
-              <div class="ms-tick" style="left:75%;" title="1.5R +0.6R잠금"></div>
+              <div class="ms-tick" style="left:75%;" title="1.5R +0.65R잠금"></div>
               <div class="prox-fill" id="posRbar-${p.side}" style="width:${p.milestonePct || 0}%;background:#38bdf8;"></div>
             </div>
             <div class="ms-labels"><span>진입</span><span>0.75R 압축</span><span>1R 익절·BE+</span><span>1.5R 잠금</span><span>2R+</span></div>
@@ -2791,18 +2994,45 @@
       $('ratBody').innerHTML = '';
     } else if (d.rationaleInfo) {
       const ri = d.rationaleInfo;
-      setTxt('ratTime', String(ri.updatedAt || '--:--').slice(-8));
+      setTxt('ratTime', String(ri.updatedAtHm || String(ri.updatedAt || '--:--').slice(-5)));
       setTxt('regimeBadge', ri.marketRegimeKo || '수급 분석');
-      const rs = (ri.updatedAt || '') + ':' + (ri.rationale || '');
+      const rs = JSON.stringify([ri.updatedAt, ri.rationale, ri.longSniper, ri.longLadder, ri.shortSniper, ri.shortLadder, ri.removedNotices, ri.skippedNotes]);
       if (ratSig !== rs) {
         ratSig = rs;
+        const paras = Array.isArray(ri.paragraphs) && ri.paragraphs.length ? ri.paragraphs : [ri.rationale || ''];
+        const parasHtml = paras.map((pTxt, idx) =>
+          `<div style="line-height:1.72;${idx > 0 ? 'margin-top:8px;' : ''}">${fmtInlineRich(pTxt)}</div>`
+        ).join('');
+
         const subCards = [];
-        if (ri.longSniper) subCards.push(`<div class="econ-row"><div class="econ-row-top"><span class="pill up">⚡ 단타 롱(${ri.longSniper.grade || 'A'}급) · ${fmt(ri.longSniper.entry,1)}$</span></div><div class="econ-row-body">${fmtInlineRich(ri.longSniper.reason)}</div></div>`);
-        if (ri.longLadder) subCards.push(`<div class="econ-row"><div class="econ-row-top"><span class="pill up">🛡 심층 3분할 롱(${ri.longLadder.grade || 'S'}급) · ${fmt(ri.longLadder.zone_high,0)}~${fmt(ri.longLadder.zone_low,0)}$</span></div><div class="econ-row-body">${fmtInlineRich(ri.longLadder.reason)}</div></div>`);
-        if (ri.shortSniper) subCards.push(`<div class="econ-row"><div class="econ-row-top"><span class="pill dn">⚡ 단타 숏(${ri.shortSniper.grade || 'A'}급) · ${fmt(ri.shortSniper.entry,1)}$</span></div><div class="econ-row-body">${fmtInlineRich(ri.shortSniper.reason)}</div></div>`);
-        if (ri.shortLadder) subCards.push(`<div class="econ-row"><div class="econ-row-top"><span class="pill dn">🛡 심층 3분할 숏(${ri.shortLadder.grade || 'S'}급) · ${fmt(ri.shortLadder.zone_low,0)}~${fmt(ri.shortLadder.zone_high,0)}$</span></div><div class="econ-row-body">${fmtInlineRich(ri.shortLadder.reason)}</div></div>`);
+        const renderSubCard = (cObj, clsSide, iconTitle, priceStr) => {
+          if (!cObj) return;
+          const stPill = cObj.liveStatus === 'HOLDING'
+            ? `<span class="pill up" style="font-size:10px;padding:2px 7px;">● 체결·보유 중</span>`
+            : `<span class="num-nw" style="font-size:12px;font-weight:900;color:#f8fafc;">${priceStr}</span>`;
+          subCards.push(`
+            <div class="econ-row">
+              <div class="row-sb" style="margin-bottom:6px;">
+                <span class="pill ${clsSide}">${iconTitle} (${cObj.grade || 'A'}급)</span>
+                ${stPill}
+              </div>
+              <div class="econ-row-body">${fmtInlineRich(cObj.reason)}</div>
+            </div>`);
+        };
+
+        renderSubCard(ri.longSniper, 'up', '⚡ 단타 롱', ri.longSniper ? `${fmt(ri.longSniper.entry,1)}$` : '');
+        renderSubCard(ri.longLadder, 'up', '🛡 심층 3분할 롱', ri.longLadder ? `${fmt(ri.longLadder.zone_high,0)}~${fmt(ri.longLadder.zone_low,0)}$` : '');
+        renderSubCard(ri.shortSniper, 'dn', '⚡ 단타 숏', ri.shortSniper ? `${fmt(ri.shortSniper.entry,1)}$` : '');
+        renderSubCard(ri.shortLadder, 'dn', '🛡 심층 3분할 숏', ri.shortLadder ? `${fmt(ri.shortLadder.zone_low,0)}~${fmt(ri.shortLadder.zone_high,0)}$` : '');
+
+        const removedArr = Array.isArray(ri.removedNotices) ? ri.removedNotices : [];
+        const removedHtml = removedArr.length
+          ? `<div style="margin-top:8px;font-size:11px;color:#fcd34d;padding:6px 9px;background:rgba(245,158,11,0.10);border:1px solid rgba(245,158,11,0.28);border-radius:8px;">🔄 실시간 연동: <b>${escHtml(removedArr.join(', '))}</b> 취소되어 근거 카드가 자동 정리됨</div>`
+          : '';
+
         const skipNotes = (ri.skippedNotes || []).map(sn => `<div style="font-size:11.5px;color:var(--sub);padding:4px 8px;background:rgba(148,163,184,0.08);border-radius:7px;">• ${escHtml(sn)}</div>`).join('');
-        $('ratBody').innerHTML = `<div style="line-height:1.72;">${fmtInlineRich(ri.rationale || '')}</div>` +
+
+        $('ratBody').innerHTML = parasHtml + removedHtml +
           (subCards.length ? `<div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">${subCards.join('')}</div>` : '') +
           (skipNotes ? `<div style="margin-top:8px;display:flex;flex-direction:column;gap:5px;">${skipNotes}</div>` : '');
       }
@@ -2810,6 +3040,7 @@
 
     if (d.econNews) {
       setTxt('econUpdTime', d.econNews.updatedAt || '--:--');
+      setTxt('econNextUpdTag', d.econNews.nextUpdateAt ? `(다음 ${d.econNews.nextUpdateAt})` : '');
       const eKey = (d.econNews.updatedAt || '') + ':' + (d.econNews.text || '').length;
       if (econSig !== eKey) {
         econSig = eKey;
