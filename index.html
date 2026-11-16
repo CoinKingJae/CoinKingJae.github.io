@@ -53,7 +53,7 @@
   .kj-toast.show { opacity:1; transform:translate(-50%, 0); }
   .kj-toast.err { border-color:rgba(244,63,94,0.65); color:#fda4af; }
 
-  /* 카드 상단 미세 광택선(Glass Highlight) */
+  /* 카드 상단 미세 광택선 */
   .card {
     background:var(--card); border:1px solid var(--line);
     box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);
@@ -80,17 +80,22 @@
   .btn.warn { background:rgba(245,158,11,0.18); border-color:rgba(245,158,11,0.5); color:#fde68a; }
   .btn.danger { background:rgba(244,63,94,0.15); border-color:rgba(244,63,94,0.45); color:#fda4af; }
 
-  /* 최상단 헤더 무절단 슬림 정렬 (오프라인 상태에서도 겹침 0%) */
-  .top-hdr { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:11px; flex-wrap:nowrap; }
-  .brand-wrap { display:flex; align-items:center; gap:6px; min-width:0; flex:1 1 auto; overflow:hidden; }
-  .brand-name { font-size:17.5px; font-weight:900; letter-spacing:-0.4px; user-select:none; cursor:default; white-space:nowrap; flex-shrink:0; }
+  /* 최상단 헤더 무절단 슬림 정렬 */
+  .top-hdr { display:flex; align-items:center; justify-content:space-between; gap:5px; margin-bottom:11px; flex-wrap:nowrap; }
+  .brand-wrap { display:flex; align-items:center; gap:5px; min-width:0; flex:1 1 auto; overflow:hidden; }
+  .brand-name { font-size:17px; font-weight:900; letter-spacing:-0.4px; user-select:none; cursor:default; white-space:nowrap; flex-shrink:0; }
   .status-pill-slim {
-    font-size:10.5px; font-weight:800; padding:3.5px 8px; border-radius:999px;
+    font-size:10.5px; font-weight:800; padding:3.5px 7.5px; border-radius:999px;
     background:var(--card2); border:1px solid var(--line); color:#10b981;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer;
   }
-  .hdr-actions { display:flex; align-items:center; gap:4.5px; flex-wrap:nowrap; flex-shrink:0; }
-  .hdr-actions .btn { padding:5.5px 8px; font-size:11px; }
+  .sess-pill {
+    font-size:10px; font-weight:900; padding:3px 6.5px; border-radius:999px;
+    background:rgba(56,189,248,0.16); border:1px solid rgba(56,189,248,0.45); color:#7dd3fc;
+    white-space:nowrap; cursor:pointer; flex-shrink:0; display:none; font-variant-numeric:tabular-nums;
+  }
+  .hdr-actions { display:flex; align-items:center; gap:4px; flex-wrap:nowrap; flex-shrink:0; }
+  .hdr-actions .btn { padding:5.5px 7.5px; font-size:11px; }
 
   /* BTC 히어로 카드 + 앰비언트 광원 + 24h 발광 위치 핀 + 실시간 초시계 펀딩 */
   .hero-card {
@@ -170,6 +175,13 @@
   }
   .chip.active { background:rgba(56,189,248,0.2); border-color:var(--acc); color:#fff; }
 
+  /* 차트 패키지 4개 탭 모바일 한줄 완벽 수납 그리드 (우측 잘림 0%) */
+  .board-tabs-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:4px; }
+  .board-tabs-grid .chip {
+    padding:5px 2px; font-size:10.2px; text-align:center;
+    overflow:hidden; text-overflow:ellipsis;
+  }
+
   /* 대기주문 2단 합산 박스 & 방향별 컬러 엣지 카드 */
   .ord-exp-box {
     background:#10192c; border:1px solid rgba(148,163,184,0.14); border-radius:12px;
@@ -204,7 +216,7 @@
   .b-title { font-size:12px; font-weight:800; color:#f1f5f9; line-height:1.35; word-break:keep-all; }
   .b-desc { font-size:10.5px; color:var(--sub); margin-top:3px; line-height:1.35; word-break:keep-all; }
 
-  /* 기관급 실시간 반응형 Performance 카드 + 2x3 대칭 그리드 + Days Trading 바 */
+  /* 기관급 실시간 반응형 Performance 카드 */
   .pf-card {
     background:#0b111e; border:1px solid rgba(148,163,184,0.18);
     box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);
@@ -222,7 +234,6 @@
   }
   .pf-seg-btn.active { background:#25324b; color:#ffffff; box-shadow:0 2px 6px rgba(0,0,0,0.35); }
 
-  /* 상단 2열 하이라이트 + 하단 2x3 완벽 대칭 */
   .pf-hero-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:15px 0 12px 0; }
   .pf-hero-box { background:#11192b; border:1px solid rgba(148,163,184,0.12); border-radius:12px; padding:10px 12px; }
   .pf-sub-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:13px 14px; margin-bottom:15px; padding:0 2px; }
@@ -325,10 +336,16 @@
   .sheet-card {
     width:100%; max-width:540px; background:#131b2b; border-top:1px solid rgba(148,163,184,0.25);
     border-radius:22px 22px 0 0; padding:12px 18px calc(22px + env(safe-area-inset-bottom, 0px));
-    box-shadow:0 -18px 45px rgba(0,0,0,0.75);
+    box-shadow:0 -18px 45px rgba(0,0,0,0.75); transition:transform 0.18s ease;
   }
-  .sheet-handle { width:38px; height:4px; border-radius:999px; background:rgba(148,163,184,0.35); margin:0 auto 14px; }
+  .sheet-handle { width:40px; height:4.5px; border-radius:999px; background:rgba(148,163,184,0.38); margin:0 auto 14px; cursor:grab; }
+  @keyframes kpShake {
+    0%, 100% { transform:translateX(0); }
+    20%, 60% { transform:translateX(-8px); }
+    40%, 80% { transform:translateX(8px); }
+  }
   .pin-dots { display:flex; justify-content:center; gap:12px; margin:14px 0 12px; }
+  .pin-dots.shake { animation:kpShake 0.32s ease; }
   .pin-dot {
     width:13px; height:13px; border-radius:50%; border:2px solid rgba(148,163,184,0.45);
     background:transparent; transition:all 0.14s ease;
@@ -349,11 +366,12 @@
   <!-- 자동 소멸 토스트 알림 -->
   <div class="kj-toast" id="kjToast"></div>
 
-  <!-- 최상단 헤더 (슬림 상태 배지 + 3버튼 무절단 고정) -->
+  <!-- 최상단 헤더 (슬림 상태 배지 + 3분 세션 타이머 + 3버튼 무절단 고정) -->
   <div class="top-hdr">
     <div class="brand-wrap">
       <div class="brand-name" id="brandLogo">KingJae</div>
-      <span class="status-pill-slim" id="liveDot">● 가동 중</span>
+      <span class="status-pill-slim" id="liveDot" title="터치 시 즉시 동기화">● 가동중</span>
+      <span class="sess-pill owner-only" id="sessTimerBadge" title="터치 시 연속 조작 세션 즉시 잠금">🔓 03:00</span>
     </div>
     <div class="hdr-actions owner-only">
       <button class="btn acc" id="btnShieldToggle" title="지표 발표 15분 전 자동 방어막">🛡️ 방어 ON</button>
@@ -389,13 +407,13 @@
       <div class="range-track"><div class="range-pin" id="btcRangePin" style="left:50%;"></div></div>
     </div>
 
-    <!-- 실시간 상태 & 예정 지표 방어막 배너 (오너 전용: 미인증 기기 완전 은닉) -->
+    <!-- 실시간 상태 & 예정 지표 방어막 배너 (오너 전용 · 1줄 고정 + 실시간 남은 분) -->
     <div class="card owner-only" id="ownerStatusCard" style="padding:10px 13px;">
-      <div class="row-sb" style="align-items:flex-start;gap:10px;">
-        <span id="statusHeadline" style="font-size:12.5px;font-weight:800;color:#f1f5f9;line-height:1.45;word-break:keep-all;">데이터 동기화 중...</span>
-        <span id="nextRunLabel" style="font-size:11.5px;font-weight:800;color:var(--acc);white-space:nowrap;flex-shrink:0;margin-top:1px;font-variant-numeric:tabular-nums;">분석 --:--</span>
+      <div class="row-sb" style="align-items:center;gap:8px;">
+        <span id="statusHeadline" style="font-size:12px;font-weight:800;color:#f1f5f9;line-height:1.4;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">데이터 동기화 중...</span>
+        <span id="nextRunLabel" style="font-size:11px;font-weight:800;color:var(--acc);white-space:nowrap;flex-shrink:0;font-variant-numeric:tabular-nums;">분석 --:--</span>
       </div>
-      <div id="newsShieldBanner" style="display:none;margin-top:7px;padding-top:7px;border-top:1px solid var(--line);font-size:11.5px;color:#fcd34d;font-weight:700;line-height:1.4;"></div>
+      <div id="newsShieldBanner" style="display:none;margin-top:7px;padding-top:7px;border-top:1px solid var(--line);font-size:11.5px;color:#fcd34d;font-weight:700;line-height:1.45;word-break:keep-all;"></div>
     </div>
 
     <!-- 4대 글로벌 매크로 2단 카드 -->
@@ -438,7 +456,7 @@
       <!-- 4단계 상향 리스크 기어 스위치 (오너 전용 · PIN 승인) -->
       <div class="gear-grid owner-only" id="riskGearBar">
         <button class="gear-btn" data-rmode="SAFE">🛡 안정+</button>
-        <button class="gear-btn active" data-rmode="BALANCE">⚖️ 밸런스+</button>
+        <button class="gear-btn" data-rmode="BALANCE">⚖️ 밸런스+</button>
         <button class="gear-btn" data-rmode="AGGRESSIVE">🔥 공격+</button>
         <button class="gear-btn" data-rmode="AUTO">🤖 AI자동</button>
       </div>
@@ -456,13 +474,13 @@
       </div>
     </div>
 
-    <!-- 보유 포지션 (오너 전용: 다단계 마일스톤 게이지 · 스탑 보장 손익 · 청산안전 · 긴급제어) -->
+    <!-- 보유 포지션 (오너 전용) -->
     <div class="card owner-only" id="posSection" style="display:none;">
       <div class="row-sb"><span style="font-size:14.5px;font-weight:900;">보유 포지션</span><span class="pill" id="posCountBadge">0건</span></div>
       <div id="posListWrap"></div>
     </div>
 
-    <!-- 다중 대기주문 (미인증 기기는 %·등급 제외 기본 배지만 노출 / %·증거금·합산·취소는 오너 전용) -->
+    <!-- 다중 대기주문 -->
     <div class="card">
       <div class="row-sb">
         <span style="font-size:14.5px;font-weight:900;">대기주문</span>
@@ -496,14 +514,14 @@
       <div id="ratBody" style="margin-top:10px;font-size:13px;line-height:1.68;color:#dbeafe;word-break:keep-all;"></div>
     </div>
 
-    <!-- 차트 패키지 (오너 전용 · 마스터 보드 6/6장) -->
+    <!-- 차트 패키지 (오너 전용 · 1줄 부제목 + 4열 완벽 수납 탭 그리드) -->
     <div class="card owner-only">
       <div class="row-sb">
         <span style="font-size:14.5px;font-weight:900;">차트 패키지</span>
         <span class="pill" style="color:#7dd3fc;border-color:rgba(56,189,248,0.35);">마스터 보드 6/6장</span>
       </div>
-      <div style="font-size:11.5px;color:var(--sub);margin:5px 0 9px;line-height:1.45;">실시간 오더플로우 · 청산 히트맵 · 멀티타임프레임 SMC 자체 연산 (<span class="num-nw">매시 01분 · 31분</span> 갱신)</div>
-      <div class="tabs-scroll" id="boardTabs">
+      <div style="font-size:11.5px;color:var(--sub);margin:5px 0 9px;line-height:1.45;word-break:keep-all;">오더플로우 · 청산 히트맵 · MTF SMC 자체 연산 <span class="num-nw">(01·31분 갱신)</span></div>
+      <div class="board-tabs-grid" id="boardTabs">
         <button class="chip active" data-bgrp="ALL">전체 (6)</button>
         <button class="chip" data-bgrp="SMC·모멘텀">SMC·모멘텀 (2)</button>
         <button class="chip" data-bgrp="CVD·청산맵">CVD·청산맵 (2)</button>
@@ -512,7 +530,7 @@
       <div class="b-grid" id="boardGrid"></div>
     </div>
 
-    <!-- 기관급 실시간 반응형 Performance 카드 (2x3 완벽 대칭 + Days Trading + 월수익 시뮬레이터) -->
+    <!-- 기관급 실시간 반응형 Performance 카드 -->
     <div class="pf-card owner-only" id="perfCardHost">
       <div class="row-sb" style="margin-bottom:12px;">
         <div class="pf-hdr">Performance</div>
@@ -528,7 +546,6 @@
         <button class="pf-seg-btn" data-pf="d365">365D</button>
       </div>
 
-      <!-- 상단 2열 핵심 수익 하이라이트 -->
       <div class="pf-hero-grid">
         <div class="pf-hero-box">
           <div class="pf-m-lbl">ROI</div>
@@ -540,7 +557,6 @@
         </div>
       </div>
 
-      <!-- 하단 2x3 완벽 대칭 세부 지표 -->
       <div class="pf-sub-grid">
         <div>
           <div class="pf-m-lbl">Sharpe Ratio</div>
@@ -582,7 +598,6 @@
         <span id="pfEndTs">--</span>
       </div>
 
-      <!-- 실시간 예상 월수익 & 3개월 복리 시뮬레이터 -->
       <div class="pf-proj-box">
         <div class="row-sb">
           <span style="font-size:12px;font-weight:900;color:#7dd3fc;" id="pfProjTitle">📈 예상 월수익 시뮬레이션</span>
@@ -598,13 +613,11 @@
         </div>
       </div>
 
-      <!-- Last Trade 바 -->
       <div class="pf-nav-bar" id="pfLastTradeBar">
         <span style="font-size:13px;font-weight:700;color:#7f8ea8;">Last Trade</span>
         <span style="font-size:13.5px;font-weight:800;color:#f8fafc;" id="pfLastTradeTxt">체결 대기 중  ›</span>
       </div>
 
-      <!-- Days Trading 바 (터치 시 5번 사진 스타일 상세 바텀시트 오픈) -->
       <div class="pf-nav-bar" id="pfDaysTradingBar">
         <span style="font-size:13px;font-weight:700;color:#7f8ea8;">Days Trading</span>
         <span style="font-size:13.5px;font-weight:800;color:#f8fafc;" id="pfDaysTradingTxt">1일차  ›</span>
@@ -630,7 +643,7 @@
     </div>
   </div>
 
-  <!-- [탭 3] 기록 (오너 전용: 성적표 · 손익 달력 · 실현손익 필터/CSV · 사이클 기록) -->
+  <!-- [탭 3] 기록 -->
   <div class="tab-pane owner-only" id="pane-rec">
     <div class="card">
       <div class="row-sb" style="margin-bottom:11px;">
@@ -642,7 +655,6 @@
       </div>
 
       <div id="recPnlPane">
-        <!-- 전략 성적표 요약 박스 -->
         <div class="sc-grid">
           <div><div class="sm-lbl">손익팩터 (Profit Factor)</div><div class="sm-val" id="scPfVal">--</div></div>
           <div><div class="sm-lbl">평균 익절 / 평균 손절</div><div class="sm-val" id="scAvgWlVal">--</div></div>
@@ -650,7 +662,6 @@
           <div><div class="sm-lbl">최고 효자 / 최대 손실</div><div class="sm-val" id="scBestWorstVal">--</div></div>
         </div>
 
-        <!-- 최근 28일 일별 손익 달력 히트맵 -->
         <div class="cal-box">
           <div class="row-sb">
             <span style="font-size:12px;font-weight:900;color:#e2e8f0;">📅 최근 4주 일별 손익 달력</span>
@@ -667,7 +678,6 @@
           </div>
         </div>
 
-        <!-- 승/패 필터 & CSV 내보내기 -->
         <div class="row-sb" style="margin-bottom:8px;">
           <div class="tabs-line" id="pnlFilterTabs">
             <button class="chip active" data-pflt="ALL">전체</button>
@@ -709,7 +719,10 @@
     <div class="modal-card">
       <div class="row-sb" style="padding:11px 14px;border-bottom:1px solid var(--line);">
         <div>
-          <div style="font-size:13.5px;font-weight:900;" id="cmTitle">BYBIT BTCUSDT Perp</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <span style="font-size:13.5px;font-weight:900;" id="cmTitle">BYBIT BTCUSDT Perp</span>
+            <span class="pill" id="cmDelayBadge" style="display:none;font-size:9.5px;padding:2px 6px;color:#fcd34d;border-color:rgba(245,158,11,0.4);">CME 10분 지연</span>
+          </div>
           <div style="font-size:18px;font-weight:900;margin-top:2px;font-variant-numeric:tabular-nums;"><span id="cmPrice">--</span> <span style="font-size:12px;" id="cmChg">--</span></div>
         </div>
         <button class="btn danger" id="cmCloseBtn">✕ 닫기</button>
@@ -756,29 +769,33 @@
     </div>
   </div>
 
-  <!-- [모달 3] Days Trading & Last Trade 상세 바텀시트 (5번 사진 바이낸스 스타일 구현) -->
+  <!-- [모달 3] Days Trading & Last Trade 상세 바텀시트 (Closed Portfolios 정식 수치 행 분리) -->
   <div class="modal-bg sheet-align" id="daysSheetModal">
-    <div class="sheet-card">
+    <div class="sheet-card" id="daysSheetCard">
       <div class="sheet-handle"></div>
-      <div style="font-size:18px;font-weight:900;color:#f8fafc;margin-bottom:18px;">Last Trade</div>
-      <div class="row-sb" style="margin-bottom:14px;">
+      <div style="font-size:18px;font-weight:900;color:#f8fafc;margin-bottom:16px;">Last Trade</div>
+      <div class="row-sb" style="margin-bottom:13px;">
         <span style="font-size:14px;color:#8b9bb4;font-weight:700;">Last Trade</span>
         <span style="font-size:14.5px;color:#f8fafc;font-weight:800;font-variant-numeric:tabular-nums;" id="sheetLastTradeVal">--</span>
       </div>
-      <div class="row-sb" style="margin-bottom:14px;">
+      <div class="row-sb" style="margin-bottom:13px;">
         <span style="font-size:14px;color:#8b9bb4;font-weight:700;">Days Trading</span>
         <span style="font-size:15px;color:#f8fafc;font-weight:900;font-variant-numeric:tabular-nums;" id="sheetDaysVal">1</span>
       </div>
-      <div style="font-size:12.5px;color:#7f8ea8;line-height:1.55;margin-bottom:20px;" id="sheetDescVal">
-        현재 운용 기준일(<span style="color:#cbd5e1;">--</span>)부터 계산된 매매 경과 일수입니다. (Closed Portfolios: <b style="color:#f8fafc;">0</b>)
+      <div class="row-sb" style="margin-bottom:14px;">
+        <span style="font-size:14px;color:#8b9bb4;font-weight:700;">Closed Portfolios</span>
+        <span style="font-size:14.5px;color:#cbd5e1;font-weight:800;font-variant-numeric:tabular-nums;" id="sheetClosedVal">0</span>
+      </div>
+      <div style="font-size:12.5px;color:#7f8ea8;line-height:1.58;margin-bottom:20px;word-break:keep-all;" id="sheetDescVal">
+        현재 운용 기준일(<span style="color:#cbd5e1;">--</span>)부터 계산된 매매 일수이며, 이전 초기화 구간은 합산되지 않습니다.
       </div>
       <button id="daysSheetOkBtn" style="width:100%;padding:13px;border:none;border-radius:12px;background:#38bdf8;color:#070b14;font-size:15px;font-weight:900;cursor:pointer;">OK</button>
     </div>
   </div>
 
-  <!-- [모달 4] 통합 6자리 보안 터치 키패드 바텀시트 (화면 잠금해제 & 전 버튼 PIN 승인 공용 · 사파리 키보드 밀림 0%) -->
+  <!-- [모달 4] 통합 6자리 보안 터치 키패드 바텀시트 -->
   <div class="modal-bg sheet-align" id="keypadModal">
-    <div class="sheet-card">
+    <div class="sheet-card" id="keypadSheetCard">
       <div class="sheet-handle"></div>
       <div class="row-sb">
         <span style="font-size:15.5px;font-weight:900;color:#f8fafc;" id="kpModalTitle">🔐 원격 조작 보안 승인</span>
@@ -824,11 +841,14 @@
   let ordSig = '', ordExpSig = '', posSig = '', brdSig = '', ratSig = '', econSig = '', pnlSig = '', scSig = '', calSig = '', logSig = '', perfSig = '';
   let perfChart = null, perfSeries = null, perfLastPointTime = 0, perfPeakEq = 0, perfBaseStartEq = 53000;
   let cmChart = null, cmSeries = null, cmSym = 'BTC', cmTf = '15m', showLines = true, showMarks = true, cmPriceLines = [], lastTradeTs = 0, cmLastCandle = null;
+  let cmMacroPollTmr = null;
   let curLbArr = [], curLbIdx = 0;
 
-  // 전용 6자리 터치 키패드 & 메모리 전용 3분 연속 조작 세션 상태 (localStorage 미저장!)
-  let kpMode = 'cmd', kpPinBuf = '', pendingCmd = null, cmdInFlight = false;
-  let memVaultKeyHex = '', memSessionToken = '', memSessionExp = 0;
+  // 전용 6자리 터치 키패드 & 사파리 볼트 영구 복호화 키(평문 PIN 역산 불가 파생해시)
+  let kpMode = 'cmd', kpPinBuf = '', pendingCmd = null, cmdInFlight = false, vaultAutoPrompted = false;
+  let savedVaultKeyHex = '';
+  try { savedVaultKeyHex = localStorage.getItem('kj_v40_vault_key') || ''; } catch(e){}
+  let memSessionToken = '', memSessionExp = 0;
 
   // 24시간 브라우저 직결 웹소켓 시세 상태
   const wsLive = {
@@ -860,13 +880,20 @@
     document.body.classList.toggle('modal-open', anyOpen);
   }
   function openModalById(id) { $(id).classList.add('open'); syncBodyModalLock(); }
-  function closeModalById(id) { $(id).classList.remove('open'); syncBodyModalLock(); }
+  function closeModalById(id) {
+    if (id === 'candleModal' && cmMacroPollTmr) {
+      clearInterval(cmMacroPollTmr);
+      cmMacroPollTmr = null;
+    }
+    $(id).classList.remove('open');
+    syncBodyModalLock();
+  }
 
   function next01Or31Info() {
     const nowMs = Date.now();
     const k = new Date(nowMs + 9 * 3600000);
     const h = k.getUTCHours(), m = k.getUTCMinutes(), s = k.getUTCSeconds();
-    let targetH = h, targetM = 1, addH = 0;
+    let targetM = 1, addH = 0;
     if (m < 1 || (m === 1 && s < 3)) {
       targetM = 1;
     } else if (m < 31 || (m === 31 && s < 3)) {
@@ -892,12 +919,10 @@
     return { date:`${mm}/${dd}`, full:`${mm}/${dd} ${hh}:${mi}`, isDayStart:(hh === '00' && mi === '00') || (hh === '09' && mi === '00') };
   }
 
-  // 실시간 펀딩비 초시계 포맷터 ('후' 글자 제거 · HH:MM:SS 초시계 · 정각 자동 롤오버)
   function getFundingTimerInfo(nextMs) {
     const now = Date.now();
     let targetMs = Number(nextMs || 0);
     if (!targetMs || targetMs <= now) {
-      // 바이비트 선형 BTCUSDT 표준 8시간 정산(00:00, 08:00, 16:00 UTC = 09:00, 17:00, 01:00 KST) 자동 롤오버
       const periodMs = 8 * 3600 * 1000;
       targetMs = (Math.floor(now / periodMs) + 1) * periodMs;
     }
@@ -944,6 +969,19 @@
     const wsAlive = (bybitWs && bybitWs.readyState === 1) || (Date.now() - wsLive.lastBtcTs < 12000);
     $('wsStreamDot').style.background = wsAlive ? '#10b981' : '#f59e0b';
 
+    const sessEl = $('sessTimerBadge');
+    if (sessEl) {
+      if (isOwner() && memSessionToken && Date.now() < memSessionExp) {
+        const remS = Math.max(0, Math.floor((memSessionExp - Date.now()) / 1000));
+        const mm = String(Math.floor(remS / 60)).padStart(2, '0');
+        const ss = String(remS % 60).padStart(2, '0');
+        sessEl.style.display = 'inline-flex';
+        setTxt('sessTimerBadge', `🔓 ${mm}:${ss}`);
+      } else {
+        sessEl.style.display = 'none';
+      }
+    }
+
     if (!S) return;
     const dotEl = $('liveDot');
     const offline = isEngineOffline();
@@ -962,14 +1000,22 @@
     }
   }
 
+  $('sessTimerBadge').onclick = () => {
+    memSessionToken = '';
+    memSessionExp = 0;
+    $('sessTimerBadge').style.display = 'none';
+    showToast('🔒 연속 조작 세션이 즉시 잠금 처리되었습니다.');
+  };
+
   $('liveDot').onclick = () => {
+    fetchStateTick();
     if (!S || !S.ts) return;
     const ageMin = Math.max(0, Math.floor((Date.now() - Number(S.ts)) / 60000));
     const kstS = new Date(Number(S.ts) + 9 * 3600000).toISOString().replace('T', ' ').slice(5, 19);
     if (isEngineOffline()) {
-      showToast(`🔌 PC 엔진 응답 중단 (${ageMin}분 전 · ${kstS} KST 마지막 동기화)`, true);
+      showToast(`🔌 오프라인 (${ageMin}분 전 · ${kstS}) — 시세 즉시 동기화`, true);
     } else {
-      showToast(`● PC 엔진 정상 가동 중 (최근 동기화 ${kstS} KST)`);
+      showToast(`● 가동중 · 최신 동기화 완료 (${kstS} KST)`);
     }
   };
 
@@ -1007,7 +1053,7 @@
   }, 1000);
 
   // ============================================================================
-  // [핵심] WebCrypto SHA256-CTR + HMAC 오너 볼트 복호화기 (공개 state.json 원천 방어)
+  // [핵심] WebCrypto SHA256-CTR + HMAC 오너 볼트 복호화기
   // ============================================================================
   async function sha256Bytes(bytes) {
     const buf = await crypto.subtle.digest('SHA-256', bytes);
@@ -1036,7 +1082,6 @@
       const ct = raw.slice(28);
       const keyBytes = hexToBytes(keyHex);
 
-      // HMAC-SHA256 무결성 검증
       const hmacKey = await crypto.subtle.importKey('raw', keyBytes, { name:'HMAC', hash:'SHA-256' }, false, ['sign']);
       const prefix = new TextEncoder().encode('KJ40V1');
       const macInput = new Uint8Array(prefix.length + nonce.length + ct.length);
@@ -1046,7 +1091,6 @@
         if (calcMac[i] !== mac[i]) return null;
       }
 
-      // SHA256-CTR 복호화
       const nBlocks = Math.ceil(ct.length / 32);
       const plain = new Uint8Array(ct.length);
       for (let b = 0; b < nBlocks; b++) {
@@ -1065,8 +1109,14 @@
   }
 
   // ============================================================================
-  // [핵심] 24시간 브라우저 직결 웹소켓 시세 엔진
+  // [핵심] 24시간 브라우저 직결 웹소켓 시세 엔진 + 괄호 찢어짐 없는 상태바 렌더러
   // ============================================================================
+  function renderOwnerStatusHeadlineHtml(badgeTxt, sideKo, priceVal, distPctVal) {
+    const sg = distPctVal >= 0 ? '+' : '';
+    const dCls = distPctVal >= 0 ? 'up' : 'dn';
+    $('statusHeadline').innerHTML = `${escHtml(badgeTxt)} ${escHtml(sideKo)} <span class="num-nw">${fmt(priceVal, 1)}</span> <span class="${dCls} num-nw">(${sg}${distPctVal.toFixed(2)}%)</span>`;
+  }
+
   function scheduleLiveTickRender() {
     if (wsLive.rafPending) return;
     wsLive.rafPending = true;
@@ -1124,7 +1174,7 @@
 
     if (!S) return;
     S.btcPrice = bp;
-    if (!isOwner()) return;
+    if (!isOwner() || !S._vaultUnlocked) return;
 
     const offline = isEngineOffline();
     const posArr = S.positions || [];
@@ -1168,7 +1218,7 @@
 
       if (!S.cycleRunning || offline) {
         const p0 = posArr[0];
-        setTxt('statusHeadline', `${p0.side === 'LONG' ? '🟢 롱' : '🔴 숏'} 보유 ${p0.size.toFixed(3)} BTC (${p0.pnlUsd >= 0 ? '+' : ''}${Math.round(p0.pnlUsd).toLocaleString()}$ · ${p0.rMultiple >= 0 ? '+' : ''}${p0.rMultiple.toFixed(2)}R)`);
+        $('statusHeadline').innerHTML = `${p0.side === 'LONG' ? '🟢 롱' : '🔴 숏'} ${p0.size.toFixed(3)} BTC <span class="${p0.pnlUsd>=0?'up':'dn'} num-nw">(${p0.pnlUsd >= 0 ? '+' : ''}${Math.round(p0.pnlUsd).toLocaleString()}$ · ${p0.rMultiple >= 0 ? '+' : ''}${p0.rMultiple.toFixed(2)}R)</span>`;
       }
 
       const pf = S.performance;
@@ -1216,8 +1266,7 @@
         if (!nearestOrd || absD < Math.abs(nearestOrd.distPct)) nearestOrd = o;
       });
       if ((!S.cycleRunning || offline) && posArr.length === 0 && nearestOrd) {
-        const sg = nearestOrd.distPct >= 0 ? '+' : '';
-        setTxt('statusHeadline', `${nearestOrd.badge} ${nearestOrd.sideKo} 대기 ${fmt(nearestOrd.price, 1)} (${sg}${nearestOrd.distPct.toFixed(2)}%)`);
+        renderOwnerStatusHeadlineHtml(nearestOrd.badge, nearestOrd.sideKo, nearestOrd.price, nearestOrd.distPct);
       }
     }
   }
@@ -1328,7 +1377,7 @@
     }
   });
 
-  // 모달 공통 닫기
+  // 모달 공통 닫기 & 바텀시트 쓸어내려 닫기(Swipe-down) 제스처
   document.querySelectorAll('.modal-bg').forEach(bg => {
     bg.addEventListener('click', (ev) => {
       if (ev.target === bg) {
@@ -1338,23 +1387,57 @@
     });
     bg.addEventListener('touchmove', (ev) => { if (ev.target === bg) ev.preventDefault(); }, { passive:false });
   });
+
+  function attachSheetSwipeClose(sheetId, modalId, onCloseExtra=null) {
+    const card = $(sheetId);
+    if (!card) return;
+    let sy = 0, dy = 0, tracking = false;
+    card.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1 && !e.target.closest('.kp-btn')) {
+        sy = e.touches[0].clientY; dy = 0; tracking = true;
+      }
+    }, { passive:true });
+    card.addEventListener('touchmove', (e) => {
+      if (!tracking || e.touches.length !== 1) return;
+      dy = Math.max(0, e.touches[0].clientY - sy);
+      if (dy > 8) card.style.transform = `translateY(${dy}px)`;
+    }, { passive:true });
+    card.addEventListener('touchend', () => {
+      if (!tracking) return;
+      tracking = false;
+      card.style.transform = '';
+      if (dy > 85) {
+        if (onCloseExtra) onCloseExtra();
+        closeModalById(modalId);
+      }
+    }, { passive:true });
+  }
+  attachSheetSwipeClose('daysSheetCard', 'daysSheetModal');
+  attachSheetSwipeClose('keypadSheetCard', 'keypadModal', () => { pendingCmd = null; });
+
   $('cmCloseBtn').onclick = () => closeModalById('candleModal');
   $('lbClose').onclick = () => closeModalById('lbModal');
   $('daysSheetOkBtn').onclick = () => closeModalById('daysSheetModal');
   $('kpCloseBtn').onclick = () => { pendingCmd = null; closeModalById('keypadModal'); };
 
   // ============================================================================
-  // [보안 핵심] 전용 6자리 보안 터치 키패드 엔진 (사파리 키보드 밀림 0% + PC 숫자키 지원)
+  // [보안 핵심] 전용 6자리 보안 터치 키패드 & 사파리 볼트 영구 키 동기화
   // ============================================================================
-  function renderKpDots() {
-    const dots = document.querySelectorAll('#kpDots .pin-dot');
+  function renderKpDots(shake=false) {
+    const wrap = $('kpDots');
+    const dots = wrap.querySelectorAll('.pin-dot');
     dots.forEach((d, idx) => d.classList.toggle('filled', idx < kpPinBuf.length));
+    if (shake) {
+      wrap.classList.remove('shake');
+      void wrap.offsetWidth;
+      wrap.classList.add('shake');
+    }
   }
 
   function openKeypadModal(mode, titleText, summaryText) {
     kpMode = mode;
     kpPinBuf = '';
-    renderKpDots();
+    renderKpDots(false);
     setTxt('kpModalTitle', titleText);
     setTxt('kpSummaryBox', summaryText);
     $('kpKeepWrap').style.display = mode === 'cmd' ? 'flex' : 'none';
@@ -1365,17 +1448,20 @@
     if (kpMode === 'unlock') {
       const vHash = await sha256Hex('KJ_V40_VERIFY:' + pinVal);
       if (vHash === VERIFY_HASH) {
-        memVaultKeyHex = await sha256Hex('KJ_V40_VAULT_KEY:' + pinVal);
-        localStorage.setItem('kj_v40_verify_hash', vHash);
-        localStorage.setItem('kj_owner_mark', '1');
+        savedVaultKeyHex = await sha256Hex('KJ_V40_VAULT_KEY:' + pinVal);
+        try {
+          localStorage.setItem('kj_v40_verify_hash', vHash);
+          localStorage.setItem('kj_v40_vault_key', savedVaultKeyHex);
+          localStorage.setItem('kj_owner_mark', '1');
+        } catch(e){}
         document.documentElement.setAttribute('data-auth', 'owner');
         closeModalById('keypadModal');
         ordSig = ''; posSig = ''; perfSig = ''; brdSig = ''; ratSig = '';
         if (S) await applyState(S);
-        showToast('✅ 관리자 화면 및 암호화 볼트 잠금 해제 완료');
+        showToast('✅ 관리자 화면 및 암호화 볼트 동기화 완료');
       } else {
         kpPinBuf = '';
-        renderKpDots();
+        renderKpDots(true);
         showToast('❌ PIN 번호가 일치하지 않습니다.', true);
       }
       return;
@@ -1439,8 +1525,11 @@
       taps = 0;
       if (isOwner()) {
         if (confirm('관리자 화면을 잠그고 미인증 게스트 화면으로 전환하시겠습니까?')) {
-          localStorage.removeItem('kj_v40_verify_hash');
-          memVaultKeyHex = '';
+          try {
+            localStorage.removeItem('kj_v40_verify_hash');
+            localStorage.removeItem('kj_v40_vault_key');
+          } catch(e){}
+          savedVaultKeyHex = '';
           memSessionToken = '';
           memSessionExp = 0;
           document.documentElement.setAttribute('data-auth', 'guest');
@@ -1478,7 +1567,7 @@
     } catch(e){}
   }
 
-  // 전 조작 버튼 개별 PIN 보안 승인 게이트 (+ 선택형 3분 메모리 세션 지원)
+  // 전 조작 버튼 개별 PIN 보안 승인 게이트
   async function refreshDirectUrlFromGh() {
     try {
       const r = await fetch('state.json?t=' + Date.now(), { cache:'no-store' });
@@ -1528,7 +1617,7 @@
     if (!base) {
       cmdInFlight = false;
       kpPinBuf = '';
-      renderKpDots();
+      renderKpDots(true);
       showToast('⚠️ PC 엔진이 오프라인이거나 터널 연결 대기 중입니다.', true);
       return;
     }
@@ -1545,15 +1634,16 @@
           return;
         }
         kpPinBuf = '';
-        renderKpDots();
+        renderKpDots(true);
         showToast('❌ ' + errMsg, true);
         if (errMsg.includes('잠겼습니다') || errMsg.includes('잠금')) {
           pendingCmd = null;
           closeModalById('keypadModal');
         }
       } else {
-        if (pinVal && !memVaultKeyHex) {
-          memVaultKeyHex = await sha256Hex('KJ_V40_VAULT_KEY:' + pinVal);
+        if (pinVal && !savedVaultKeyHex) {
+          savedVaultKeyHex = await sha256Hex('KJ_V40_VAULT_KEY:' + pinVal);
+          try { localStorage.setItem('kj_v40_vault_key', savedVaultKeyHex); } catch(e){}
         }
         if (res.body.tempSessionToken) {
           memSessionToken = String(res.body.tempSessionToken);
@@ -1572,7 +1662,10 @@
           try {
             const res2 = await tryPost(directApi);
             if (res2.body.ok) {
-              if (pinVal && !memVaultKeyHex) memVaultKeyHex = await sha256Hex('KJ_V40_VAULT_KEY:' + pinVal);
+              if (pinVal && !savedVaultKeyHex) {
+                savedVaultKeyHex = await sha256Hex('KJ_V40_VAULT_KEY:' + pinVal);
+                try { localStorage.setItem('kj_v40_vault_key', savedVaultKeyHex); } catch(e){}
+              }
               if (res2.body.tempSessionToken) {
                 memSessionToken = String(res2.body.tempSessionToken);
                 memSessionExp = Date.now() + Number(res2.body.tempSessionTtl || 180) * 1000;
@@ -1588,13 +1681,12 @@
         }
       }
       kpPinBuf = '';
-      renderKpDots();
+      renderKpDots(true);
       showToast('⚠️ PC 봇 응답 지연 — 가동 상태를 확인해 주세요.', true);
     }
     cmdInFlight = false;
   }
 
-  // 전 조작 버튼 PIN 승인 게이트 연결
   $('btnForceRun').onclick = () => requestPinAndSendCmd('⚡ [타점 분석] 즉시 AI 마스터 보드 분석 실행', 'force_run');
   $('btnForceNews').onclick = () => requestPinAndSendCmd('🌐 [경제 브리핑] 즉시 실시간 검색 실행', 'force_news');
   $('btnPauseToggle').onclick = () => {
@@ -1610,7 +1702,7 @@
   document.querySelectorAll('[data-lev]').forEach(b => {
     b.onclick = () => {
       const lv = Number(b.dataset.lev);
-      if (S && Number(S.leverage) === lv) {
+      if (S && S._vaultUnlocked && Number(S.leverage) === lv) {
         showToast(`이미 교차 ${lv}x 레버리지가 적용 중입니다.`);
         return;
       }
@@ -1621,7 +1713,7 @@
   document.querySelectorAll('[data-rmode]').forEach(b => {
     b.onclick = () => {
       const rm = b.dataset.rmode;
-      if (S && String(S.riskMode || 'BALANCE') === rm) {
+      if (S && S._vaultUnlocked && String(S.riskMode || '') === rm) {
         showToast(`이미 [${b.textContent}] 기어가 적용 중입니다.`);
         return;
       }
@@ -1633,7 +1725,6 @@
   $('btnRestorePnl').onclick = () => requestPinAndSendCmd('↩ [실현손익 복원] 직전 집계 기준점으로 되돌리기', 'restore_pnl_epoch');
   $('btnClearLogs').onclick = () => requestPinAndSendCmd('🗑 [사이클 기록] 운용 로그 전체 비우기', 'clear_logs');
 
-  // 대기주문 방향 필터 & 접기/펼치기
   $('btnToggleOrdFold').onclick = () => {
     ordFolded = !ordFolded;
     $('ordListWrap').style.display = ordFolded ? 'none' : 'block';
@@ -1647,7 +1738,6 @@
     if (S) renderOpenOrdersSection(S);
   };
 
-  // 하단 탭 전환
   function markRecAsSeen() {
     if (!S) return;
     const latestLogId = ((S.logs || [])[0] || {}).id || 0;
@@ -1723,13 +1813,12 @@
     if (S) renderLogsList(S.logs || []);
   };
 
-  // 본문 내 모든 금액·수치·괄호 등락률이 줄바꿈으로 찢어지지 않도록 한 덩어리(nowrap) 보호
   function fmtInlineRich(str) {
     let s = escHtml(str || '');
     s = s.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
     s = s.replace(/\(\s*([+-]\d[\d,.]*%)\s*\)/g, (_, p1) => {
       const cls = p1.startsWith('+') ? 'up' : 'dn';
-      return `(<span class="${cls} num-nw" style="font-weight:800;">${p1}</span>)`;
+      return `<span class="${cls} num-nw" style="font-weight:800;">(${p1})</span>`;
     });
     s = s.replace(/(?<![\w.-])([+-]\d[\d,.]*%)/g, (_, p1) => {
       const cls = p1.startsWith('+') ? 'up' : 'dn';
@@ -1818,7 +1907,6 @@
     setTxt('pfStartTs', pObj.startTimeStr || '--');
     setTxt('pfEndTs', pObj.endTimeStr || '--');
 
-    // 예상 월수익 & 3개월 복리 시뮬레이터
     const mp = pf.monthlyProjection || {};
     setTxt('pfProjModeTag', mp.modeLabel || '⚖️ 밸런스+');
     if (mp.livePaceAvailable) {
@@ -1841,7 +1929,6 @@
       setTxt('pfProj3mTxt', `${Number(mp.model3mEquity || eqNow).toLocaleString()} USDT`);
     }
 
-    // Last Trade & Days Trading 바 업데이트 및 상세 시트 연동
     const lastTrStr = (pf.lastTrade && pf.lastTrade.timeStr) ? pf.lastTrade.timeStr : '체결 대기 중';
     const daysNum = Number(pf.daysTrading || 1);
     const closedPortN = Number(pf.closedPortfolios || 0);
@@ -1860,14 +1947,14 @@
     $('pfDaysTradingBar').onclick = () => {
       setTxt('sheetLastTradeVal', lastTrStr);
       setTxt('sheetDaysVal', String(daysNum));
-      $('sheetDescVal').innerHTML = `현재 운용 프로젝트 기준일(<span style="color:#cbd5e1;">${escHtml(projStartS)} KST</span>)로부터 경과한 매매 일수이며, 이전 초기화 구간은 합산되지 않습니다. (Closed Portfolios: <b style="color:#f8fafc;">${closedPortN}</b>)`;
+      setTxt('sheetClosedVal', String(closedPortN));
+      $('sheetDescVal').innerHTML = `현재 운용 프로젝트 기준일(<span class="num-nw" style="color:#cbd5e1;">${escHtml(projStartS)} KST</span>)로부터 경과한 매매 일수이며, 이전 초기화 구간은 합산되지 않습니다.`;
       openModalById('daysSheetModal');
     };
 
     const box = $('perfChartBox');
     if (!box || box.clientWidth < 40) return;
 
-    // 0.00% 평행선일 때 Y축이 -0.01% 하나로 붕괴되지 않도록 최소 대칭 축(-0.50% ~ +0.50% / -250$ ~ +250$) 보장
     const minBand = perfMode === 'roi' ? 0.50 : Math.max(250, Math.round(eqNow * 0.005));
     const autoScaleProv = (baseImpl) => {
       const res = baseImpl();
@@ -1960,9 +2047,20 @@
     }
   });
 
-  // 5종목 × 6타임프레임 실시간 캔들 차트 모달
+  // ============================================================================
+  // [5종목 실시간 캔들 모달] BTC(0.1초 WS) + NQ100/NVDA/SOXL/GOLD(4초 직통 라이브 폴링)
+  // ============================================================================
   const SYM_TITLES = { BTC:'BYBIT BTCUSDT Perp', NQ100:'NQ100 나스닥100 선물', NVDA:'NVDA 엔비디아', SOXL:'SOXL 반도체 3X', GOLD:'GOLD 국제 금 선물' };
   const BYBIT_IV_MAP = { '1m':'1', '5m':'5', '15m':'15', '1h':'60', '4h':'240', '1D':'D' };
+  const YAHOO_SYM_MAP = { NQ100:'NQ=F', NVDA:'NVDA', SOXL:'SOXL', GOLD:'GC=F' };
+  const YAHOO_TF_MAP = {
+    '1m':  { iv:'1m',  rg:'2d' },
+    '5m':  { iv:'5m',  rg:'5d' },
+    '15m': { iv:'15m', rg:'10d' },
+    '1h':  { iv:'60m', rg:'1mo' },
+    '4h':  { iv:'60m', rg:'2mo' },
+    '1D':  { iv:'1d',  rg:'6mo' }
+  };
 
   function getCurSymPrice(sym) {
     if (sym === 'BTC') return wsLive.btcPrice > 0 ? wsLive.btcPrice : Number((S && S.btcPrice) || 0);
@@ -1983,11 +2081,63 @@
     } catch(e) { return null; }
   }
 
+  async function fetchLiveYahooKlinesDirect(sym, tf) {
+    const tk = YAHOO_SYM_MAP[sym];
+    const cfg = YAHOO_TF_MAP[tf] || YAHOO_TF_MAP['15m'];
+    if (!tk) return null;
+    const rawUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(tk)}?interval=${cfg.iv}&range=${cfg.rg}&includePrePost=true`;
+    const candidates = [
+      rawUrl,
+      `https://corsproxy.io/?${encodeURIComponent(rawUrl)}`,
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(rawUrl)}`
+    ];
+    for (const u of candidates) {
+      try {
+        const r = await fetch(u, { cache:'no-store' });
+        if (!r.ok) continue;
+        const j = await r.json();
+        const res0 = (((j.chart || {}).result) || [])[0];
+        if (!res0) continue;
+        const meta = res0.meta || {};
+        const tsList = res0.timestamp || [];
+        const q0 = (((res0.indicators || {}).quote) || [])[0] || {};
+        const opens = q0.open || [], highs = q0.high || [], lows = q0.low || [], closes = q0.close || [];
+        const dedup = new Map();
+        for (let i = 0; i < Math.min(tsList.length, closes.length); i++) {
+          if (opens[i] == null || highs[i] == null || lows[i] == null || closes[i] == null) continue;
+          const tSec = Number(tsList[i]);
+          const slot = tf === '4h' ? Math.floor(tSec / 14400) * 14400 : tSec;
+          if (!dedup.has(slot)) {
+            dedup.set(slot, [slot, Number(opens[i]), Number(highs[i]), Number(lows[i]), Number(closes[i])]);
+          } else {
+            const cur = dedup.get(slot);
+            cur[2] = Math.max(cur[2], Number(highs[i]));
+            cur[3] = Math.min(cur[3], Number(lows[i]));
+            cur[4] = Number(closes[i]);
+          }
+        }
+        const bars = Array.from(dedup.values()).sort((a, b) => a[0] - b[0]).slice(-110);
+        if (bars.length) {
+          const lastC = Number(meta.regularMarketPrice || bars[bars.length - 1][4]);
+          bars[bars.length - 1][4] = lastC;
+          bars[bars.length - 1][2] = Math.max(bars[bars.length - 1][2], lastC);
+          bars[bars.length - 1][3] = Math.min(bars[bars.length - 1][3], lastC);
+          const prevC = Number(meta.chartPreviousClose || meta.previousClose || bars[0][1] || lastC);
+          const chgPct = prevC > 0 ? ((lastC - prevC) / prevC) * 100.0 : 0.0;
+          return { bars, price: lastC, chgPct };
+        }
+      } catch(e){}
+    }
+    return null;
+  }
+
   async function openCandleModal(sym, tf='15m', focusKstSec=0, focusPrice=0) {
     if (!window.LightweightCharts) return;
+    if (cmMacroPollTmr) { clearInterval(cmMacroPollTmr); cmMacroPollTmr = null; }
     cmSym = sym; cmTf = tf; cmLastCandle = null;
     openModalById('candleModal');
     setTxt('cmTitle', SYM_TITLES[sym] || sym);
+    $('cmDelayBadge').style.display = (sym === 'NQ100' || sym === 'GOLD') ? 'inline-flex' : 'none';
     document.querySelectorAll('#cmTfBar .chip').forEach(b => b.classList.toggle('active', b.dataset.tf === tf));
     $('cmBtcTools').style.display = sym === 'BTC' ? 'flex' : 'none';
 
@@ -2010,6 +2160,14 @@
     if (sym === 'BTC' && (!rawRows.length || stateStale)) {
       const fresh = await fetchFreshBtcKlinesDirect(tf);
       if (fresh && fresh.length) rawRows = fresh;
+    } else if (sym !== 'BTC') {
+      const liveMac = await fetchLiveYahooKlinesDirect(sym, tf);
+      if (liveMac && liveMac.bars.length) {
+        rawRows = liveMac.bars;
+        setTxt('cmPrice', fmt(liveMac.price, liveMac.price >= 1000 ? 1 : 2));
+        chgEl.className = liveMac.chgPct >= 0 ? 'up' : 'dn';
+        setTxt('cmChg', `${liveMac.chgPct >= 0 ? '+' : ''}${liveMac.chgPct.toFixed(2)}%`);
+      }
     }
 
     if (!rawRows.length) {
@@ -2100,7 +2258,28 @@
           cmSeries.setMarkers(snapped);
         }
       } else $('cmLastTradeStrip').style.display = 'none';
-    } else $('cmLastTradeStrip').style.display = 'none';
+    } else {
+      $('cmLastTradeStrip').style.display = 'none';
+      // 매크로 4종목 모달 오픈 시 4초마다 실시간 직통 라이브 캔들 업데이트 루프 가동
+      cmMacroPollTmr = setInterval(async () => {
+        if (!$('candleModal').classList.contains('open') || cmSym !== sym || cmTf !== tf) return;
+        const liveM = await fetchLiveYahooKlinesDirect(sym, tf);
+        if (!liveM || !liveM.bars.length || !cmSeries) return;
+        const dLive = liveM.price >= 1000 ? 1 : 2;
+        setTxt('cmPrice', fmt(liveM.price, dLive));
+        chgEl.className = liveM.chgPct >= 0 ? 'up' : 'dn';
+        setTxt('cmChg', `${liveM.chgPct >= 0 ? '+' : ''}${liveM.chgPct.toFixed(2)}%`);
+        setTxt('p-' + sym, fmt(liveM.price, dLive));
+        const ceCard = $('c-' + sym);
+        if (ceCard) {
+          ceCard.className = 'm-chg ' + (liveM.chgPct >= 0 ? 'up' : 'dn');
+          setTxt('c-' + sym, `${liveM.chgPct >= 0 ? '+' : ''}${liveM.chgPct.toFixed(2)}%`);
+        }
+        const lastB = liveM.bars[liveM.bars.length - 1];
+        const barObj = { time: Number(lastB[0]) + 9 * 3600, open:Number(lastB[1]), high:Number(lastB[2]), low:Number(lastB[3]), close:Number(lastB[4]) };
+        try { cmSeries.update(barObj); } catch(e){}
+      }, 4500);
+    }
 
     if (focusKstSec > 0) {
       cmChart.timeScale().setVisibleRange({ from: focusKstSec - 3600 * 5, to: focusKstSec + 3600 * 2 });
@@ -2150,7 +2329,6 @@
     if (cmChart && lastTradeTs > 0) cmChart.timeScale().setVisibleRange({ from: lastTradeTs - 3600 * 5, to: lastTradeTs + 3600 * 2 });
   };
 
-  // 마스터 보드 뷰어 (좌우 스와이프)
   function openLb(idx) {
     if (!curLbArr.length) return;
     curLbIdx = (idx + curLbArr.length) % curLbArr.length;
@@ -2218,10 +2396,12 @@
     $('recLogsWrap').innerHTML = filtered.length ? filtered.map(l => {
       const k = String(l.kind || '');
       const edgeCls = k === 'warn' ? 'edge-warn' : ((k === 'guard' || k === 'rotation') ? 'edge-guard' : ((k === 'order' || k === 'cycle') ? 'edge-order' : 'edge-news'));
+      const cleanTitle = String(l.title || '').replace(/->/g, '→');
+      const cleanDesc = String(l.desc || '').replace(/->/g, '→');
       return `
       <div class="ord-card ${edgeCls}">
-        <div class="row-sb"><b style="font-size:12.5px;">${escHtml(l.title)}</b><span style="font-size:11px;color:var(--sub);">${escHtml(l.time || '')}</span></div>
-        <div style="font-size:11.5px;color:var(--sub);margin-top:4px;line-height:1.5;">${escHtml(l.desc || '')}</div>
+        <div class="row-sb"><b style="font-size:12.5px;">${escHtml(cleanTitle)}</b><span style="font-size:11px;color:var(--sub);">${escHtml(l.time || '')}</span></div>
+        <div style="font-size:11.5px;color:var(--sub);margin-top:4px;line-height:1.5;">${escHtml(cleanDesc)}</div>
       </div>`;
     }).join('') : '<div style="color:var(--sub);font-size:12.5px;padding:12px 0;">표시할 운용 기록이 없습니다.</div>';
   }
@@ -2264,7 +2444,6 @@
       </div>`).join('') : '<div style="color:var(--sub);font-size:12.5px;padding:12px 0;">표시할 실현손익 내역이 없습니다.</div>';
   }
 
-  // 다중 대기주문 렌더링 (방향 컬러 엣지 · 2단 노출 합산 · 미인증 % 마스킹)
   function renderOpenOrdersSection(d) {
     const allOrds = d.openOrders || [];
     const sumInfo = d.orderSummary || {};
@@ -2279,7 +2458,7 @@
       $('ordFilterBar').style.display = 'none';
     }
 
-    if (isOwner() && allOrds.length > 0) {
+    if (isOwner() && d._vaultUnlocked && allOrds.length > 0) {
       $('ordExposureBox').style.display = 'flex';
       const le = sumInfo.longExposure || {}, se = sumInfo.shortExposure || {};
       const expLines = [];
@@ -2299,13 +2478,14 @@
     }
 
     const ords = ordFilter === 'ALL' ? allOrds : allOrds.filter(o => o.side === ordFilter);
-    const nOrdSig = isOwner() + ':' + ordFilter + ':' + JSON.stringify(ords.map(o => [o.orderId, o.price, o.qty, o.sl, o.tp, o.badge, o.guestBadge]));
+    const showOwnerDetails = isOwner() && Boolean(d._vaultUnlocked);
+    const nOrdSig = showOwnerDetails + ':' + ordFilter + ':' + JSON.stringify(ords.map(o => [o.orderId, o.price, o.qty, o.sl, o.tp, o.badge, o.guestBadge]));
     if (ordSig !== nOrdSig) {
       ordSig = nOrdSig;
       $('ordListWrap').innerHTML = ords.length ? ords.map(o => {
-        const dispBadge = isOwner() ? o.badge : (o.guestBadge || o.badge);
+        const dispBadge = showOwnerDetails ? o.badge : (o.guestBadge || o.badge);
         const edgeCls = o.side === 'LONG' ? 'edge-long' : 'edge-short';
-        const ladNote = (isOwner() && o.track === 'LADDER' && o.ladderFullTpUsd > 0)
+        const ladNote = (showOwnerDetails && o.track === 'LADDER' && o.ladderFullTpUsd > 0)
           ? `<div style="font-size:11px;color:#7dd3fc;margin-top:3px;">🛡 심층 3분할 전량 체결 익절 시: <b>+${o.ladderFullTpPct}% (+${fmt(o.ladderFullTpUsd,0)}$)</b></div>`
           : '';
         return `
@@ -2327,6 +2507,7 @@
             <div><div class="sm-lbl">손절</div><b class="dn">${fmt(o.sl,1)}</b></div>
             <div><div class="sm-lbl">손익비</div><b>1 : ${o.rr}</b></div>
           </div>
+          ${showOwnerDetails ? `
           <div class="owner-only">
             <div class="prox-track"><div class="prox-fill" id="oprox-${o.orderId}" style="width:${o.proximityPct || 20}%;background:${o.side==='LONG'?'#10b981':'#f43f5e'};"></div></div>
             <div style="font-size:11.5px;color:var(--sub);margin-top:7px;" id="odist-${o.orderId}">현재가 대비 ${o.distPct>=0?'+':''}${o.distPct}% (${o.distUsd>=0?'+':''}${fmt(o.distUsd,0)}$) · 증거금 ${o.marginUsd}$</div>
@@ -2335,7 +2516,7 @@
             </div>
             ${ladNote}
             <div style="font-size:11.5px;color:#cbd5e1;margin-top:4px;">1R(35%익절·65%본절런너): <b>${fmt(o.r1Price,1)}</b></div>
-          </div>
+          </div>` : ''}
         </div>`;
       }).join('') : '<div style="color:var(--sub);font-size:12.5px;margin-top:10px;">해당 조건에 대기 중인 지정가 주문이 없습니다.</div>';
 
@@ -2348,13 +2529,26 @@
     }
   }
 
-  // 무깜빡임 상태 반영기 (오너 암호화 볼트 자동 복호화 병합)
+  // 무깜빡임 상태 반영기 (사파리 볼트 자동 복호화 & 키 누락 시 원탭 복구)
   async function applyState(rawObj) {
-    let d = { ...rawObj };
-    if (isOwner() && d.ownerVault && memVaultKeyHex) {
-      const dec = await decryptOwnerVault(d.ownerVault, memVaultKeyHex);
-      if (dec && typeof dec === 'object') {
-        d = { ...d, ...dec };
+    let d = { ...rawObj, _vaultUnlocked: false };
+    if (isOwner() && d.ownerVault) {
+      if (!savedVaultKeyHex) {
+        try { savedVaultKeyHex = localStorage.getItem('kj_v40_vault_key') || ''; } catch(e){}
+      }
+      if (savedVaultKeyHex) {
+        const dec = await decryptOwnerVault(d.ownerVault, savedVaultKeyHex);
+        if (dec && typeof dec === 'object') {
+          d = { ...d, ...dec, _vaultUnlocked: true };
+        }
+      }
+      if (!d._vaultUnlocked && !vaultAutoPrompted) {
+        vaultAutoPrompted = true;
+        setTimeout(() => {
+          if (isOwner() && (!S || !S._vaultUnlocked)) {
+            openKeypadModal('unlock', '🔐 사파리 보안 볼트 동기화', '세션 업그레이드로 인해 6자리 PIN을 1회 입력하시면 기록과 AI자동 기어가 즉시 복원됩니다.');
+          }
+        }, 250);
       }
     }
 
@@ -2390,11 +2584,11 @@
       setTxt('btnShieldToggle', shOn ? '🛡️ 방어 ON' : '🛡️ 방어 OFF');
     }
 
-    const curLev = Number(d.leverage || 100);
-    document.querySelectorAll('[data-lev]').forEach(b => b.classList.toggle('acc', Number(b.dataset.lev) === curLev));
+    const curLev = d._vaultUnlocked ? Number(d.leverage || 100) : 0;
+    document.querySelectorAll('[data-lev]').forEach(b => b.classList.toggle('acc', curLev > 0 && Number(b.dataset.lev) === curLev));
 
-    const curRmode = String(d.riskMode || 'BALANCE').toUpperCase();
-    document.querySelectorAll('[data-rmode]').forEach(b => b.classList.toggle('active', b.dataset.rmode === curRmode));
+    const curRmode = d._vaultUnlocked ? String(d.riskMode || 'BALANCE').toUpperCase() : '';
+    document.querySelectorAll('[data-rmode]').forEach(b => b.classList.toggle('active', Boolean(curRmode) && b.dataset.rmode === curRmode));
 
     setTxt('btcLivePrice', fmt(d.btcPrice, 1));
     const bc = Number(d.btcChg24h || 0);
@@ -2411,23 +2605,34 @@
     const offline = isEngineOffline();
     const sumInfo = d.orderSummary || {};
     if (isOwner()) {
-      const hlText = (d.cycleRunning && !offline)
-        ? (d.phaseNote || '오더플로우 마스터 보드 6/6장 분석 진행 중')
-        : (sumInfo.ownerHeadline || d.statusHeadline || '양방향 지정가 감시 중');
-      setTxt('statusHeadline', hlText);
-
-      const ns = sumInfo.newsShield || {};
-      const nsEl = $('newsShieldBanner');
-      if (ns.active && ns.event) {
-        nsEl.style.display = 'block';
-        nsEl.style.color = '#fb7185';
-        setTxt('newsShieldBanner', `🛡️ [지표 방어막 작동 중] ${ns.event.timeStr} ${ns.event.title} (${ns.phase})`);
-      } else if (ns.enabled && ns.nextEvent && Number(ns.nextEvent.diffMin) <= 180 && Number(ns.nextEvent.diffMin) > 0) {
-        nsEl.style.display = 'block';
-        nsEl.style.color = '#fcd34d';
-        setTxt('newsShieldBanner', `🕒 예정 지표: ${ns.nextEvent.timeStr} ${ns.nextEvent.title} (발표 15분 전 단타 자동 철수 대기)`);
+      if (!d._vaultUnlocked) {
+        setTxt('statusHeadline', '🔐 볼트 동기화 대기 중 (로고 5회 터치로 복구)');
+        $('newsShieldBanner').style.display = 'none';
       } else {
-        nsEl.style.display = 'none';
+        if (d.cycleRunning && !offline) {
+          setTxt('statusHeadline', d.phaseNote || '오더플로우 마스터 보드 6/6장 분석 중');
+        } else if (sumInfo.ownerHeadline) {
+          setTxt('statusHeadline', sumInfo.ownerHeadline);
+        } else {
+          setTxt('statusHeadline', '양방향 지정가 감시 중');
+        }
+
+        const ns = sumInfo.newsShield || {};
+        const nsEl = $('newsShieldBanner');
+        if (ns.active && ns.event) {
+          nsEl.style.display = 'block';
+          nsEl.style.color = '#fb7185';
+          setTxt('newsShieldBanner', `🛡️ [지표 방어막 가동 중] ${ns.event.timeStr} ${ns.event.title} (${ns.phase})`);
+        } else if (ns.enabled && ns.nextEvent && Number(ns.nextEvent.diffMin) <= 240 && Number(ns.nextEvent.diffMin) > 0) {
+          const dm = Math.max(1, Math.round(Number(ns.nextEvent.diffMin)));
+          const shieldIn = Math.max(0, dm - 15);
+          const cdNote = shieldIn > 0 ? `발표 ${dm}분 전 · 방어막 가동 ${shieldIn}분 전` : `방어막 가동 임박 (발표 ${dm}분 전)`;
+          nsEl.style.display = 'block';
+          nsEl.style.color = '#fcd34d';
+          setTxt('newsShieldBanner', `🕒 예정 지표: ${ns.nextEvent.timeStr} ${ns.nextEvent.title} (${cdNote})`);
+        } else {
+          nsEl.style.display = 'none';
+        }
       }
     }
 
@@ -2451,47 +2656,57 @@
     setTxt('totalSeedVal', fmt(eqVal, 2));
 
     if (isOwner()) {
-      const upnl = Number(w.unrealisedPnl || 0);
-      const upEl = $('liveUpnlPill');
-      if (Math.abs(upnl) >= 0.01 || (d.positions || []).length > 0) {
-        upEl.style.display = 'inline-flex';
-        upEl.className = 'upnl-pill owner-only ' + (upnl >= 0 ? 'pos' : 'neg');
-        setTxt('liveUpnlPill', `미실현 ${upnl >= 0 ? '+' : ''}${fmt(upnl, 2)}`);
+      if (!d._vaultUnlocked) {
+        $('liveUpnlPill').style.display = 'none';
+        setTxt('riskAllowanceTxt', '1회 한도: 보안 볼트 동기화 후 표시');
+        setTxt('totalRealizedBadge', '--');
+        $('guardBrakeBanner').style.display = 'none';
+        setTxt('wbVal', '--');
+        setTxt('avVal', '--');
+        setTxt('omVal', '--');
       } else {
-        upEl.style.display = 'none';
+        const upnl = Number(w.unrealisedPnl || 0);
+        const upEl = $('liveUpnlPill');
+        if (Math.abs(upnl) >= 0.01 || (d.positions || []).length > 0) {
+          upEl.style.display = 'inline-flex';
+          upEl.className = 'upnl-pill owner-only ' + (upnl >= 0 ? 'pos' : 'neg');
+          setTxt('liveUpnlPill', `미실현 ${upnl >= 0 ? '+' : ''}${fmt(upnl, 2)}`);
+        } else {
+          upEl.style.display = 'none';
+        }
+
+        const rg = d.riskGear || {};
+        const snpPct = Number(rg.sniperPct || 1.8);
+        const ladPct = Number(rg.ladderPct || 3.0);
+        const snpUsd = Math.round(eqVal * (snpPct / 100.0));
+        const ladUsd = Math.round(eqVal * (ladPct / 100.0));
+        setTxt('riskAllowanceTxt', `1회 한도: 단타 ${snpUsd.toLocaleString()}$ (${snpPct}%) · 심층 ${ladUsd.toLocaleString()}$ (${ladPct}%)`);
+
+        const gbEl = $('guardBrakeBanner');
+        const pfObj = d.performance || {};
+        if (rg.dailyBrakeApplied) {
+          gbEl.style.display = 'block';
+          setTxt('guardBrakeBanner', '🛑 [일일 손실 브레이크(-6%) 작동] 당일 보호를 위해 신규 진입 물량 50% 자동 축소 중');
+        } else if (pfObj.lossStreakCooldownActive) {
+          gbEl.style.display = 'block';
+          setTxt('guardBrakeBanner', `❄️ [단기 3연패 휩소 브레이크] 연속 손실 방어를 위해 근거리 단타 ${pfObj.lossStreakRemMin || 30}분 휴식 중 (심층 유지)`);
+        } else if (rg.profitLockApplied) {
+          gbEl.style.display = 'block';
+          setTxt('guardBrakeBanner', '🔒 [Profit Lock 작동] 고점 수익 보존을 위해 리스크 기어 1단계 자동 감속 중');
+        } else if (rg.weekendThinApplied) {
+          gbEl.style.display = 'block';
+          setTxt('guardBrakeBanner', '🌙 [주말 박장 모드] 휴장 유동성 보호를 위해 AI자동 단타 비중 15% 자동 감량 적용 중');
+        } else {
+          gbEl.style.display = 'none';
+        }
+
+        setTxt('wbVal', fmt(w.walletBalance || 0, 2) + '$');
+        setTxt('avVal', fmt(w.availableBalance || 0, 2) + '$');
+        setTxt('omVal', fmt(w.orderMargin || 0, 2) + '$');
       }
-
-      const rg = d.riskGear || {};
-      const snpPct = Number(rg.sniperPct || 1.8);
-      const ladPct = Number(rg.ladderPct || 3.0);
-      const snpUsd = Math.round(eqVal * (snpPct / 100.0));
-      const ladUsd = Math.round(eqVal * (ladPct / 100.0));
-      setTxt('riskAllowanceTxt', `1회 한도: 단타 ${snpUsd.toLocaleString()}$ (${snpPct}%) · 심층 ${ladUsd.toLocaleString()}$ (${ladPct}%)`);
-
-      const gbEl = $('guardBrakeBanner');
-      const pfObj = d.performance || {};
-      if (rg.dailyBrakeApplied) {
-        gbEl.style.display = 'block';
-        setTxt('guardBrakeBanner', '🛑 [일일 손실 브레이크(-6%) 작동] 당일 보호를 위해 신규 진입 물량 50% 자동 축소 중');
-      } else if (pfObj.lossStreakCooldownActive) {
-        gbEl.style.display = 'block';
-        setTxt('guardBrakeBanner', `❄️ [단기 3연패 휩소 브레이크] 연속 손실 방어를 위해 근거리 단타 ${pfObj.lossStreakRemMin || 30}분 휴식 중 (심층 유지)`);
-      } else if (rg.profitLockApplied) {
-        gbEl.style.display = 'block';
-        setTxt('guardBrakeBanner', '🔒 [Profit Lock 작동] 고점 수익 보존을 위해 리스크 기어 1단계 자동 감속 중');
-      } else if (rg.weekendThinApplied) {
-        gbEl.style.display = 'block';
-        setTxt('guardBrakeBanner', '🌙 [주말 박장 모드] 휴장 유동성 보호를 위해 AI자동 단타 비중 15% 자동 감량 적용 중');
-      } else {
-        gbEl.style.display = 'none';
-      }
-
-      setTxt('wbVal', fmt(w.walletBalance || 0, 2) + '$');
-      setTxt('avVal', fmt(w.availableBalance || 0, 2) + '$');
-      setTxt('omVal', fmt(w.orderMargin || 0, 2) + '$');
     }
 
-    if (d.performance && isOwner()) {
+    if (d.performance && isOwner() && d._vaultUnlocked) {
       const pf = d.performance;
       const tr = cleanZero(pf.totalRealizedUsd);
       const rb = $('totalRealizedBadge');
@@ -2531,9 +2746,9 @@
     }
 
     const posArr = d.positions || [];
-    if (!isOwner() || !posArr.length) {
+    if (!isOwner() || !d._vaultUnlocked || !posArr.length) {
       $('posSection').style.display = 'none';
-      if (!isOwner()) $('posListWrap').innerHTML = '';
+      if (!isOwner() || !d._vaultUnlocked) $('posListWrap').innerHTML = '';
     } else {
       $('posSection').style.display = 'block';
       setTxt('posCountBadge', `${posArr.length}건 보유`);
@@ -2593,7 +2808,7 @@
 
     if (hasFreshBtc) applyRealtimeQuoteTick();
 
-    if (!isOwner()) {
+    if (!isOwner() || !d._vaultUnlocked) {
       $('ratBody').innerHTML = '';
     } else if (d.rationaleInfo) {
       const ri = d.rationaleInfo;
@@ -2623,7 +2838,7 @@
       }
     }
 
-    if (isOwner()) {
+    if (isOwner() && d._vaultUnlocked) {
       renderLogsList(d.logs || []);
       renderBoards();
     }
