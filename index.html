@@ -2031,35 +2031,93 @@
         }));
       });
 
-      if (sym === 'BTC' && S && isOwner() && S._vaultUnlocked) {
-        const mks = (S.performance && S.performance.markersAsc) || [];
-        if (mks.length) {
-          const lastM = mks[mks.length - 1];
-          lastTradeTs = Number(lastM.timeSec) + 9 * 3600;
+if (sym === 'BTC' && S && isOwner() && S._vaultUnlocked) {
+        const exitMks = (S.performance && S.performance.markersAsc) || [];
+        const entryMks = (S.performance && S.performance.entryMarkersAsc) || [];
+        const lastEx = exitMks.length ? exitMks[exitMks.length - 1] : null;
+        const lastEn = entryMks.length ? entryMks[entryMks.length - 1] : null;
+
+        if (lastEx && (!lastEn || Number(lastEx.timeSec) >= Number(lastEn.timeSec))) {
+          lastTradeTs = Number(lastEx.timeSec) + 9 * 3600;
           $('cmLastTradeStrip').style.display = 'flex';
-          setTxt('cmLastTradeTxt', `최근 체결: ${lastM.side} ${fmt(lastM.entry,0)} → ${fmt(lastM.exit,0)} (${lastM.pnl >= 0 ? '+' : ''}${fmt(lastM.pnl,0)}$)`);
-          if (showMarks && candles.length > 1) {
-            const cTimes = candles.map(c => c.time);
-            const snapped = [];
-            mks.slice(-25).forEach(m => {
-              const mt = Number(m.timeSec) + 9 * 3600;
-              if (mt < cTimes[0] - 86400) return;
-              let bestT = cTimes[0], bestD = Math.abs(cTimes[0] - mt);
-              for (const ct of cTimes) { const d = Math.abs(ct - mt); if (d < bestD) { bestD = d; bestT = ct; } }
+          setTxt('cmLastTradeTxt', `최근 체결: ${lastEx.side} ${fmt(lastEx.entry,0)} → ${fmt(lastEx.exit,0)} (${lastEx.pnl >= 0 ? '+' : ''}${fmt(lastEx.pnl,0)}$)`);
+        } else if (lastEn) {
+          lastTradeTs = Number(lastEn.timeSec) + 9 * 3600;
+          $('cmLastTradeStrip').style.display = 'flex';
+          setTxt('cmLastTradeTxt', `최근 진입: ${lastEn.side} ${fmt(lastEn.price,1)}$ (${lastEn.qty} BTC)`);
+        }
+
+        if (showMarks && candles.length > 1 && (entryMks.length || exitMks.length)) {
+          const cTimes = candles.map(c => c.time);
+          const barSec = cTimes.length >= 2 ? Math.max(60, cTimes[1] - cTimes[0]) : 900;
+          const snapCandleTime = (kstSec) => {
+            if (kstSec < cTimes[0] || kstSec > cTimes[cTimes.length - 1] + barSec * 2) return 0;
+            let bestT = cTimes[0];
+            for (const ct of cTimes) {
+              if (ct <= kstSec) bestT = ct;
+              else break;
+            }
+            return bestT;
+          };
+
+          const grouped = new Map();
+          entryMks.slice(-30).forEach(en => {
+            const bt = snapCandleTime(Number(en.timeSec) + 9 * 3600);
+            if (!bt) return;
+            const gk = `EN_${en.side}_${bt}`;
+            const prev = grouped.get(gk);
+            const q = Number(en.qty || 0), p = Number(en.price || 0);
+            if (prev) {
+              const nq = prev.qty + q;
+              prev.price = nq > 0 ? (prev.price * prev.qty + p * q) / nq : p;
+              prev.qty = nq;
+              prev.cnt += 1;
+            } else {
+              grouped.set(gk, { time: bt, kind: 'EN', side: en.side, price: p, qty: q, cnt: 1 });
+            }
+          });
+
+          exitMks.slice(-30).forEach(ex => {
+            const bt = snapCandleTime(Number(ex.timeSec) + 9 * 3600);
+            if (!bt) return;
+            const gk = `EX_${ex.side}_${bt}`;
+            const prev = grouped.get(gk);
+            const pnl = Number(ex.pnl || 0);
+            if (prev) {
+              prev.pnl += pnl;
+              prev.cnt += 1;
+            } else {
+              grouped.set(gk, { time: bt, kind: 'EX', side: ex.side, pnl: pnl, cnt: 1 });
+            }
+          });
+
+          const snapped = [];
+          grouped.forEach(g => {
+            if (g.kind === 'EN') {
+              const isL = g.side === 'LONG';
               snapped.push({
-                time: bestT,
-                position: m.pnl >= 0 ? 'belowBar' : 'aboveBar',
-                color: m.pnl >= 0 ? '#10b981' : '#f43f5e',
-                shape: m.side === 'LONG' ? 'arrowUp' : 'arrowDown',
-                text: `${m.side[0]}청산 ${m.pnl >= 0 ? '+' : ''}${Math.round(m.pnl)}$`
+                time: g.time,
+                position: isL ? 'belowBar' : 'aboveBar',
+                color: isL ? '#38bdf8' : '#c084fc',
+                shape: isL ? 'arrowUp' : 'arrowDown',
+                text: `${g.side[0]}진입 ${fmt(g.price, 0)}${g.cnt > 1 ? `(${g.cnt})` : ''}`
               });
-            });
-            snapped.sort((a, b) => a.time - b.time);
-            cmSeries.setMarkers(snapped);
-          }
+            } else {
+              const isL = g.side === 'LONG';
+              snapped.push({
+                time: g.time,
+                position: isL ? 'aboveBar' : 'belowBar',
+                color: g.pnl >= 0 ? '#10b981' : '#f43f5e',
+                shape: isL ? 'arrowDown' : 'arrowUp',
+                text: `${g.side[0]}청산 ${g.pnl >= 0 ? '+' : ''}${Math.round(g.pnl)}$`
+              });
+            }
+          });
+          snapped.sort((a, b) => a.time - b.time);
+          cmSeries.setMarkers(snapped);
         }
       }
-
+      
       if (focusKstSec > 0) cmChart.timeScale().setVisibleRange({ from: focusKstSec - 3600 * 5, to: focusKstSec + 3600 * 2 });
       else cmChart.timeScale().fitContent();
 
