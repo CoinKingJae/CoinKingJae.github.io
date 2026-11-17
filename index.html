@@ -7,8 +7,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="KingJae">
 <meta name="theme-color" content="#070b14">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%230d1629'/%3E%3Cstop offset='100%25' stop-color='%23070b14'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='url(%23g)'/%3E%3Crect x='6' y='6' width='168' height='168' rx='35' fill='none' stroke='%2338bdf8' stroke-opacity='0.45' stroke-width='3'/%3E%3Ctext x='90' y='112' text-anchor='middle' font-family='system-ui,-apple-system,sans-serif' font-weight='900' font-size='74' fill='%23f8fafc' letter-spacing='-3'%3EKJ%3C/text%3E%3Ccircle cx='138' cy='46' r='8' fill='%2310b981'/%3E%3C/svg%3E">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230d1629'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='28' fill='%2338bdf8'%3EKJ%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%230d1629'/%3E%3Cstop offset='100%25' stop-color='%23070b14'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='url(%23g)'/%3E%3Crect x='6' y='6' width='168' height='168' rx='35' fill='none' stroke='%2338bdf8' stroke-opacity='0.45' stroke-width='3'/%3E%3Ctext x='90' y='112' text-anchor='middle' font-family='system-ui,-apple-system,sans-serif' font-weight='900' font-size='74' fill='%23f8fafc' letter-spacing='-3'%3EKJ%3C/text%3E%3Ccircle cx='138' cy='46' r='8' fill='%2310b981'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230d1629'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='28' fill='%2338bdf8'%3EKJ%3C/text%3E%3C/svg%3E">
 <title>KingJae · AI ORDERFLOW</title>
 <script>
   (function(){
@@ -20,7 +20,7 @@
     document.documentElement.setAttribute('data-auth', vTok === '61ba211110b37c4a169e71d3c0719a1a98c01a981cc6aa1ee4631ef434b7fe75' ? 'owner' : 'guest');
   })();
 </script>
-<script src="[https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js](https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js)"></script>
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/lightweight-charts/4.2.0/lightweight-charts.standalone.production.min.js'"></script>
 <style>
   :root {
     --bg:#070b14; --card:#0d1424; --card2:#131d32; --line:rgba(148,163,184,0.15);
@@ -220,6 +220,7 @@
     background:#111a2c; border:1px solid var(--line); border-radius:14px;
     padding:12px 13px; margin-top:9px; border-left:3.5px solid rgba(148,163,184,0.3);
   }
+  .ord-card.pos-clickable { cursor:pointer; }
   .ord-card.edge-long { border-left-color:#10b981; background:linear-gradient(90deg, rgba(16,185,129,0.06) 0%, #111a2c 35%); }
   .ord-card.edge-short { border-left-color:#f43f5e; background:linear-gradient(90deg, rgba(244,63,94,0.06) 0%, #111a2c 35%); }
   .ord-card.edge-warn { border-left-color:#f59e0b; }
@@ -457,7 +458,7 @@
       </div>
     </div>
 
-    <!-- 시드(AUM) 카드: 미인증 기기는 게스트시드.txt 고정값, 인증 기기는 실계좌 실시간 표시 -->
+    <!-- 시드(AUM) 카드 -->
     <div class="card">
       <div class="row-sb">
         <div style="font-size:12px;color:var(--sub);font-weight:700;">전체 시드 (AUM)</div>
@@ -501,7 +502,7 @@
     </div>
 
     <div class="card owner-only" id="posSection" style="display:none;">
-      <div class="row-sb"><span style="font-size:14.5px;font-weight:900;">보유 포지션</span><span class="pill" id="posCountBadge">0건</span></div>
+      <div class="row-sb"><span style="font-size:14.5px;font-weight:900;">보유 포지션 <span style="font-size:11px;color:var(--sub);font-weight:700;">(터치 시 차트)</span></span><span class="pill" id="posCountBadge">0건</span></div>
       <div id="posListWrap"></div>
     </div>
 
@@ -854,9 +855,9 @@
   let S = null, lastRawPayload = null, directApi = '', activeTab = 'dash', logFilter = 'ALL', ordFilter = 'ALL', pnlFilter = 'ALL', ordFolded = false;
   let perfPeriod = 'd7', perfMode = 'roi', boardGrp = 'ALL', pingDone = false;
   let ordSig = '', ordExpSig = '', posSig = '', brdSig = '', ratSig = '', econSig = '', pnlSig = '', scSig = '', calSig = '', logSig = '', perfSig = '';
-  let perfChart = null, perfSeries = null, perfLastPointTime = 0, perfPeakEq = 0, perfPeakRelNav = 1.0, perfBaseStartEq = 10000;
-  let cmChart = null, cmSeries = null, cmSym = 'BTC', cmTf = '15m', showLines = true, showMarks = true, cmPriceLines = [], lastTradeTs = 0, cmLastCandle = null;
-  let cmMacroPollTmr = null;
+  let perfChart = null, perfSeries = null, perfNativeRedraw = null, perfLastPointTime = 0, perfPeakEq = 0, perfPeakRelNav = 1.0, perfBaseStartEq = 10000;
+  let cmChart = null, cmSeries = null, cmNativeCtrl = null, cmSym = 'BTC', cmTf = '15m', showLines = true, showMarks = true, cmPriceLines = [], lastTradeTs = 0, cmLastCandle = null;
+  let cmMacroPollTmr = null, cmReqSeq = 0, chartLibPromise = null;
   let curLbArr = [], curLbIdx = 0;
 
   let kpMode = 'cmd', kpPinBuf = '', pendingCmd = null, cmdInFlight = false, vaultAutoPrompted = false;
@@ -868,9 +869,9 @@
     btcPrice: 0, prevBtcPrice: 0, btcChg24h: null,
     high24h: 0, low24h: 0, turnover24h: 0, fundingPct: null, nextFundingMs: 0,
     upBtcKrw: 0, usdtKrw: 0, fxKrw: 1380,
-    lastBtcTs: 0, lastUpTs: 0, rafPending: false, flashTmr: null
+    lastBtcTs: 0, lastBybitTs: 0, lastUpTs: 0, rafPending: false, flashTmr: null
   };
-  let bybitWs = null, bybitPingTmr = null, upbitWs = null, toastTmr = null;
+  let bybitWs = null, bybitPingTmr = null, binanceWs = null, upbitWs = null, toastTmr = null;
 
   const $ = (id) => document.getElementById(id);
   const setTxt = (id, v) => { const el = $(id); const s = String(v ?? ''); if (el && el.textContent !== s) el.textContent = s; };
@@ -892,14 +893,25 @@
     const anyOpen = Array.from(document.querySelectorAll('.modal-bg')).some(m => m.classList.contains('open'));
     document.body.classList.toggle('modal-open', anyOpen);
   }
-  function openModalById(id) { $(id).classList.add('open'); syncBodyModalLock(); }
-  function closeModalById(id) {
-    if (id === 'candleModal' && cmMacroPollTmr) {
-      clearInterval(cmMacroPollTmr);
-      cmMacroPollTmr = null;
-    }
-    $(id).classList.remove('open');
+  function openModalById(id) {
+    const el = $(id);
+    if (el) el.classList.add('open');
     syncBodyModalLock();
+  }
+  function closeModalById(id) {
+    if (id === 'candleModal') {
+      if (cmMacroPollTmr) { clearInterval(cmMacroPollTmr); cmMacroPollTmr = null; }
+      if (cmNativeCtrl) { try { cmNativeCtrl.destroy(); } catch(e){} cmNativeCtrl = null; }
+    }
+    const el = $(id);
+    if (el) el.classList.remove('open');
+    syncBodyModalLock();
+  }
+
+  function getLiveBtcPrice() {
+    if (wsLive.btcPrice > 0 && (Date.now() - wsLive.lastBtcTs) < 12000) return wsLive.btcPrice;
+    if (S && Number(S.btcPrice) > 0) return Number(S.btcPrice);
+    return wsLive.btcPrice > 0 ? wsLive.btcPrice : 0;
   }
 
   function next01Or31Info() {
@@ -907,21 +919,14 @@
     const k = new Date(nowMs + 9 * 3600000);
     const h = k.getUTCHours(), m = k.getUTCMinutes(), s = k.getUTCSeconds();
     let targetM = 1, addH = 0;
-    if (m < 1 || (m === 1 && s < 3)) {
-      targetM = 1;
-    } else if (m < 31 || (m === 31 && s < 3)) {
-      targetM = 31;
-    } else {
-      targetM = 1;
-      addH = 1;
-    }
+    if (m < 1 || (m === 1 && s < 3)) targetM = 1;
+    else if (m < 31 || (m === 31 && s < 3)) targetM = 31;
+    else { targetM = 1; addH = 1; }
     const dispH = (h + addH) % 24;
     const remSec = Math.max(0, (addH * 3600 + targetM * 60 + 3) - (m * 60 + s));
-    const rm = String(Math.floor(remSec / 60)).padStart(2, '0');
-    const rs = String(remSec % 60).padStart(2, '0');
     return {
       timeStr: `${String(dispH).padStart(2,'0')}:${String(targetM).padStart(2,'0')}`,
-      cdStr: `${rm}:${rs}`
+      cdStr: `${String(Math.floor(remSec / 60)).padStart(2, '0')}:${String(remSec % 60).padStart(2, '0')}`
     };
   }
 
@@ -940,10 +945,10 @@
       targetMs = (Math.floor(now / periodMs) + 1) * periodMs;
     }
     const remSec = Math.max(0, Math.floor((targetMs - now) / 1000));
-    const hh = String(Math.floor(remSec / 3600)).padStart(2, '0');
-    const mm = String(Math.floor((remSec % 3600) / 60)).padStart(2, '0');
-    const ss = String(remSec % 60).padStart(2, '0');
-    return { text: `${hh}:${mm}:${ss}`, urgent: remSec < 600 };
+    return {
+      text: `${String(Math.floor(remSec / 3600)).padStart(2, '0')}:${String(Math.floor((remSec % 3600) / 60)).padStart(2, '0')}:${String(remSec % 60).padStart(2, '0')}`,
+      urgent: remSec < 600
+    };
   }
 
   function getMacroSessionBadge(sym) {
@@ -979,17 +984,15 @@
   }
 
   function updateTopHeartbeatBadge() {
-    const wsAlive = (bybitWs && bybitWs.readyState === 1) || (Date.now() - wsLive.lastBtcTs < 12000);
+    const wsAlive = (Date.now() - wsLive.lastBtcTs) < 10000;
     $('wsStreamDot').style.background = wsAlive ? '#10b981' : '#f59e0b';
 
     const sessEl = $('sessTimerBadge');
     if (sessEl) {
       if (isOwner() && memSessionToken && Date.now() < memSessionExp) {
         const remS = Math.max(0, Math.floor((memSessionExp - Date.now()) / 1000));
-        const mm = String(Math.floor(remS / 60)).padStart(2, '0');
-        const ss = String(remS % 60).padStart(2, '0');
         sessEl.style.display = 'inline-flex';
-        setTxt('sessTimerBadge', `🔓 ${mm}:${ss}`);
+        setTxt('sessTimerBadge', `🔓 ${String(Math.floor(remS / 60)).padStart(2, '0')}:${String(remS % 60).padStart(2, '0')}`);
       } else {
         sessEl.style.display = 'none';
       }
@@ -997,8 +1000,7 @@
 
     if (!S) return;
     const dotEl = $('liveDot');
-    const offline = isEngineOffline();
-    if (offline) {
+    if (isEngineOffline()) {
       dotEl.style.color = '#f59e0b';
       setTxt('liveDot', '🔌 오프라인');
     } else if (S.cycleRunning) {
@@ -1012,25 +1014,6 @@
       setTxt('liveDot', '● 가동중');
     }
   }
-
-  $('sessTimerBadge').onclick = () => {
-    memSessionToken = '';
-    memSessionExp = 0;
-    $('sessTimerBadge').style.display = 'none';
-    showToast('🔒 연속 조작 세션이 즉시 잠금 처리되었습니다.');
-  };
-
-  $('liveDot').onclick = () => {
-    fetchStateTick();
-    if (!S || !S.ts) return;
-    const ageMin = Math.max(0, Math.floor((Date.now() - Number(S.ts)) / 60000));
-    const kstS = new Date(Number(S.ts) + 9 * 3600000).toISOString().replace('T', ' ').slice(5, 19);
-    if (isEngineOffline()) {
-      showToast(`🔌 오프라인 (${ageMin}분 전 · ${kstS}) — 시세 즉시 동기화`, true);
-    } else {
-      showToast(`● 가동중 · 최신 동기화 완료 (${kstS} KST)`);
-    }
-  };
 
   function updateFundingAndRangeBar(bp) {
     const hi = wsLive.high24h || Number((S && S.high24h) || 0);
@@ -1061,8 +1044,7 @@
     setTxt('nextRunLabel', `분석 ${nxt.timeStr} · ${nxt.cdStr}`);
     if (isOwner()) setTxt('pfEndTs', fullNow);
     updateTopHeartbeatBadge();
-    const curBp = wsLive.btcPrice > 0 ? wsLive.btcPrice : Number((S && S.btcPrice) || 0);
-    updateFundingAndRangeBar(curBp);
+    updateFundingAndRangeBar(getLiveBtcPrice());
   }, 1000);
 
   async function sha256Bytes(bytes) {
@@ -1134,7 +1116,7 @@
   }
 
   function applyRealtimeQuoteTick() {
-    const bp = wsLive.btcPrice > 0 ? wsLive.btcPrice : Number((S && S.btcPrice) || 0);
+    const bp = getLiveBtcPrice();
     if (bp <= 0) return;
 
     document.title = `${fmt(bp, 1)} · KingJae`;
@@ -1173,11 +1155,12 @@
         $('cmChg').className = c >= 0 ? 'up' : 'dn';
         setTxt('cmChg', `${c >= 0 ? '+' : ''}${c.toFixed(2)}%`);
       }
-      if (cmSeries && cmLastCandle) {
+      if (cmLastCandle) {
         cmLastCandle.close = bp;
         if (bp > cmLastCandle.high) cmLastCandle.high = bp;
         if (bp < cmLastCandle.low) cmLastCandle.low = bp;
-        try { cmSeries.update(cmLastCandle); } catch(e){}
+        if (cmSeries) { try { cmSeries.update(cmLastCandle); } catch(e){} }
+        if (cmNativeCtrl) { try { cmNativeCtrl.updateLast(cmLastCandle, bp); } catch(e){} }
       }
     }
 
@@ -1217,6 +1200,7 @@
         }
       });
 
+      // 상단 전체시드·미실현 배지와 보유포지션 카드의 미실현 손익을 동일 실시간 값으로 일치시켜 숫자 괴리 원천 차단
       const wb = Number((S.wallet && S.wallet.walletBalance) || S.realTotalSeed || 10000);
       const liveEq = wb + liveTotalUpnl;
       setTxt('totalSeedVal', fmt(liveEq, 2));
@@ -1230,7 +1214,6 @@
         $('statusHeadline').innerHTML = `${p0.side === 'LONG' ? '🟢 롱' : '🔴 숏'} ${p0.size.toFixed(3)} BTC <span class="${p0.pnlUsd>=0?'up':'dn'} num-nw">(${p0.pnlUsd >= 0 ? '+' : ''}${Math.round(p0.pnlUsd).toLocaleString()}$ · ${p0.rMultiple >= 0 ? '+' : ''}${p0.rMultiple.toFixed(2)}R)</span>`;
       }
 
-      // TWR 기준가 연동 실시간 ROI · MDD 웹소켓 틱 연산 (입출금 후에도 왜곡 0%)
       const pf = S.performance;
       const pObj = pf && pf.periods && pf.periods[perfPeriod];
       if (pObj && wb > 0) {
@@ -1259,13 +1242,11 @@
         setTxt('pfPnlVal', `${netPnl >= 0 ? '+' : ''}${fmt(netPnl, 2)}`);
         setTxt('pfMddVal', `${mddShow.toFixed(2)}%`);
 
+        const liveChartVal = Number((perfMode === 'roi' ? roiPct : netPnl).toFixed(2));
         if (perfSeries && perfLastPointTime > 0) {
-          try {
-            perfSeries.update({
-              time: perfLastPointTime,
-              value: Number((perfMode === 'roi' ? roiPct : netPnl).toFixed(2))
-            });
-          } catch(e){}
+          try { perfSeries.update({ time: perfLastPointTime, value: liveChartVal }); } catch(e){}
+        } else if (perfNativeRedraw) {
+          try { perfNativeRedraw(liveChartVal); } catch(e){}
         }
       }
     }
@@ -1302,24 +1283,33 @@
     }
   }
 
-  function connectBybitPublicWs() {
+  function connectBybitPublicWs(forceReset=false) {
     try {
-      if (bybitWs && (bybitWs.readyState === 0 || bybitWs.readyState === 1)) return;
-      bybitWs = new WebSocket('wss://[stream.bybit.com/v5/public/linear](https://stream.bybit.com/v5/public/linear)');
+      const wsSilent = (Date.now() - wsLive.lastBybitTs) > 7500;
+      if (!forceReset && !wsSilent && bybitWs && (bybitWs.readyState === 0 || bybitWs.readyState === 1)) return;
+      if (bybitWs) { try { bybitWs.onclose = null; bybitWs.close(); } catch(e){} bybitWs = null; }
+      bybitWs = new WebSocket('wss://stream.bybit.com/v5/public/linear');
       bybitWs.onopen = () => {
+        wsLive.lastBybitTs = Date.now();
         $('wsStreamDot').style.background = '#10b981';
         bybitWs.send(JSON.stringify({ op:'subscribe', args:['tickers.BTCUSDT'] }));
         clearInterval(bybitPingTmr);
         bybitPingTmr = setInterval(() => {
+          if ((Date.now() - wsLive.lastBybitTs) > 7500) { connectBybitPublicWs(true); return; }
           if (bybitWs && bybitWs.readyState === 1) bybitWs.send(JSON.stringify({ op:'ping' }));
-        }, 20000);
+        }, 7000);
       };
       bybitWs.onmessage = (ev) => {
         try {
           const msg = JSON.parse(ev.data);
           if (msg.topic === 'tickers.BTCUSDT' && msg.data) {
             const d = msg.data;
-            if (d.lastPrice !== undefined) { wsLive.btcPrice = Number(d.lastPrice); wsLive.lastBtcTs = Date.now(); }
+            const px = d.lastPrice !== undefined ? Number(d.lastPrice) : (d.markPrice !== undefined ? Number(d.markPrice) : 0);
+            if (px > 0) {
+              wsLive.btcPrice = px;
+              wsLive.lastBtcTs = Date.now();
+              wsLive.lastBybitTs = Date.now();
+            }
             if (d.price24hPcnt !== undefined) wsLive.btcChg24h = Number(d.price24hPcnt) * 100.0;
             if (d.highPrice24h !== undefined) wsLive.high24h = Number(d.highPrice24h);
             if (d.lowPrice24h !== undefined) wsLive.low24h = Number(d.lowPrice24h);
@@ -1330,17 +1320,42 @@
           }
         } catch(e){}
       };
-      bybitWs.onclose = () => { clearInterval(bybitPingTmr); setTimeout(connectBybitPublicWs, 2500); };
+      bybitWs.onclose = () => { clearInterval(bybitPingTmr); setTimeout(() => connectBybitPublicWs(false), 2500); };
       bybitWs.onerror = () => { try { bybitWs.close(); } catch(e){} };
-    } catch(e) { setTimeout(connectBybitPublicWs, 4000); }
+    } catch(e) { setTimeout(() => connectBybitPublicWs(false), 4000); }
   }
 
-  function connectUpbitPublicWs() {
+  // 5G 통신사에서 바이비트 웹소켓이 지연·차단될 때 즉시 보조 가동되는 바이낸스 선물 실시간 틱 스트림
+  function connectBinanceBackupWs() {
     try {
-      if (upbitWs && (upbitWs.readyState === 0 || upbitWs.readyState === 1)) return;
-      upbitWs = new WebSocket('wss://[api.upbit.com/websocket/v1](https://api.upbit.com/websocket/v1)');
+      if (binanceWs && (binanceWs.readyState === 0 || binanceWs.readyState === 1)) return;
+      binanceWs = new WebSocket('wss://fstream.binance.com/ws/btcusdt@miniTicker');
+      binanceWs.onmessage = (ev) => {
+        if ((Date.now() - wsLive.lastBybitTs) < 4000) return;
+        try {
+          const d = JSON.parse(ev.data);
+          const px = Number(d.c || 0);
+          if (px > 0) {
+            wsLive.btcPrice = px;
+            wsLive.lastBtcTs = Date.now();
+            scheduleLiveTickRender();
+          }
+        } catch(e){}
+      };
+      binanceWs.onclose = () => { binanceWs = null; setTimeout(connectBinanceBackupWs, 4000); };
+      binanceWs.onerror = () => { try { binanceWs.close(); } catch(e){} };
+    } catch(e){}
+  }
+
+  function connectUpbitPublicWs(forceReset=false) {
+    try {
+      const upSilent = (Date.now() - wsLive.lastUpTs) > 10000;
+      if (!forceReset && !upSilent && upbitWs && (upbitWs.readyState === 0 || upbitWs.readyState === 1)) return;
+      if (upbitWs) { try { upbitWs.onclose = null; upbitWs.close(); } catch(e){} upbitWs = null; }
+      upbitWs = new WebSocket('wss://api.upbit.com/websocket/v1');
       upbitWs.binaryType = 'arraybuffer';
       upbitWs.onopen = () => {
+        wsLive.lastUpTs = Date.now();
         upbitWs.send(JSON.stringify([{ ticket:'kj-v40-live' }, { type:'ticker', codes:['KRW-BTC','KRW-USDT'] }]));
       };
       upbitWs.onmessage = async (ev) => {
@@ -1356,15 +1371,16 @@
           scheduleLiveTickRender();
         } catch(e){}
       };
-      upbitWs.onclose = () => { setTimeout(connectUpbitPublicWs, 3500); };
+      upbitWs.onclose = () => { setTimeout(() => connectUpbitPublicWs(false), 3500); };
       upbitWs.onerror = () => { try { upbitWs.close(); } catch(e){} };
-    } catch(e) { setTimeout(connectUpbitPublicWs, 5000); }
+    } catch(e) { setTimeout(() => connectUpbitPublicWs(false), 5000); }
   }
 
   setInterval(async () => {
-    if (Date.now() - wsLive.lastBtcTs > 6500) {
+    if (Date.now() - wsLive.lastBtcTs > 4500) {
+      let okTick = false;
       try {
-        const r = await fetch('[https://api.bybit.com/v5/market/tickers?category=linear&symbol=BTCUSDT](https://api.bybit.com/v5/market/tickers?category=linear&symbol=BTCUSDT)', { cache:'no-store' });
+        const r = await fetch('https://api.bybit.com/v5/market/tickers?category=linear&symbol=BTCUSDT', { cache:'no-store' });
         if (r.ok) {
           const j = await r.json();
           const tk = (((j.result || {}).list) || [])[0];
@@ -1376,14 +1392,28 @@
             if (tk.fundingRate) wsLive.fundingPct = Number(tk.fundingRate) * 100.0;
             if (tk.nextFundingTime) wsLive.nextFundingMs = Number(tk.nextFundingTime);
             wsLive.lastBtcTs = Date.now();
+            okTick = true;
             scheduleLiveTickRender();
           }
         }
       } catch(e){}
+      if (!okTick) {
+        try {
+          const r2 = await fetch('https://fapi.binance.com/fapi/v1/ticker/price?symbol=BTCUSDT', { cache:'no-store' });
+          if (r2.ok) {
+            const j2 = await r2.json();
+            if (j2 && j2.price) {
+              wsLive.btcPrice = Number(j2.price);
+              wsLive.lastBtcTs = Date.now();
+              scheduleLiveTickRender();
+            }
+          }
+        } catch(e2){}
+      }
     }
-    if (Date.now() - wsLive.lastUpTs > 8000) {
+    if (Date.now() - wsLive.lastUpTs > 7500) {
       try {
-        const r = await fetch('[https://api.upbit.com/v1/ticker?markets=KRW-BTC,KRW-USDT](https://api.upbit.com/v1/ticker?markets=KRW-BTC,KRW-USDT)', { cache:'no-store' });
+        const r = await fetch('https://api.upbit.com/v1/ticker?markets=KRW-BTC,KRW-USDT', { cache:'no-store' });
         if (r.ok) {
           const arr = await r.json();
           arr.forEach(x => {
@@ -1395,17 +1425,726 @@
         }
       } catch(e){}
     }
-  }, 5000);
+  }, 3500);
 
-  connectBybitPublicWs();
-  connectUpbitPublicWs();
+  connectBybitPublicWs(true);
+  connectBinanceBackupWs();
+  connectUpbitPublicWs(true);
+
+  // 다중 CDN + 로컬 PC 서버 동시 경주 로더 (1.8초 초과 시 내장 HTML5 캔들엔진 즉시 가동)
+  function ensureChartLib() {
+    if (window.LightweightCharts) return Promise.resolve(true);
+    if (chartLibPromise) return chartLibPromise;
+    const urls = [
+      'https://cdnjs.cloudflare.com/ajax/libs/lightweight-charts/4.2.0/lightweight-charts.standalone.production.min.js',
+      'https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js',
+      'https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js'
+    ];
+    if (location.origin.includes('127.0.0.1') || location.origin.includes('localhost')) urls.unshift(location.origin + '/api/lwcharts.js');
+    else if (directApi) urls.unshift(directApi + '/api/lwcharts.js');
+
+    chartLibPromise = new Promise((resolve) => {
+      let settled = false;
+      const done = (ok) => {
+        if (settled) return;
+        settled = true;
+        if (!ok) chartLibPromise = null;
+        resolve(ok);
+      };
+      const tmr = setTimeout(() => done(Boolean(window.LightweightCharts)), 1800);
+      let failCnt = 0;
+      urls.forEach(u => {
+        const sc = document.createElement('script');
+        sc.src = u;
+        sc.async = true;
+        sc.onload = () => { if (window.LightweightCharts) { clearTimeout(tmr); done(true); } };
+        sc.onerror = () => { failCnt++; if (failCnt >= urls.length) { clearTimeout(tmr); done(Boolean(window.LightweightCharts)); } };
+        document.head.appendChild(sc);
+      });
+    });
+    return chartLibPromise;
+  }
+
+  // 외부 차트 CDN이 모두 차단된 5G/방화벽 환경에서도 100% 작동하는 자체 내장 고해상도 캔들차트 엔진
+  function mountNativeCandleCanvas(wrap, candles, priceLines, dec, tf, onInspect) {
+    wrap.innerHTML = '';
+    const cv = document.createElement('canvas');
+    const w = Math.max(300, wrap.clientWidth || 360), h = 340;
+    const dpr = Math.min(3, window.devicePixelRatio || 2);
+    cv.width = Math.floor(w * dpr);
+    cv.height = Math.floor(h * dpr);
+    cv.style.width = w + 'px';
+    cv.style.height = h + 'px';
+    cv.style.display = 'block';
+    cv.style.touchAction = 'none';
+    wrap.appendChild(cv);
+    const ctx = cv.getContext('2d');
+
+    const calcEmaArr = (arr, period) => {
+      if (arr.length < period) return [];
+      const k = 2 / (period + 1);
+      let ema = arr[0].close;
+      return arr.map((c, i) => { ema = i === 0 ? c.close : c.close * k + ema * (1 - k); return ema; });
+    };
+
+    const view = candles.slice(-72);
+    let hoverIdx = -1;
+
+    const draw = () => {
+      if (!view.length) return;
+      ctx.save();
+      ctx.scale(dpr, dpr);
+      ctx.fillStyle = '#070b14';
+      ctx.fillRect(0, 0, w, h);
+
+      const padL = 8, padR = 64, padT = 14, padB = 24;
+      const plotW = w - padL - padR, plotH = h - padT - padB;
+
+      let minP = Infinity, maxP = -Infinity;
+      view.forEach(c => { if (c.low < minP) minP = c.low; if (c.high > maxP) maxP = c.high; });
+      (priceLines || []).forEach(pl => {
+        if (pl.price > 0 && pl.price >= minP * 0.96 && pl.price <= maxP * 1.04) {
+          if (pl.price < minP) minP = pl.price;
+          if (pl.price > maxP) maxP = pl.price;
+        }
+      });
+      const span = Math.max((maxP - minP), maxP * 0.002, 0.01);
+      minP -= span * 0.07;
+      maxP += span * 0.07;
+      const yOf = (p) => padT + ((maxP - p) / (maxP - minP)) * plotH;
+
+      ctx.strokeStyle = 'rgba(148,163,184,0.08)';
+      ctx.lineWidth = 1;
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '10px -apple-system,sans-serif';
+      for (let g = 0; g <= 4; g++) {
+        const py = padT + (plotH * g) / 4;
+        const pv = maxP - ((maxP - minP) * g) / 4;
+        ctx.beginPath(); ctx.moveTo(padL, py); ctx.lineTo(w - padR, py); ctx.stroke();
+        ctx.fillText(fmt(pv, dec), w - padR + 5, py + 3);
+      }
+
+      const stepX = plotW / Math.max(view.length, 1);
+      const bodyW = Math.max(2, Math.min(9, stepX * 0.68));
+      const ema20 = calcEmaArr(view, 20);
+      const ema50 = calcEmaArr(view, 50);
+
+      const drawLineArr = (arr, color) => {
+        if (!arr.length) return;
+        ctx.strokeStyle = color; ctx.lineWidth = 1.2; ctx.beginPath();
+        arr.forEach((v, idx) => {
+          const cx = padL + (idx + 0.5) * stepX, cy = yOf(v);
+          if (idx === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+        });
+        ctx.stroke();
+      };
+      drawLineArr(ema20, '#f59e0b');
+      drawLineArr(ema50, '#8b5cf6');
+
+      view.forEach((c, idx) => {
+        const cx = padL + (idx + 0.5) * stepX;
+        const up = c.close >= c.open;
+        const clr = up ? '#10b981' : '#f43f5e';
+        const yH = yOf(c.high), yL = yOf(c.low), yO = yOf(c.open), yC = yOf(c.close);
+        ctx.strokeStyle = clr; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(cx, yH); ctx.lineTo(cx, yL); ctx.stroke();
+        const topY = Math.min(yO, yC), bh = Math.max(1.5, Math.abs(yC - yO));
+        ctx.fillStyle = clr;
+        ctx.fillRect(cx - bodyW / 2, topY, bodyW, bh);
+      });
+
+      (priceLines || []).forEach(pl => {
+        if (pl.price < minP || pl.price > maxP) return;
+        const py = yOf(pl.price);
+        ctx.save();
+        ctx.strokeStyle = pl.color || '#38bdf8';
+        ctx.lineWidth = pl.lineWidth || 1;
+        if (pl.lineStyle) ctx.setLineDash([4, 4]);
+        ctx.beginPath(); ctx.moveTo(padL, py); ctx.lineTo(w - padR, py); ctx.stroke();
+        ctx.restore();
+      });
+
+      const lastC = view[view.length - 1];
+      const ly = yOf(lastC.close);
+      ctx.fillStyle = lastC.close >= lastC.open ? '#10b981' : '#f43f5e';
+      ctx.fillRect(w - padR + 2, ly - 8, padR - 4, 16);
+      ctx.fillStyle = '#070b14'; ctx.font = 'bold 10px -apple-system,sans-serif';
+      ctx.fillText(fmt(lastC.close, dec), w - padR + 5, ly + 3.5);
+
+      ctx.fillStyle = '#64748b'; ctx.font = '10px -apple-system,sans-serif';
+      [0, Math.floor(view.length / 2), view.length - 1].forEach(idx => {
+        if (!view[idx]) return;
+        const cx = Math.min(w - padR - 36, Math.max(padL, padL + idx * stepX - 16));
+        const lbl = tf === '1D' ? fmtKstTs(view[idx].time).date : fmtKstTs(view[idx].time).full;
+        ctx.fillText(lbl, cx, h - 6);
+      });
+
+      if (hoverIdx >= 0 && hoverIdx < view.length) {
+        const hc = view[hoverIdx];
+        const hx = padL + (hoverIdx + 0.5) * stepX, hy = yOf(hc.close);
+        ctx.save();
+        ctx.strokeStyle = 'rgba(248,250,252,0.38)'; ctx.setLineDash([3, 3]);
+        ctx.beginPath(); ctx.moveTo(hx, padT); ctx.lineTo(hx, h - padB); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(padL, hy); ctx.lineTo(w - padR, hy); ctx.stroke();
+        ctx.restore();
+      }
+      ctx.restore();
+    };
+
+    const handlePoint = (clientX) => {
+      const rect = cv.getBoundingClientRect();
+      const x = clientX - rect.left - 8;
+      const plotW = w - 72;
+      const idx = Math.max(0, Math.min(view.length - 1, Math.floor((x / Math.max(plotW, 1)) * view.length)));
+      hoverIdx = idx;
+      draw();
+      if (onInspect && view[idx]) onInspect(view[idx].time, view[idx].close);
+    };
+
+    cv.addEventListener('pointerdown', (e) => handlePoint(e.clientX));
+    cv.addEventListener('pointermove', (e) => { if (e.buttons > 0 || e.pointerType === 'touch') handlePoint(e.clientX); });
+    draw();
+
+    return {
+      updateLast(bar) {
+        if (!view.length) return;
+        view[view.length - 1] = { ...bar };
+        draw();
+      },
+      destroy() { wrap.innerHTML = ''; }
+    };
+  }
+
+  function mountNativePerfCanvas(box, pts, isRoi) {
+    box.innerHTML = '';
+    const cv = document.createElement('canvas');
+    const w = Math.max(260, box.clientWidth || 320), h = 195;
+    const dpr = Math.min(3, window.devicePixelRatio || 2);
+    cv.width = Math.floor(w * dpr); cv.height = Math.floor(h * dpr);
+    cv.style.width = w + 'px'; cv.style.height = h + 'px'; cv.style.display = 'block';
+    box.appendChild(cv);
+    const ctx = cv.getContext('2d');
+    const data = pts.map(p => ({ ...p }));
+
+    const draw = () => {
+      if (!data.length) return;
+      ctx.save(); ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, w, h);
+      const padL = 48, padR = 8, padT = 16, padB = 16;
+      const plotW = w - padL - padR, plotH = h - padT - padB;
+      let mn = Math.min(0, ...data.map(d => d.value)), mx = Math.max(0, ...data.map(d => d.value));
+      const band = isRoi ? 0.5 : 50;
+      if (mx - mn < band * 2) { mn = Math.min(-band, mn - band); mx = Math.max(band, mx + band); }
+      const yOf = (v) => padT + ((mx - v) / Math.max(mx - mn, 0.001)) * plotH;
+      const y0 = yOf(0);
+
+      ctx.strokeStyle = 'rgba(148,163,184,0.14)'; ctx.setLineDash([3, 3]);
+      ctx.beginPath(); ctx.moveTo(padL, y0); ctx.lineTo(w - padR, y0); ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#64748b'; ctx.font = '10px -apple-system,sans-serif';
+      [mx, 0, mn].forEach(v => {
+        const txt = isRoi ? `${v.toFixed(2)}%` : `${v > 0 ? '+' : ''}${v.toFixed(0)}$`;
+        ctx.fillText(txt, 2, Math.min(h - 4, Math.max(11, yOf(v) + 3)));
+      });
+
+      const lastVal = data[data.length - 1].value;
+      const clr = lastVal >= 0 ? '#10b981' : '#f43f5e';
+      ctx.strokeStyle = clr; ctx.lineWidth = 2; ctx.beginPath();
+      data.forEach((pt, i) => {
+        const px = padL + (i / Math.max(data.length - 1, 1)) * plotW, py = yOf(pt.value);
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      });
+      ctx.stroke();
+      ctx.restore();
+    };
+    draw();
+    return (newLastVal) => {
+      if (!data.length) return;
+      data[data.length - 1].value = newLastVal;
+      draw();
+    };
+  }
+
+  function fmtInlineRich(str) {
+    let s = escHtml(str || '');
+    s = s.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+    s = s.replace(/([가-힣A-Za-z0-9.,+-]+(?:달러|%))\(\s*([^()]{1,28})\s*\)/g, (_, head, inner) => {
+      const hHtml = head.endsWith('%')
+        ? `<span class="${head.startsWith('-') ? 'dn' : 'up'}" style="font-weight:800;">${head}</span>`
+        : `<span class="price-hl">${head}</span>`;
+      const iHtml = inner.endsWith('%')
+        ? `<span class="${inner.startsWith('-') ? 'dn' : 'up'}" style="font-weight:800;">${inner}</span>`
+        : inner;
+      return `<span class="num-nw">${hHtml}(${iHtml})</span>`;
+    });
+    s = s.replace(/(\d[\d,]*(?:\.\d+)?\s*(?:억\s*)?달러)/g, '<span class="price-hl">$1</span>');
+    s = s.replace(/\(\s*([+-]\d[\d,.]*%)\s*\)/g, (_, p1) => {
+      const cls = p1.startsWith('+') ? 'up' : 'dn';
+      return `<span class="${cls} num-nw" style="font-weight:800;">(${p1})</span>`;
+    });
+    s = s.replace(/(?<![\w.-])([+-]\d[\d,.]*%)/g, (_, p1) => {
+      const cls = p1.startsWith('+') ? 'up' : 'dn';
+      return `<span class="${cls} num-nw" style="font-weight:800;">${p1}</span>`;
+    });
+    s = s.replace(/(\d[\d,]*(?:\.\d+)?\s*(?:원|건|배|만\s*건))/g, '<span class="num-nw">$1</span>');
+    return s;
+  }
+
+  async function renderPerfCard() {
+    if (!isOwner() || !S || !S._vaultUnlocked || !S.performance) return;
+    const pf = S.performance;
+    const pObj = (pf.periods || {})[perfPeriod] || {
+      pnlUsd:0, realizedUsd:0, pnlPct:0, sharpe:'--', profitFactor:'--', mddPct:0, winRate:0, wins:0, count:0, startTimeStr:'--', endTimeStr:'--', points:[]
+    };
+
+    const cfCnt = Number(pf.cashFlowCount || 0);
+    $('pfEpochBadge').style.display = 'inline-flex';
+    if (pf.resetAt) {
+      setTxt('pfEpochBadge', cfCnt > 0 ? `${pf.resetAt.slice(5, 16)} · 입출금 ${cfCnt}건 TWR` : `${pf.resetAt.slice(5, 16)} 이후 · TWR`);
+    } else {
+      setTxt('pfEpochBadge', cfCnt > 0 ? `입출금 ${cfCnt}건 TWR 보정` : 'TWR 수익률 보정');
+    }
+
+    const eqNow = Number((S.wallet && S.wallet.totalEquity) || S.realTotalSeed || 10000);
+    perfBaseStartEq = Math.max(500, eqNow - Number(pObj.pnlUsd || 0));
+    perfPeakEq = Math.max(perfBaseStartEq, eqNow);
+    perfPeakRelNav = Math.max(1.0, Number(pObj.realizedPeakRelNav || 1.0));
+
+    const netVal = cleanZero(pObj.pnlUsd);
+    const roiVal = cleanZero(pObj.pnlPct);
+    $('pfRoiVal').className = 'pf-m-val ' + (roiVal > 0 ? 'up' : (roiVal < 0 ? 'dn' : ''));
+    $('pfPnlVal').className = 'pf-m-val ' + (netVal > 0 ? 'up' : (netVal < 0 ? 'dn' : ''));
+
+    setTxt('pfRoiVal', `${roiVal.toFixed(2)}%`);
+    setTxt('pfPnlVal', `${netVal >= 0 ? '+' : ''}${fmt(netVal, 2)}`);
+    setTxt('pfSharpeVal', pObj.sharpe || '--');
+    setTxt('pfFactorVal', pObj.profitFactor || '--');
+    setTxt('pfMddVal', `${cleanZero(pObj.mddPct).toFixed(2)}%`);
+    setTxt('pfWinRateVal', `${cleanZero(pObj.winRate).toFixed(2)}%`);
+    setTxt('pfWinsVal', String(pObj.wins || 0));
+    setTxt('pfTotalPosVal', String(pObj.count || 0));
+    setTxt('pfStartTs', pObj.startTimeStr || '--');
+    setTxt('pfEndTs', pObj.endTimeStr || '--');
+
+    const mp = pf.monthlyProjection || {};
+    setTxt('pfProjModeTag', mp.modeLabel || '⚖️ 밸런스+');
+    if (mp.livePaceAvailable) {
+      const pPct = Number(mp.paceMonthlyPct || 0), pUsd = Number(mp.paceMonthlyUsd || 0);
+      $('pfProjMonthlyPct').style.color = pPct >= 0 ? '#34d399' : '#fb7185';
+      $('pfProjMonthlyUsd').className = 'pill ' + (pUsd >= 0 ? 'up' : 'dn');
+      setTxt('pfProjTitle', '📈 실전 페이스 기반 예상 월수익 (30D · TWR)');
+      setTxt('pfProjMonthlyPct', `${pPct >= 0 ? '+' : ''}${pPct.toFixed(1)}%`);
+      setTxt('pfProjMonthlyUsd', `월 ${pUsd >= 0 ? '+' : ''}${pUsd.toLocaleString()}$`);
+      setTxt('pfProjNoteTxt', '입출금 왜곡이 제거된 순수 체결 수익 속도 환산치');
+      setTxt('pfProj3mTxt', `${Number(mp.pace3mEquity || eqNow).toLocaleString()} USDT`);
+    } else {
+      $('pfProjMonthlyPct').style.color = '#34d399';
+      $('pfProjMonthlyUsd').className = 'pill up';
+      setTxt('pfProjTitle', '📈 기어별 표준 예상 월수익 시뮬레이션');
+      setTxt('pfProjMonthlyPct', mp.modelRangePct || '+20% ~ +26%');
+      setTxt('pfProjMonthlyUsd', `월 ${mp.modelUsdRange || ''}`);
+      setTxt('pfProjNoteTxt', '체결 3건 누적 시 TWR 실전 페이스로 자동 전환');
+      setTxt('pfProj3mTxt', `${Number(mp.model3mEquity || eqNow).toLocaleString()} USDT`);
+    }
+
+    const lastTrStr = (pf.lastTrade && pf.lastTrade.timeStr) ? pf.lastTrade.timeStr : '체결 대기 중';
+    const daysNum = Number(pf.daysTrading || 1);
+    const closedPortN = Number(pf.closedPortfolios || 0);
+    const projStartS = String(pf.projectStartStr || '--');
+
+    setTxt('pfLastTradeTxt', `${lastTrStr}  ›`);
+    $('pfLastTradeBar').onclick = () => {
+      if (pf.lastTrade && pf.lastTrade.timeSec) openCandleModal('BTC', '15m', Number(pf.lastTrade.timeSec) + 9 * 3600);
+      else openCandleModal('BTC', '15m');
+    };
+
+    setTxt('pfDaysTradingTxt', `${daysNum}일차  ›`);
+    $('pfDaysTradingBar').onclick = () => {
+      setTxt('sheetLastTradeVal', lastTrStr);
+      setTxt('sheetDaysVal', String(daysNum));
+      setTxt('sheetClosedVal', String(closedPortN));
+      $('sheetDescVal').innerHTML = `현재 운용 프로젝트 기준일(<span class="num-nw" style="color:#cbd5e1;">${escHtml(projStartS)} KST</span>)로부터 경과한 매매 일수이며, 수시 입출금은 TWR 기준가로 자동 분리되어 수익률에 영향을 주지 않습니다.`;
+      openModalById('daysSheetModal');
+    };
+
+    const box = $('perfChartBox');
+    if (!box || box.clientWidth < 40) return;
+
+    const pts = (pObj.points || []).map(p => ({
+      time: Number(p.t) + 9 * 3600,
+      value: cleanZero(perfMode === 'roi' ? p.pct : p.pnl)
+    }));
+    const newSig = `${pf.resetAt || 'ALL'}:${cfCnt}:${perfPeriod}:${perfMode}:${box.clientWidth}:${pts.length}:${pts.length ? pts[pts.length - 1].value : 0}`;
+    if (perfSig === newSig) return;
+    perfSig = newSig;
+
+    const hasLib = await ensureChartLib();
+    if (!hasLib) {
+      perfChart = null; perfSeries = null;
+      if (pts.length) perfNativeRedraw = mountNativePerfCanvas(box, pts, perfMode === 'roi');
+      return;
+    }
+
+    perfNativeRedraw = null;
+    const minBand = perfMode === 'roi' ? 0.50 : Math.max(50, Math.round(eqNow * 0.005));
+    const autoScaleProv = (baseImpl) => {
+      const res = baseImpl();
+      if (!res || !res.priceRange) return { priceRange: { minValue: -minBand, maxValue: minBand } };
+      let mn = res.priceRange.minValue, mx = res.priceRange.maxValue;
+      if (mx - mn < minBand * 2) {
+        const mid = (mx + mn) / 2.0;
+        mn = Math.min(-minBand, mid - minBand);
+        mx = Math.max(minBand, mid + minBand);
+      }
+      return { priceRange: { minValue: mn, maxValue: mx } };
+    };
+    const priceFmt = perfMode === 'roi'
+      ? { type:'custom', minMove:0.01, formatter:(v) => `${cleanZero(v, 0.005).toFixed(2)}%` }
+      : { type:'custom', minMove:0.1, formatter:(v) => { const z = cleanZero(v, 0.05); return `${z > 0 ? '+' : ''}${z.toFixed(1)}$`; } };
+
+    if (!perfChart) {
+      box.innerHTML = '';
+      perfChart = LightweightCharts.createChart(box, {
+        width: box.clientWidth, height: 195,
+        layout: { background:{ color:'transparent' }, textColor:'#64748b', fontSize:11, attributionLogo:false },
+        grid: { vertLines:{ visible:false }, horzLines:{ color:'rgba(148,163,184,0.08)', style:2 } },
+        leftPriceScale: { visible:true, borderVisible:false, scaleMargins:{ top:0.18, bottom:0.18 } },
+        rightPriceScale: { visible:false },
+        timeScale: { visible:false, borderVisible:false },
+        crosshair: { vertLine:{ color:'rgba(148,163,184,0.35)', labelVisible:false }, horzLine:{ color:'rgba(148,163,184,0.35)' } }
+      });
+      perfSeries = perfChart.addBaselineSeries({
+        baseValue: { type: 'price', price: 0 },
+        topLineColor: '#10b981', topFillColor1: 'rgba(16, 185, 129, 0.30)', topFillColor2: 'rgba(16, 185, 129, 0.02)',
+        bottomLineColor: '#f43f5e', bottomFillColor1: 'rgba(244, 63, 94, 0.02)', bottomFillColor2: 'rgba(244, 63, 94, 0.30)',
+        lineWidth: 2, priceLineVisible: false, lastValueVisible: false,
+        priceFormat: priceFmt, autoscaleInfoProvider: autoScaleProv
+      });
+      perfChart.subscribeCrosshairMove((param) => {
+        if (!param || !param.time || !param.seriesData || !param.seriesData.get(perfSeries)) {
+          setTxt('pfHoverVal', '실시간 웹소켓 연동 중');
+          return;
+        }
+        const val = cleanZero(param.seriesData.get(perfSeries).value);
+        const dt = fmtKstTs(param.time).full;
+        setTxt('pfHoverVal', `${dt} · ${perfMode === 'roi' ? val.toFixed(2) + '%' : (val > 0 ? '+' : '') + fmt(val, 2) + '$'}`);
+      });
+    } else {
+      perfChart.applyOptions({ width: box.clientWidth });
+      perfSeries.applyOptions({ priceFormat: priceFmt, autoscaleInfoProvider: autoScaleProv });
+    }
+
+    if (pts.length) {
+      perfLastPointTime = pts[pts.length - 1].time;
+      perfSeries.setData(pts);
+      perfChart.timeScale().fitContent();
+    }
+  }
+
+  const SYM_TITLES = { BTC:'BYBIT BTCUSDT Perp', NQ100:'NQ100 나스닥100 선물', NVDA:'NVDA 엔비디아', SOXL:'SOXL 반도체 3X', GOLD:'GOLD 국제 금 선물' };
+  const BYBIT_IV_MAP = { '1m':'1', '5m':'5', '15m':'15', '1h':'60', '4h':'240', '1D':'D' };
+  const BINANCE_IV_MAP = { '1m':'1m', '5m':'5m', '15m':'15m', '1h':'1h', '4h':'4h', '1D':'1d' };
+
+  function getCurSymPrice(sym) {
+    if (sym === 'BTC') return getLiveBtcPrice();
+    if (!S) return 0;
+    return Number(((S.macroQuotes || {})[sym] || {}).price || 0);
+  }
+
+  async function fetchFreshBtcKlinesDirect(tf) {
+    try {
+      const iv = BYBIT_IV_MAP[tf] || '15';
+      const r = await fetch(`https://api.bybit.com/v5/market/kline?category=linear&symbol=BTCUSDT&interval=${iv}&limit=120`, { cache:'no-store' });
+      if (r.ok) {
+        const j = await r.json();
+        const rows = ((j.result || {}).list) || [];
+        if (rows.length) {
+          rows.sort((a, b) => Number(a[0]) - Number(b[0]));
+          return rows.map(x => [Math.floor(Number(x[0]) / 1000), Number(x[1]), Number(x[2]), Number(x[3]), Number(x[4])]);
+        }
+      }
+    } catch(e){}
+    try {
+      const biv = BINANCE_IV_MAP[tf] || '15m';
+      const r2 = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=${biv}&limit=120`, { cache:'no-store' });
+      if (r2.ok) {
+        const rows2 = await r2.json();
+        if (Array.isArray(rows2) && rows2.length) {
+          return rows2.map(x => [Math.floor(Number(x[0]) / 1000), Number(x[1]), Number(x[2]), Number(x[3]), Number(x[4])]);
+        }
+      }
+    } catch(e2){}
+    return null;
+  }
+
+  async function fetchMacroKlinesFromServer(sym, tf) {
+    const bases = [];
+    if (location.origin.includes('127.0.0.1') || location.origin.includes('localhost')) bases.push(location.origin);
+    if (directApi) bases.push(directApi);
+    for (const b of bases) {
+      const ctrl = new AbortController();
+      const tmr = setTimeout(() => ctrl.abort(), 3200);
+      try {
+        const r = await fetch(`${b}/api/macro_klines?sym=${encodeURIComponent(sym)}&tf=${encodeURIComponent(tf)}&t=${Date.now()}`, {
+          cache:'no-store', signal:ctrl.signal
+        });
+        clearTimeout(tmr);
+        if (r.ok) {
+          const j = await r.json();
+          if (j && j.ok && Array.isArray(j.bars) && j.bars.length) return j;
+        }
+      } catch(e) { clearTimeout(tmr); }
+    }
+    return null;
+  }
+
+  // 어떤 통신 조건에서도 터치 즉시(0.01초) 팝업을 먼저 열고 차트를 렌더링합니다.
+  async function openCandleModal(sym, tf='15m', focusKstSec=0, focusPrice=0) {
+    const mySeq = ++cmReqSeq;
+    if (cmMacroPollTmr) { clearInterval(cmMacroPollTmr); cmMacroPollTmr = null; }
+    if (cmNativeCtrl) { try { cmNativeCtrl.destroy(); } catch(e){} cmNativeCtrl = null; }
+    if (cmChart) { try { cmChart.remove(); } catch(e){} cmChart = null; cmSeries = null; cmPriceLines = []; }
+
+    cmSym = sym; cmTf = tf; cmLastCandle = null;
+    openModalById('candleModal');
+
+    setTxt('cmTitle', SYM_TITLES[sym] || sym);
+    $('cmDelayBadge').style.display = (sym === 'NQ100' || sym === 'GOLD') ? 'inline-flex' : 'none';
+    document.querySelectorAll('#cmTfBar .chip').forEach(b => b.classList.toggle('active', b.dataset.tf === tf));
+    $('cmBtcTools').style.display = sym === 'BTC' ? 'flex' : 'none';
+    $('cmLastTradeStrip').style.display = 'none';
+
+    const curP = getCurSymPrice(sym);
+    const dec = curP >= 1000 ? 1 : 2;
+    const chg = sym === 'BTC'
+      ? Number(wsLive.btcChg24h !== null ? wsLive.btcChg24h : ((S && S.btcChg24h) || 0))
+      : Number((((S && S.macroQuotes) || {})[sym] || {}).chgPct || 0);
+    setTxt('cmPrice', curP > 0 ? fmt(curP, dec) : '--');
+    const chgEl = $('cmChg');
+    chgEl.className = chg >= 0 ? 'up' : 'dn';
+    setTxt('cmChg', `${chg >= 0 ? '+' : ''}${chg.toFixed(2)}%`);
+
+    const wrap = $('cmCanvas');
+    wrap.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:12.5px;font-weight:700;">차트 불러오는 중...</div>';
+
+    let rawRows = ((((S && S.allOhlc) || {})[sym] || {})[tf]) || [];
+    const libReadyPromise = ensureChartLib();
+
+    if (!rawRows.length) {
+      if (sym === 'BTC') {
+        const fresh = await fetchFreshBtcKlinesDirect(tf);
+        if (fresh && fresh.length) rawRows = fresh;
+      } else {
+        const srvInit = await fetchMacroKlinesFromServer(sym, tf);
+        if (srvInit && Array.isArray(srvInit.bars) && srvInit.bars.length) rawRows = srvInit.bars;
+      }
+    }
+
+    const hasLib = await libReadyPromise;
+    if (mySeq !== cmReqSeq || !$('candleModal').classList.contains('open')) return;
+
+    if (!rawRows.length) {
+      wrap.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:13px;">캔들 데이터를 동기화 중입니다. 잠시 후 다시 터치해 주세요.</div>';
+      return;
+    }
+
+    const candles = rawRows.map(r => ({ time: Number(r[0]) + 9 * 3600, open:Number(r[1]), high:Number(r[2]), low:Number(r[3]), close:Number(r[4]) }));
+    const liveNowP = getCurSymPrice(sym);
+    if (sym === 'BTC' && liveNowP > 0 && candles.length) {
+      const lc = candles[candles.length - 1];
+      lc.close = liveNowP;
+      if (liveNowP > lc.high) lc.high = liveNowP;
+      if (liveNowP < lc.low) lc.low = liveNowP;
+    }
+    if (candles.length) cmLastCandle = { ...candles[candles.length - 1] };
+
+    const lineSpecs = [];
+    if (sym === 'BTC' && S && showLines) {
+      const showOwner = isOwner() && Boolean(S._vaultUnlocked);
+      if (showOwner) {
+        (S.positions || []).forEach(p => {
+          lineSpecs.push({ price:p.entry, color:'#38bdf8', lineWidth:2, lineStyle:0, title:`${p.side==='LONG'?'롱':'숏'} 진입` });
+          if (p.r1Price > 0 && p.stage === 0) lineSpecs.push({ price:p.r1Price, color:'#f59e0b', lineWidth:1, lineStyle:3, title:'1R(확정익절)' });
+          if (p.sl > 0) lineSpecs.push({ price:p.sl, color:'#f43f5e', lineWidth:1, lineStyle:2, title:'보유 손절' });
+          if (p.tp > 0) lineSpecs.push({ price:p.tp, color:'#10b981', lineWidth:1, lineStyle:2, title:'보유 익절' });
+        });
+      }
+      (S.openOrders || []).forEach(o => {
+        const clr = o.side === 'LONG' ? '#10b981' : '#f43f5e';
+        const isSnp = o.track === 'SNIPER';
+        const bLbl = showOwner ? o.badge : (o.guestBadge || o.badge);
+        lineSpecs.push({ price:o.price, color:clr, lineWidth:isSnp ? 2 : 1, lineStyle:isSnp ? 0 : 2, title:`${bLbl} ${o.sideKo}` });
+      });
+    }
+
+    const renderInspectBar = (tSec, selP) => {
+      const liveRef = getCurSymPrice(cmSym);
+      const tStr = cmTf === '1D' ? fmtKstTs(tSec).date : fmtKstTs(tSec).full;
+      if (liveRef > 0) {
+        const diff = selP - liveRef, pct = (diff / liveRef) * 100.0, sg = pct >= 0 ? '+' : '';
+        const clr = pct >= 0 ? '#10b981' : '#f43f5e';
+        $('cmCrossBar').innerHTML = `<span style="color:#f8fafc;">📅 ${tStr} · <b>${fmt(selP, dec)}</b></span><span style="color:${clr};">현재가 대비 <b>${sg}${pct.toFixed(2)}%</b> (${sg}${fmt(diff, dec)})</span>`;
+      } else {
+        $('cmCrossBar').innerHTML = `<span style="color:#f8fafc;">📅 ${tStr} · <b>${fmt(selP, dec)}</b></span>`;
+      }
+    };
+
+    if (!hasLib) {
+      cmNativeCtrl = mountNativeCandleCanvas(wrap, candles, lineSpecs, dec, tf, renderInspectBar);
+    } else {
+      wrap.innerHTML = '';
+      cmChart = LightweightCharts.createChart(wrap, {
+        width: wrap.clientWidth || 360, height: 340,
+        layout: { background:{ color:'#070b14' }, textColor:'#94a3b8', fontSize:11, attributionLogo:false },
+        grid: { vertLines:{ color:'rgba(148,163,184,0.07)' }, horzLines:{ color:'rgba(148,163,184,0.07)' } },
+        crosshair: { mode: 0 },
+        localization: { timeFormatter: (t) => cmTf === '1D' ? fmtKstTs(t).date : fmtKstTs(t).full },
+        rightPriceScale: { borderColor:'rgba(148,163,184,0.18)' },
+        timeScale: {
+          borderColor:'rgba(148,163,184,0.18)', timeVisible: tf !== '1D', secondsVisible: false,
+          tickMarkFormatter: (t, tickType) => {
+            const info = fmtKstTs(t);
+            if (tf === '1D' || tickType <= 2 || info.isDayStart) return info.date;
+            return info.full;
+          }
+        }
+      });
+
+      cmSeries = cmChart.addCandlestickSeries({ upColor:'#10b981', downColor:'#f43f5e', borderUpColor:'#10b981', borderDownColor:'#f43f5e', wickUpColor:'#10b981', wickDownColor:'#f43f5e' });
+      cmSeries.setData(candles);
+
+      const calcEma = (period) => {
+        const k = 2 / (period + 1); let ema = candles[0].close;
+        return candles.map((c, i) => { ema = i === 0 ? c.close : c.close * k + ema * (1 - k); return { time:c.time, value:Number(ema.toFixed(dec)) }; });
+      };
+      if (candles.length >= 20) cmChart.addLineSeries({ color:'#f59e0b', lineWidth:1, priceLineVisible:false, lastValueVisible:false }).setData(calcEma(20));
+      if (candles.length >= 50) cmChart.addLineSeries({ color:'#8b5cf6', lineWidth:1, priceLineVisible:false, lastValueVisible:false }).setData(calcEma(50));
+
+      lineSpecs.forEach(ls => {
+        cmPriceLines.push(cmSeries.createPriceLine({
+          price:ls.price, color:ls.color, lineWidth:ls.lineWidth, lineStyle:ls.lineStyle, axisLabelVisible:true, title:ls.title
+        }));
+      });
+
+      if (sym === 'BTC' && S && isOwner() && S._vaultUnlocked) {
+        const mks = (S.performance && S.performance.markersAsc) || [];
+        if (mks.length) {
+          const lastM = mks[mks.length - 1];
+          lastTradeTs = Number(lastM.timeSec) + 9 * 3600;
+          $('cmLastTradeStrip').style.display = 'flex';
+          setTxt('cmLastTradeTxt', `최근 체결: ${lastM.side} ${fmt(lastM.entry,0)} → ${fmt(lastM.exit,0)} (${lastM.pnl >= 0 ? '+' : ''}${fmt(lastM.pnl,0)}$)`);
+          if (showMarks && candles.length > 1) {
+            const cTimes = candles.map(c => c.time);
+            const snapped = [];
+            mks.slice(-25).forEach(m => {
+              const mt = Number(m.timeSec) + 9 * 3600;
+              if (mt < cTimes[0] - 86400) return;
+              let bestT = cTimes[0], bestD = Math.abs(cTimes[0] - mt);
+              for (const ct of cTimes) { const d = Math.abs(ct - mt); if (d < bestD) { bestD = d; bestT = ct; } }
+              snapped.push({
+                time: bestT,
+                position: m.pnl >= 0 ? 'belowBar' : 'aboveBar',
+                color: m.pnl >= 0 ? '#10b981' : '#f43f5e',
+                shape: m.side === 'LONG' ? 'arrowUp' : 'arrowDown',
+                text: `${m.side[0]}청산 ${m.pnl >= 0 ? '+' : ''}${Math.round(m.pnl)}$`
+              });
+            });
+            snapped.sort((a, b) => a.time - b.time);
+            cmSeries.setMarkers(snapped);
+          }
+        }
+      }
+
+      if (focusKstSec > 0) cmChart.timeScale().setVisibleRange({ from: focusKstSec - 3600 * 5, to: focusKstSec + 3600 * 2 });
+      else cmChart.timeScale().fitContent();
+
+      const onMove = (param) => {
+        if (!param || !param.time) return;
+        let selP = 0;
+        if (param.point && cmSeries && typeof cmSeries.coordinateToPrice === 'function') selP = Number(cmSeries.coordinateToPrice(param.point.y) || 0);
+        if (selP <= 0 && param.seriesData && param.seriesData.get(cmSeries)) selP = Number(param.seriesData.get(cmSeries).close || 0);
+        if (selP > 0) renderInspectBar(param.time, selP);
+      };
+      cmChart.subscribeCrosshairMove(onMove);
+      cmChart.subscribeClick(onMove);
+    }
+
+    const lastBar = candles[candles.length - 1];
+    if (focusPrice > 0 && liveNowP > 0 && lastBar) {
+      const diffF = focusPrice - liveNowP, pctF = (diffF / liveNowP) * 100.0, sgF = pctF >= 0 ? '+' : '';
+      const clrF = pctF >= 0 ? '#10b981' : '#f43f5e';
+      $('cmCrossBar').innerHTML = `<span style="color:#f8fafc;">🎯 기준 타점 · <b>${fmt(focusPrice, dec)}</b></span><span style="color:${clrF};">현재가 대비 <b>${sgF}${pctF.toFixed(2)}%</b> (${sgF}${fmt(diffF, dec)})</span>`;
+    } else if (lastBar) {
+      renderInspectBar(lastBar.time, lastBar.close);
+    }
+
+    if (sym !== 'BTC') {
+      const syncMacroLiveTick = async () => {
+        if (!$('candleModal').classList.contains('open') || cmSym !== sym || cmTf !== tf) return;
+        const liveM = await fetchMacroKlinesFromServer(sym, tf);
+        if (!liveM || !Array.isArray(liveM.bars) || !liveM.bars.length) return;
+        const dLive = liveM.price >= 1000 ? 1 : 2;
+        if (liveM.price > 0) {
+          setTxt('cmPrice', fmt(liveM.price, dLive));
+          chgEl.className = liveM.chgPct >= 0 ? 'up' : 'dn';
+          setTxt('cmChg', `${liveM.chgPct >= 0 ? '+' : ''}${Number(liveM.chgPct).toFixed(2)}%`);
+          setTxt('p-' + sym, fmt(liveM.price, dLive));
+          const ceCard = $('c-' + sym);
+          if (ceCard) {
+            ceCard.className = 'm-chg ' + (liveM.chgPct >= 0 ? 'up' : 'dn');
+            setTxt('c-' + sym, `${liveM.chgPct >= 0 ? '+' : ''}${Number(liveM.chgPct).toFixed(2)}%`);
+          }
+          if (S && S.macroQuotes && S.macroQuotes[sym]) {
+            S.macroQuotes[sym].price = liveM.price;
+            S.macroQuotes[sym].chgPct = liveM.chgPct;
+          }
+        }
+        const lastB = liveM.bars[liveM.bars.length - 1];
+        const barObj = { time: Number(lastB[0]) + 9 * 3600, open:Number(lastB[1]), high:Number(lastB[2]), low:Number(lastB[3]), close:Number(lastB[4]) };
+        if (cmSeries) { try { cmSeries.update(barObj); } catch(e){} }
+        if (cmNativeCtrl) { try { cmNativeCtrl.updateLast(barObj); } catch(e){} }
+      };
+      syncMacroLiveTick();
+      cmMacroPollTmr = setInterval(syncMacroLiveTick, 4000);
+    }
+  }
+
+  $('sessTimerBadge').onclick = () => {
+    memSessionToken = '';
+    memSessionExp = 0;
+    $('sessTimerBadge').style.display = 'none';
+    showToast('🔒 연속 조작 세션이 즉시 잠금 처리되었습니다.');
+  };
+
+  $('liveDot').onclick = () => {
+    connectBybitPublicWs(true);
+    connectBinanceBackupWs();
+    connectUpbitPublicWs(true);
+    fetchStateTick();
+    if (!S || !S.ts) return;
+    const ageMin = Math.max(0, Math.floor((Date.now() - Number(S.ts)) / 60000));
+    const kstS = new Date(Number(S.ts) + 9 * 3600000).toISOString().replace('T', ' ').slice(5, 19);
+    if (isEngineOffline()) {
+      showToast(`🔌 오프라인 (${ageMin}분 전 · ${kstS}) — 시세 즉시 동기화`, true);
+    } else {
+      showToast(`● 가동중 · 실시간 소켓 및 상태 동기화 완료 (${kstS} KST)`);
+    }
+  };
 
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
-      connectBybitPublicWs();
-      connectUpbitPublicWs();
+      connectBybitPublicWs(true);
+      connectBinanceBackupWs();
+      connectUpbitPublicWs(true);
       fetchStateTick();
     }
+  });
+  window.addEventListener('pageshow', () => {
+    connectBybitPublicWs(true);
+    connectBinanceBackupWs();
+    connectUpbitPublicWs(true);
+    fetchStateTick();
   });
 
   document.querySelectorAll('.modal-bg').forEach(bg => {
@@ -1449,6 +2188,52 @@
   $('lbClose').onclick = () => closeModalById('lbModal');
   $('daysSheetOkBtn').onclick = () => closeModalById('daysSheetModal');
   $('kpCloseBtn').onclick = () => { pendingCmd = null; closeModalById('keypadModal'); };
+
+  $('btcHeroCard').onclick = () => openCandleModal('BTC', cmTf);
+  document.querySelectorAll('.m-box').forEach(b => {
+    b.onclick = () => openCandleModal(b.dataset.msym, '15m');
+  });
+  $('cmTfBar').onclick = (ev) => {
+    const b = ev.target.closest('.chip');
+    if (b) openCandleModal(cmSym, b.dataset.tf);
+  };
+  $('btnToggleLines').onclick = () => {
+    showLines = !showLines;
+    $('btnToggleLines').classList.toggle('active', showLines);
+    openCandleModal(cmSym, cmTf);
+  };
+  $('btnToggleMarks').onclick = () => {
+    showMarks = !showMarks;
+    $('btnToggleMarks').classList.toggle('active', showMarks);
+    openCandleModal(cmSym, cmTf);
+  };
+  $('btnJumpTrade').onclick = () => {
+    if (cmChart && lastTradeTs > 0) {
+      cmChart.timeScale().setVisibleRange({ from: lastTradeTs - 3600 * 5, to: lastTradeTs + 3600 * 2 });
+    }
+  };
+
+  $('perfTabs').onclick = (ev) => {
+    const b = ev.target.closest('.pf-seg-btn'); if (!b) return;
+    perfPeriod = b.dataset.pf;
+    document.querySelectorAll('#perfTabs .pf-seg-btn').forEach(x => x.classList.toggle('active', x === b));
+    perfSig = '';
+    renderPerfCard();
+  };
+
+  $('perfModeTabs').onclick = (ev) => {
+    const b = ev.target.closest('.pf-seg-btn'); if (!b) return;
+    perfMode = b.dataset.pmode;
+    document.querySelectorAll('#perfModeTabs .pf-seg-btn').forEach(x => x.classList.toggle('active', x === b));
+    perfSig = '';
+    renderPerfCard();
+  };
+
+  window.addEventListener('resize', () => {
+    if (perfChart && $('perfChartBox') && $('perfChartBox').clientWidth > 40) {
+      perfChart.applyOptions({ width: $('perfChartBox').clientWidth });
+    }
+  });
 
   function renderKpDots(shake=false) {
     const wrap = $('kpDots');
@@ -1494,7 +2279,6 @@
       }
       return;
     }
-
     if (kpMode === 'cmd') {
       await executeApprovedCmd(pinVal, '');
     }
@@ -1504,16 +2288,8 @@
     const btn = ev.target.closest('.kp-btn');
     if (!btn || cmdInFlight) return;
     const k = btn.dataset.k;
-    if (k === 'CLR') {
-      kpPinBuf = '';
-      renderKpDots();
-      return;
-    }
-    if (k === 'DEL') {
-      kpPinBuf = kpPinBuf.slice(0, -1);
-      renderKpDots();
-      return;
-    }
+    if (k === 'CLR') { kpPinBuf = ''; renderKpDots(); return; }
+    if (k === 'DEL') { kpPinBuf = kpPinBuf.slice(0, -1); renderKpDots(); return; }
     if (/^\d$/.test(k) && kpPinBuf.length < 6) {
       kpPinBuf += k;
       renderKpDots();
@@ -1746,7 +2522,7 @@
               }
               if (res2.body.tempSessionToken) {
                 memSessionToken = String(res2.body.tempSessionToken);
-                memSessionExp = Date.now() + Number(res2.body.tempSessionTtl || 180) * 1000;
+                memSessionExp = Date.now() + Number(res.body.tempSessionTtl || 180) * 1000;
               }
               pendingCmd = null;
               closeModalById('keypadModal');
@@ -1833,13 +2609,8 @@
     document.querySelectorAll('.bnav-btn').forEach(x => x.classList.toggle('active', x.dataset.tab === targetTab));
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'pane-' + targetTab));
 
-    if (sameTab) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }
+    if (sameTab) window.scrollTo({ top: 0, behavior: 'smooth' });
+    else { window.scrollTo(0, 0); document.documentElement.scrollTop = 0; document.body.scrollTop = 0; }
 
     if (targetTab === 'rec') markRecAsSeen();
     if (targetTab === 'dash' && isOwner()) { perfSig = ''; setTimeout(renderPerfCard, 35); }
@@ -1896,505 +2667,6 @@
     if (S) renderLogsList(S.logs || []);
   };
 
-  function fmtInlineRich(str) {
-    let s = escHtml(str || '');
-    s = s.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
-    s = s.replace(/([가-힣A-Za-z0-9.,+-]+(?:달러|%))\(\s*([^()]{1,28})\s*\)/g, (_, head, inner) => {
-      const hHtml = head.endsWith('%')
-        ? `<span class="${head.startsWith('-') ? 'dn' : 'up'}" style="font-weight:800;">${head}</span>`
-        : `<span class="price-hl">${head}</span>`;
-      const iHtml = inner.endsWith('%')
-        ? `<span class="${inner.startsWith('-') ? 'dn' : 'up'}" style="font-weight:800;">${inner}</span>`
-        : inner;
-      return `<span class="num-nw">${hHtml}(${iHtml})</span>`;
-    });
-    s = s.replace(/(\d[\d,]*(?:\.\d+)?\s*(?:억\s*)?달러)/g, '<span class="price-hl">$1</span>');
-    s = s.replace(/\(\s*([+-]\d[\d,.]*%)\s*\)/g, (_, p1) => {
-      const cls = p1.startsWith('+') ? 'up' : 'dn';
-      return `<span class="${cls} num-nw" style="font-weight:800;">(${p1})</span>`;
-    });
-    s = s.replace(/(?<![\w.-])([+-]\d[\d,.]*%)/g, (_, p1) => {
-      const cls = p1.startsWith('+') ? 'up' : 'dn';
-      return `<span class="${cls} num-nw" style="font-weight:800;">${p1}</span>`;
-    });
-    s = s.replace(/(\d[\d,]*(?:\.\d+)?\s*(?:원|건|배|만\s*건))/g, '<span class="num-nw">$1</span>');
-    return s;
-  }
-
-  function renderEconSectionView(econObj) {
-    const secs = Array.isArray(econObj.sections) ? econObj.sections : [];
-    if (!secs.length) {
-      $('econJumpBar').innerHTML = '';
-      $('econBodyWrap').innerHTML = `<div class="econ-sec"><div class="econ-row-body">${fmtInlineRich(econObj.text || '브리핑 대기 중입니다.')}</div></div>`;
-      return;
-    }
-
-    $('econJumpBar').style.gridTemplateColumns = `repeat(${Math.min(5, Math.max(1, secs.length))}, minmax(0, 1fr))`;
-    $('econJumpBar').innerHTML = secs.map(sec => {
-      const rawTab = String(sec.shortTab || sec.title || '');
-      const styledTab = rawTab.startsWith('₿')
-        ? `<span style="color:#fbbf24;">₿</span>${escHtml(rawTab.slice(1))}`
-        : escHtml(rawTab);
-      return `<button type="button" class="chip" data-ejump="${escHtml(sec.id)}">${styledTab}</button>`;
-    }).join('');
-
-    $('econJumpBar').querySelectorAll('[data-ejump]').forEach(btn => {
-      btn.onclick = () => {
-        const el = document.getElementById(btn.dataset.ejump);
-        if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
-      };
-    });
-
-    $('econBodyWrap').innerHTML = secs.map(sec => {
-      const rowsHtml = (sec.items || []).map(it => {
-        const hasTime = Boolean(it.timeChip);
-        const hasLbl = Boolean(it.label);
-        let topHtml = '';
-        if (hasTime || hasLbl) {
-          topHtml = `<div class="econ-row-top">` +
-            (hasTime ? `<span class="econ-time-badge">🕒 ${escHtml(it.timeChip)}</span>` : '') +
-            (hasLbl ? (hasTime ? `<span class="econ-ev-title">${escHtml(it.label)}</span>` : `<span class="econ-key-tag">${escHtml(it.label)}</span>`) : '') +
-            `</div>`;
-        }
-        return `<div class="econ-row">${topHtml}<div class="econ-row-body">${fmtInlineRich(it.body)}</div></div>`;
-      }).join('');
-
-      return `<div class="econ-sec ${sec.isSchedule ? 'sched-sec' : ''}" id="${escHtml(sec.id)}">
-        <div class="econ-sec-title">${escHtml(sec.title)}</div>
-        <div class="econ-list">${rowsHtml}</div>
-      </div>`;
-    }).join('');
-  }
-
-  function renderPerfCard() {
-    if (!isOwner() || !S || !S._vaultUnlocked || !S.performance || !window.LightweightCharts) return;
-    const pf = S.performance;
-    const pObj = (pf.periods || {})[perfPeriod] || {
-      pnlUsd:0, realizedUsd:0, pnlPct:0, sharpe:'--', profitFactor:'--', mddPct:0, winRate:0, wins:0, count:0, startTimeStr:'--', endTimeStr:'--', points:[]
-    };
-
-    const cfCnt = Number(pf.cashFlowCount || 0);
-    if (pf.resetAt) {
-      $('pfEpochBadge').style.display = 'inline-flex';
-      setTxt('pfEpochBadge', cfCnt > 0 ? `${pf.resetAt.slice(5, 16)} · 입출금 ${cfCnt}건 TWR` : `${pf.resetAt.slice(5, 16)} 이후 · TWR`);
-    } else if (cfCnt > 0) {
-      $('pfEpochBadge').style.display = 'inline-flex';
-      setTxt('pfEpochBadge', `입출금 ${cfCnt}건 TWR 보정`);
-    } else {
-      $('pfEpochBadge').style.display = 'inline-flex';
-      setTxt('pfEpochBadge', 'TWR 수익률 보정');
-    }
-
-    const eqNow = Number((S.wallet && S.wallet.totalEquity) || S.realTotalSeed || 10000);
-    perfBaseStartEq = Math.max(500, eqNow - Number(pObj.pnlUsd || 0));
-    perfPeakEq = Math.max(perfBaseStartEq, eqNow);
-    perfPeakRelNav = Math.max(1.0, Number(pObj.realizedPeakRelNav || 1.0));
-
-    const netVal = cleanZero(pObj.pnlUsd);
-    const roiVal = cleanZero(pObj.pnlPct);
-    const roiEl = $('pfRoiVal'), pnlEl = $('pfPnlVal');
-    roiEl.className = 'pf-m-val ' + (roiVal > 0 ? 'up' : (roiVal < 0 ? 'dn' : ''));
-    pnlEl.className = 'pf-m-val ' + (netVal > 0 ? 'up' : (netVal < 0 ? 'dn' : ''));
-
-    setTxt('pfRoiVal', `${roiVal.toFixed(2)}%`);
-    setTxt('pfPnlVal', `${netVal >= 0 ? '+' : ''}${fmt(netVal, 2)}`);
-    setTxt('pfSharpeVal', pObj.sharpe || '--');
-    setTxt('pfFactorVal', pObj.profitFactor || '--');
-    setTxt('pfMddVal', `${cleanZero(pObj.mddPct).toFixed(2)}%`);
-    setTxt('pfWinRateVal', `${cleanZero(pObj.winRate).toFixed(2)}%`);
-    setTxt('pfWinsVal', String(pObj.wins || 0));
-    setTxt('pfTotalPosVal', String(pObj.count || 0));
-    setTxt('pfStartTs', pObj.startTimeStr || '--');
-    setTxt('pfEndTs', pObj.endTimeStr || '--');
-
-    const mp = pf.monthlyProjection || {};
-    setTxt('pfProjModeTag', mp.modeLabel || '⚖️ 밸런스+');
-    if (mp.livePaceAvailable) {
-      const pPct = Number(mp.paceMonthlyPct || 0);
-      const pUsd = Number(mp.paceMonthlyUsd || 0);
-      $('pfProjMonthlyPct').style.color = pPct >= 0 ? '#34d399' : '#fb7185';
-      $('pfProjMonthlyUsd').className = 'pill ' + (pUsd >= 0 ? 'up' : 'dn');
-      setTxt('pfProjTitle', '📈 실전 페이스 기반 예상 월수익 (30D · TWR)');
-      setTxt('pfProjMonthlyPct', `${pPct >= 0 ? '+' : ''}${pPct.toFixed(1)}%`);
-      setTxt('pfProjMonthlyUsd', `월 ${pUsd >= 0 ? '+' : ''}${pUsd.toLocaleString()}$`);
-      setTxt('pfProjNoteTxt', '입출금 왜곡이 제거된 순수 체결 수익 속도 환산치');
-      setTxt('pfProj3mTxt', `${Number(mp.pace3mEquity || eqNow).toLocaleString()} USDT`);
-    } else {
-      $('pfProjMonthlyPct').style.color = '#34d399';
-      $('pfProjMonthlyUsd').className = 'pill up';
-      setTxt('pfProjTitle', '📈 기어별 표준 예상 월수익 시뮬레이션');
-      setTxt('pfProjMonthlyPct', mp.modelRangePct || '+20% ~ +26%');
-      setTxt('pfProjMonthlyUsd', `월 ${mp.modelUsdRange || ''}`);
-      setTxt('pfProjNoteTxt', '체결 3건 누적 시 TWR 실전 페이스로 자동 전환');
-      setTxt('pfProj3mTxt', `${Number(mp.model3mEquity || eqNow).toLocaleString()} USDT`);
-    }
-
-    const lastTrStr = (pf.lastTrade && pf.lastTrade.timeStr) ? pf.lastTrade.timeStr : '체결 대기 중';
-    const daysNum = Number(pf.daysTrading || 1);
-    const closedPortN = Number(pf.closedPortfolios || 0);
-    const projStartS = String(pf.projectStartStr || '--');
-
-    setTxt('pfLastTradeTxt', `${lastTrStr}  ›`);
-    $('pfLastTradeBar').onclick = () => {
-      if (pf.lastTrade && pf.lastTrade.timeSec) {
-        openCandleModal('BTC', '15m', Number(pf.lastTrade.timeSec) + 9 * 3600);
-      } else {
-        openCandleModal('BTC', '15m');
-      }
-    };
-
-    setTxt('pfDaysTradingTxt', `${daysNum}일차  ›`);
-    $('pfDaysTradingBar').onclick = () => {
-      setTxt('sheetLastTradeVal', lastTrStr);
-      setTxt('sheetDaysVal', String(daysNum));
-      setTxt('sheetClosedVal', String(closedPortN));
-      $('sheetDescVal').innerHTML = `현재 운용 프로젝트 기준일(<span class="num-nw" style="color:#cbd5e1;">${escHtml(projStartS)} KST</span>)로부터 경과한 매매 일수이며, 수시 입출금은 TWR 기준가로 자동 분리되어 수익률에 영향을 주지 않습니다.`;
-      openModalById('daysSheetModal');
-    };
-
-    const box = $('perfChartBox');
-    if (!box || box.clientWidth < 40) return;
-
-    const minBand = perfMode === 'roi' ? 0.50 : Math.max(50, Math.round(eqNow * 0.005));
-    const autoScaleProv = (baseImpl) => {
-      const res = baseImpl();
-      if (!res || !res.priceRange) return { priceRange: { minValue: -minBand, maxValue: minBand } };
-      let mn = res.priceRange.minValue;
-      let mx = res.priceRange.maxValue;
-      if (mx - mn < minBand * 2) {
-        const mid = (mx + mn) / 2.0;
-        mn = Math.min(-minBand, mid - minBand);
-        mx = Math.max(minBand, mid + minBand);
-      }
-      return { priceRange: { minValue: mn, maxValue: mx } };
-    };
-
-    const priceFmt = perfMode === 'roi'
-      ? { type:'custom', minMove:0.01, formatter:(v) => `${cleanZero(v, 0.005).toFixed(2)}%` }
-      : { type:'custom', minMove:0.1, formatter:(v) => { const z = cleanZero(v, 0.05); return `${z > 0 ? '+' : ''}${z.toFixed(1)}$`; } };
-
-    if (!perfChart) {
-      perfChart = LightweightCharts.createChart(box, {
-        width: box.clientWidth, height: 195,
-        layout: { background:{ color:'transparent' }, textColor:'#64748b', fontSize:11, attributionLogo:false },
-        grid: { vertLines:{ visible:false }, horzLines:{ color:'rgba(148,163,184,0.08)', style:2 } },
-        leftPriceScale: { visible:true, borderVisible:false, scaleMargins:{ top:0.18, bottom:0.18 } },
-        rightPriceScale: { visible:false },
-        timeScale: { visible:false, borderVisible:false },
-        crosshair: { vertLine:{ color:'rgba(148,163,184,0.35)', labelVisible:false }, horzLine:{ color:'rgba(148,163,184,0.35)' } }
-      });
-      perfSeries = perfChart.addBaselineSeries({
-        baseValue: { type: 'price', price: 0 },
-        topLineColor: '#10b981',
-        topFillColor1: 'rgba(16, 185, 129, 0.30)',
-        topFillColor2: 'rgba(16, 185, 129, 0.02)',
-        bottomLineColor: '#f43f5e',
-        bottomFillColor1: 'rgba(244, 63, 94, 0.02)',
-        bottomFillColor2: 'rgba(244, 63, 94, 0.30)',
-        lineWidth: 2,
-        priceLineVisible: false,
-        lastValueVisible: false,
-        priceFormat: priceFmt,
-        autoscaleInfoProvider: autoScaleProv
-      });
-      perfChart.subscribeCrosshairMove((param) => {
-        if (!param || !param.time || !param.seriesData || !param.seriesData.get(perfSeries)) {
-          setTxt('pfHoverVal', '실시간 웹소켓 연동 중');
-          return;
-        }
-        const val = cleanZero(param.seriesData.get(perfSeries).value);
-        const dt = fmtKstTs(param.time).full;
-        setTxt('pfHoverVal', `${dt} · ${perfMode === 'roi' ? val.toFixed(2) + '%' : (val > 0 ? '+' : '') + fmt(val, 2) + '$'}`);
-      });
-    } else {
-      perfChart.applyOptions({ width: box.clientWidth });
-      perfSeries.applyOptions({ priceFormat: priceFmt, autoscaleInfoProvider: autoScaleProv });
-    }
-
-    const pts = (pObj.points || []).map(p => ({
-      time: Number(p.t) + 9 * 3600,
-      value: cleanZero(perfMode === 'roi' ? p.pct : p.pnl)
-    }));
-
-    const newSig = `${pf.resetAt || 'ALL'}:${cfCnt}:${perfPeriod}:${perfMode}:${box.clientWidth}:${pts.length}:${pts.length ? pts[pts.length - 1].value : 0}`;
-    if (perfSig !== newSig && pts.length) {
-      perfSig = newSig;
-      perfLastPointTime = pts[pts.length - 1].time;
-      perfSeries.setData(pts);
-      perfChart.timeScale().fitContent();
-    }
-  }
-
-  $('perfTabs').onclick = (ev) => {
-    const b = ev.target.closest('.pf-seg-btn'); if (!b) return;
-    perfPeriod = b.dataset.pf;
-    document.querySelectorAll('#perfTabs .pf-seg-btn').forEach(x => x.classList.toggle('active', x === b));
-    perfSig = '';
-    renderPerfCard();
-  };
-
-  $('perfModeTabs').onclick = (ev) => {
-    const b = ev.target.closest('.pf-seg-btn'); if (!b) return;
-    perfMode = b.dataset.pmode;
-    document.querySelectorAll('#perfModeTabs .pf-seg-btn').forEach(x => x.classList.toggle('active', x === b));
-    perfSig = '';
-    renderPerfCard();
-  };
-
-  window.addEventListener('resize', () => {
-    if (perfChart && $('perfChartBox') && $('perfChartBox').clientWidth > 40) {
-      perfChart.applyOptions({ width: $('perfChartBox').clientWidth });
-    }
-  });
-
-  const SYM_TITLES = { BTC:'BYBIT BTCUSDT Perp', NQ100:'NQ100 나스닥100 선물', NVDA:'NVDA 엔비디아', SOXL:'SOXL 반도체 3X', GOLD:'GOLD 국제 금 선물' };
-  const BYBIT_IV_MAP = { '1m':'1', '5m':'5', '15m':'15', '1h':'60', '4h':'240', '1D':'D' };
-
-  function getCurSymPrice(sym) {
-    if (sym === 'BTC') return wsLive.btcPrice > 0 ? wsLive.btcPrice : Number((S && S.btcPrice) || 0);
-    if (!S) return 0;
-    return Number(((S.macroQuotes || {})[sym] || {}).price || 0);
-  }
-
-  async function fetchFreshBtcKlinesDirect(tf) {
-    try {
-      const iv = BYBIT_IV_MAP[tf] || '15';
-      const r = await fetch(`https://api.bybit.com/v5/market/kline?category=linear&symbol=BTCUSDT&interval=${iv}&limit=120`, { cache:'no-store' });
-      if (!r.ok) return null;
-      const j = await r.json();
-      const rows = ((j.result || {}).list) || [];
-      if (!rows.length) return null;
-      rows.sort((a, b) => Number(a[0]) - Number(b[0]));
-      return rows.map(x => [Math.floor(Number(x[0]) / 1000), Number(x[1]), Number(x[2]), Number(x[3]), Number(x[4])]);
-    } catch(e) { return null; }
-  }
-
-  async function fetchMacroKlinesFromServer(sym, tf) {
-    const bases = [];
-    if (location.origin.includes('127.0.0.1') || location.origin.includes('localhost')) bases.push(location.origin);
-    if (directApi) bases.push(directApi);
-    for (const b of bases) {
-      const ctrl = new AbortController();
-      const tmr = setTimeout(() => ctrl.abort(), 3200);
-      try {
-        const r = await fetch(`${b}/api/macro_klines?sym=${encodeURIComponent(sym)}&tf=${encodeURIComponent(tf)}&t=${Date.now()}`, {
-          cache:'no-store', signal:ctrl.signal
-        });
-        clearTimeout(tmr);
-        if (r.ok) {
-          const j = await r.json();
-          if (j && j.ok && Array.isArray(j.bars) && j.bars.length) return j;
-        }
-      } catch(e) {
-        clearTimeout(tmr);
-      }
-    }
-    return null;
-  }
-
-  async function openCandleModal(sym, tf='15m', focusKstSec=0, focusPrice=0) {
-    if (!window.LightweightCharts) return;
-    if (cmMacroPollTmr) { clearInterval(cmMacroPollTmr); cmMacroPollTmr = null; }
-    cmSym = sym; cmTf = tf; cmLastCandle = null;
-    openModalById('candleModal');
-    setTxt('cmTitle', SYM_TITLES[sym] || sym);
-    $('cmDelayBadge').style.display = (sym === 'NQ100' || sym === 'GOLD') ? 'inline-flex' : 'none';
-    document.querySelectorAll('#cmTfBar .chip').forEach(b => b.classList.toggle('active', b.dataset.tf === tf));
-    $('cmBtcTools').style.display = sym === 'BTC' ? 'flex' : 'none';
-
-    const curP = getCurSymPrice(sym);
-    const dec = curP >= 1000 ? 1 : 2;
-    const chg = sym === 'BTC'
-      ? Number(wsLive.btcChg24h !== null ? wsLive.btcChg24h : ((S && S.btcChg24h) || 0))
-      : Number((((S && S.macroQuotes) || {})[sym] || {}).chgPct || 0);
-    setTxt('cmPrice', curP > 0 ? fmt(curP, dec) : '--');
-    const chgEl = $('cmChg');
-    chgEl.className = chg >= 0 ? 'up' : 'dn';
-    setTxt('cmChg', `${chg >= 0 ? '+' : ''}${chg.toFixed(2)}%`);
-
-    const wrap = $('cmCanvas');
-    if (cmChart) { try { cmChart.remove(); } catch(e){} cmChart = null; cmSeries = null; cmPriceLines = []; }
-    wrap.innerHTML = '';
-
-    let rawRows = ((((S && S.allOhlc) || {})[sym] || {})[tf]) || [];
-    if (!rawRows.length && sym === 'BTC') {
-      const fresh = await fetchFreshBtcKlinesDirect(tf);
-      if (fresh && fresh.length) rawRows = fresh;
-    } else if (!rawRows.length && sym !== 'BTC') {
-      const srvInit = await fetchMacroKlinesFromServer(sym, tf);
-      if (srvInit && Array.isArray(srvInit.bars) && srvInit.bars.length) rawRows = srvInit.bars;
-    }
-
-    if (!rawRows.length) {
-      wrap.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:13px;">캔들 데이터를 동기화 중입니다...</div>';
-      return;
-    }
-
-    cmChart = LightweightCharts.createChart(wrap, {
-      width: wrap.clientWidth || 360, height: 340,
-      layout: { background:{ color:'#070b14' }, textColor:'#94a3b8', fontSize:11, attributionLogo:false },
-      grid: { vertLines:{ color:'rgba(148,163,184,0.07)' }, horzLines:{ color:'rgba(148,163,184,0.07)' } },
-      crosshair: { mode: 0 },
-      localization: { timeFormatter: (t) => cmTf === '1D' ? fmtKstTs(t).date : fmtKstTs(t).full },
-      rightPriceScale: { borderColor:'rgba(148,163,184,0.18)' },
-      timeScale: {
-        borderColor:'rgba(148,163,184,0.18)', timeVisible: tf !== '1D', secondsVisible: false,
-        tickMarkFormatter: (t, tickType) => {
-          const info = fmtKstTs(t);
-          if (tf === '1D' || tickType <= 2 || info.isDayStart) return info.date;
-          return info.full;
-        }
-      }
-    });
-
-    cmSeries = cmChart.addCandlestickSeries({ upColor:'#10b981', downColor:'#f43f5e', borderUpColor:'#10b981', borderDownColor:'#f43f5e', wickUpColor:'#10b981', wickDownColor:'#f43f5e' });
-    const candles = rawRows.map(r => ({ time: Number(r[0]) + 9 * 3600, open:Number(r[1]), high:Number(r[2]), low:Number(r[3]), close:Number(r[4]) }));
-    if (sym === 'BTC' && curP > 0 && candles.length) {
-      const lc = candles[candles.length - 1];
-      lc.close = curP;
-      if (curP > lc.high) lc.high = curP;
-      if (curP < lc.low) lc.low = curP;
-    }
-    cmSeries.setData(candles);
-    if (candles.length) cmLastCandle = { ...candles[candles.length - 1] };
-
-    const calcEma = (period) => {
-      const k = 2 / (period + 1); let ema = candles[0].close;
-      return candles.map((c, i) => { ema = i === 0 ? c.close : c.close * k + ema * (1 - k); return { time:c.time, value:Number(ema.toFixed(dec)) }; });
-    };
-    if (candles.length >= 20) cmChart.addLineSeries({ color:'#f59e0b', lineWidth:1, priceLineVisible:false, lastValueVisible:false }).setData(calcEma(20));
-    if (candles.length >= 50) cmChart.addLineSeries({ color:'#8b5cf6', lineWidth:1, priceLineVisible:false, lastValueVisible:false }).setData(calcEma(50));
-
-    if (sym === 'BTC' && S) {
-      const showOwner = isOwner() && Boolean(S._vaultUnlocked);
-      if (showLines) {
-        if (showOwner) {
-          (S.positions || []).forEach(p => {
-            cmPriceLines.push(cmSeries.createPriceLine({ price:p.entry, color:'#38bdf8', lineWidth:2, lineStyle:0, axisLabelVisible:true, title:`${p.side==='LONG'?'롱':'숏'} 진입` }));
-            if (p.r1Price > 0 && p.stage === 0) {
-              cmPriceLines.push(cmSeries.createPriceLine({ price:p.r1Price, color:'#f59e0b', lineWidth:1, lineStyle:3, axisLabelVisible:true, title:'1R(확정익절)' }));
-            }
-            if (p.sl > 0) cmPriceLines.push(cmSeries.createPriceLine({ price:p.sl, color:'#f43f5e', lineWidth:1, lineStyle:2, axisLabelVisible:true, title:'보유 손절' }));
-            if (p.tp > 0) cmPriceLines.push(cmSeries.createPriceLine({ price:p.tp, color:'#10b981', lineWidth:1, lineStyle:2, axisLabelVisible:true, title:'보유 익절' }));
-          });
-        }
-        (S.openOrders || []).forEach(o => {
-          const clr = o.side === 'LONG' ? '#10b981' : '#f43f5e';
-          const isSnp = o.track === 'SNIPER';
-          const bLbl = showOwner ? o.badge : (o.guestBadge || o.badge);
-          cmPriceLines.push(cmSeries.createPriceLine({
-            price:o.price, color:clr, lineWidth: isSnp ? 2 : 1, lineStyle: isSnp ? 0 : 2,
-            axisLabelVisible:true, title:`${bLbl} ${o.sideKo}`
-          }));
-        });
-      }
-      const mks = (S.performance && S.performance.markersAsc) || [];
-      if (mks.length && showOwner) {
-        const lastM = mks[mks.length - 1];
-        lastTradeTs = Number(lastM.timeSec) + 9 * 3600;
-        $('cmLastTradeStrip').style.display = 'flex';
-        setTxt('cmLastTradeTxt', `최근 체결: ${lastM.side} ${fmt(lastM.entry,0)} → ${fmt(lastM.exit,0)} (${lastM.pnl >= 0 ? '+' : ''}${fmt(lastM.pnl,0)}$)`);
-        if (showMarks && candles.length > 1) {
-          const cTimes = candles.map(c => c.time);
-          const snapped = [];
-          mks.slice(-25).forEach(m => {
-            const mt = Number(m.timeSec) + 9 * 3600;
-            if (mt < cTimes[0] - 86400) return;
-            let bestT = cTimes[0], bestD = Math.abs(cTimes[0] - mt);
-            for (const ct of cTimes) { const d = Math.abs(ct - mt); if (d < bestD) { bestD = d; bestT = ct; } }
-            snapped.push({
-              time: bestT,
-              position: m.pnl >= 0 ? 'belowBar' : 'aboveBar',
-              color: m.pnl >= 0 ? '#10b981' : '#f43f5e',
-              shape: m.side === 'LONG' ? 'arrowUp' : 'arrowDown',
-              text: `${m.side[0]}청산 ${m.pnl >= 0 ? '+' : ''}${Math.round(m.pnl)}$`
-            });
-          });
-          snapped.sort((a, b) => a.time - b.time);
-          cmSeries.setMarkers(snapped);
-        }
-      } else $('cmLastTradeStrip').style.display = 'none';
-    } else {
-      $('cmLastTradeStrip').style.display = 'none';
-    }
-
-    if (focusKstSec > 0) {
-      cmChart.timeScale().setVisibleRange({ from: focusKstSec - 3600 * 5, to: focusKstSec + 3600 * 2 });
-    } else {
-      cmChart.timeScale().fitContent();
-    }
-
-    const updateCrossBar = (param) => {
-      const liveRef = getCurSymPrice(cmSym);
-      if (!param || !param.time) return;
-      let selP = 0;
-      if (param.point && cmSeries && typeof cmSeries.coordinateToPrice === 'function') {
-        selP = Number(cmSeries.coordinateToPrice(param.point.y) || 0);
-      }
-      if (selP <= 0 && param.seriesData && param.seriesData.get(cmSeries)) {
-        selP = Number(param.seriesData.get(cmSeries).close || 0);
-      }
-      if (selP <= 0) return;
-      const tStr = cmTf === '1D' ? fmtKstTs(param.time).date : fmtKstTs(param.time).full;
-      if (liveRef > 0) {
-        const diff = selP - liveRef, pct = (diff / liveRef) * 100.0, sg = pct >= 0 ? '+' : '';
-        const clr = pct >= 0 ? '#10b981' : '#f43f5e';
-        $('cmCrossBar').innerHTML = `<span style="color:#f8fafc;">📅 ${tStr} · <b>${fmt(selP, dec)}</b></span><span style="color:${clr};">현재가 대비 <b>${sg}${pct.toFixed(2)}%</b> (${sg}${fmt(diff, dec)})</span>`;
-      } else {
-        $('cmCrossBar').innerHTML = `<span style="color:#f8fafc;">📅 ${tStr} · <b>${fmt(selP, dec)}</b></span>`;
-      }
-    };
-    cmChart.subscribeCrosshairMove(updateCrossBar);
-    cmChart.subscribeClick(updateCrossBar);
-
-    const lastBar = candles[candles.length - 1];
-    if (focusPrice > 0 && curP > 0 && lastBar) {
-      const diffF = focusPrice - curP, pctF = (diffF / curP) * 100.0, sgF = pctF >= 0 ? '+' : '';
-      const clrF = pctF >= 0 ? '#10b981' : '#f43f5e';
-      $('cmCrossBar').innerHTML = `<span style="color:#f8fafc;">🎯 선택 지정가 · <b>${fmt(focusPrice, dec)}</b></span><span style="color:${clrF};">현재가 대비 <b>${sgF}${pctF.toFixed(2)}%</b> (${sgF}${fmt(diffF, dec)})</span>`;
-    } else if (lastBar) {
-      updateCrossBar({ time:lastBar.time, seriesData:new Map([[cmSeries, lastBar]]) });
-    }
-
-    if (sym !== 'BTC') {
-      const syncMacroLiveTick = async () => {
-        if (!$('candleModal').classList.contains('open') || cmSym !== sym || cmTf !== tf) return;
-        const liveM = await fetchMacroKlinesFromServer(sym, tf);
-        if (!liveM || !Array.isArray(liveM.bars) || !liveM.bars.length || !cmSeries) return;
-        const dLive = liveM.price >= 1000 ? 1 : 2;
-        if (liveM.price > 0) {
-          setTxt('cmPrice', fmt(liveM.price, dLive));
-          chgEl.className = liveM.chgPct >= 0 ? 'up' : 'dn';
-          setTxt('cmChg', `${liveM.chgPct >= 0 ? '+' : ''}${Number(liveM.chgPct).toFixed(2)}%`);
-          setTxt('p-' + sym, fmt(liveM.price, dLive));
-          const ceCard = $('c-' + sym);
-          if (ceCard) {
-            ceCard.className = 'm-chg ' + (liveM.chgPct >= 0 ? 'up' : 'dn');
-            setTxt('c-' + sym, `${liveM.chgPct >= 0 ? '+' : ''}${Number(liveM.chgPct).toFixed(2)}%`);
-          }
-          if (S && S.macroQuotes && S.macroQuotes[sym]) {
-            S.macroQuotes[sym].price = liveM.price;
-            S.macroQuotes[sym].chgPct = liveM.chgPct;
-          }
-        }
-        const lastB = liveM.bars[liveM.bars.length - 1];
-        const barObj = { time: Number(lastB[0]) + 9 * 3600, open:Number(lastB[1]), high:Number(lastB[2]), low:Number(lastB[3]), close:Number(lastB[4]) };
-        try { cmSeries.update(barObj); } catch(e){}
-      };
-      syncMacroLiveTick();
-      cmMacroPollTmr = setInterval(syncMacroLiveTick, 4000);
-    }
-  }
-
-  $('btcHeroCard').onclick = () => openCandleModal('BTC', cmTf);
-  document.querySelectorAll('.m-box').forEach(b => { b.onclick = () => openCandleModal(b.dataset.msym, '15m'); });
-  $('cmTfBar').onclick = (ev) => { const b = ev.target.closest('.chip'); if (b) openCandleModal(cmSym, b.dataset.tf); };
-  $('btnToggleLines').onclick = () => { showLines = !showLines; $('btnToggleLines').classList.toggle('active', showLines); openCandleModal(cmSym, cmTf); };
-  $('btnToggleMarks').onclick = () => { showMarks = !showMarks; $('btnToggleMarks').classList.toggle('active', showMarks); openCandleModal(cmSym, cmTf); };
-  $('btnJumpTrade').onclick = () => {
-    if (cmChart && lastTradeTs > 0) cmChart.timeScale().setVisibleRange({ from: lastTradeTs - 3600 * 5, to: lastTradeTs + 3600 * 2 });
-  };
-
   function openLb(idx) {
     if (!curLbArr.length) return;
     curLbIdx = (idx + curLbArr.length) % curLbArr.length;
@@ -2446,6 +2718,51 @@
         </div>
       </div>`).join('');
     $('boardGrid').querySelectorAll('.b-card').forEach(c => { c.onclick = () => openLb(Number(c.dataset.bidx)); });
+  }
+
+  function renderEconSectionView(econObj) {
+    const secs = Array.isArray(econObj.sections) ? econObj.sections : [];
+    if (!secs.length) {
+      $('econJumpBar').innerHTML = '';
+      $('econBodyWrap').innerHTML = `<div class="econ-sec"><div class="econ-row-body">${fmtInlineRich(econObj.text || '브리핑 대기 중입니다.')}</div></div>`;
+      return;
+    }
+
+    $('econJumpBar').style.gridTemplateColumns = `repeat(${Math.min(5, Math.max(1, secs.length))}, minmax(0, 1fr))`;
+    $('econJumpBar').innerHTML = secs.map(sec => {
+      const rawTab = String(sec.shortTab || sec.title || '');
+      const styledTab = rawTab.startsWith('₿')
+        ? `<span style="color:#fbbf24;">₿</span>${escHtml(rawTab.slice(1))}`
+        : escHtml(rawTab);
+      return `<button type="button" class="chip" data-ejump="${escHtml(sec.id)}">${styledTab}</button>`;
+    }).join('');
+
+    $('econJumpBar').querySelectorAll('[data-ejump]').forEach(btn => {
+      btn.onclick = () => {
+        const el = document.getElementById(btn.dataset.ejump);
+        if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+      };
+    });
+
+    $('econBodyWrap').innerHTML = secs.map(sec => {
+      const rowsHtml = (sec.items || []).map(it => {
+        const hasTime = Boolean(it.timeChip);
+        const hasLbl = Boolean(it.label);
+        let topHtml = '';
+        if (hasTime || hasLbl) {
+          topHtml = `<div class="econ-row-top">` +
+            (hasTime ? `<span class="econ-time-badge">🕒 ${escHtml(it.timeChip)}</span>` : '') +
+            (hasLbl ? (hasTime ? `<span class="econ-ev-title">${escHtml(it.label)}</span>` : `<span class="econ-key-tag">${escHtml(it.label)}</span>`) : '') +
+            `</div>`;
+        }
+        return `<div class="econ-row">${topHtml}<div class="econ-row-body">${fmtInlineRich(it.body)}</div></div>`;
+      }).join('');
+
+      return `<div class="econ-sec ${sec.isSchedule ? 'sched-sec' : ''}" id="${escHtml(sec.id)}">
+        <div class="econ-sec-title">${escHtml(sec.title)}</div>
+        <div class="econ-list">${rowsHtml}</div>
+      </div>`;
+    }).join('');
   }
 
   function renderLogsList(logs) {
@@ -2673,12 +2990,14 @@
       }
     }
 
-    const hasFreshBtc = wsLive.btcPrice > 0 && (Date.now() - wsLive.lastBtcTs) < 15000;
-    const hasFreshUp = wsLive.upBtcKrw > 0 && (Date.now() - wsLive.lastUpTs) < 15000;
+    const hasFreshBtc = wsLive.btcPrice > 0 && (Date.now() - wsLive.lastBtcTs) < 12000;
+    const hasFreshUp = wsLive.upBtcKrw > 0 && (Date.now() - wsLive.lastUpTs) < 12000;
     if (d.fxKrw && d.fxKrw > 900) wsLive.fxKrw = Number(d.fxKrw);
     if (hasFreshBtc) {
       d.btcPrice = wsLive.btcPrice;
       if (wsLive.btcChg24h !== null) d.btcChg24h = wsLive.btcChg24h;
+    } else if (Number(d.btcPrice) > 0) {
+      wsLive.btcPrice = Number(d.btcPrice);
     }
     if (hasFreshUp) {
       if (wsLive.usdtKrw > 0) d.usdtKrw = Math.round(wsLive.usdtKrw);
@@ -2748,9 +3067,7 @@
         } else if (ns.enabled && ns.nextEvent && Number(ns.nextEvent.diffMin) <= 240 && Number(ns.nextEvent.diffMin) > 0) {
           const dm = Math.max(1, Math.round(Number(ns.nextEvent.diffMin)));
           const shieldIn = Math.max(0, dm - 15);
-          const l2Txt = shieldIn > 0
-            ? `발표 ${dm}분 전 · 🛡️ 방어막 가동 ${shieldIn}분 전`
-            : `발표 ${dm}분 전 · 🛡️ 방어막 가동 임박`;
+          const l2Txt = shieldIn > 0 ? `발표 ${dm}분 전 · 🛡️ 방어막 가동 ${shieldIn}분 전` : `발표 ${dm}분 전 · 🛡️ 방어막 가동 임박`;
           nsBox.style.display = 'block';
           $('shieldLine1').style.color = '#fde68a';
           setTxt('shieldLine1', `🕒 ${ns.nextEvent.timeStr} · ${ns.nextEvent.title}`);
@@ -2789,9 +3106,7 @@
         setTxt('riskAllowanceTxt', '보안 볼트 동기화 후 표시');
         setTxt('totalRealizedBadge', '--');
         $('guardBrakeBanner').style.display = 'none';
-        setTxt('wbVal', '--');
-        setTxt('avVal', '--');
-        setTxt('omVal', '--');
+        setTxt('wbVal', '--'); setTxt('avVal', '--'); setTxt('omVal', '--');
       } else {
         const upnl = Number(w.unrealisedPnl || 0);
         const upEl = $('liveUpnlPill');
@@ -2887,7 +3202,7 @@
       const nPosSig = JSON.stringify(posArr.map(p => [p.side, p.size, p.entry, p.sl, p.tp, p.stageNote, p.liqSafe, p.lockedPnlUsd]));
       if (posSig !== nPosSig) {
         posSig = nPosSig;
-        $('posListWrap').innerHTML = posArr.map(p => {
+        $('posListWrap').innerHTML = posArr.map((p, idx) => {
           const edgeCls = p.side === 'LONG' ? 'edge-long' : 'edge-short';
           const liqBadge = p.liqSafe
             ? `<span class="pill up" style="font-size:10px;">청산가 안전 (이격 ${p.liqGapPct}%)</span>`
@@ -2900,13 +3215,13 @@
             lockBanner = `<div class="row-sb" style="font-size:11px;margin-top:7px;padding:6px 9px;border-radius:8px;background:rgba(7,11,20,0.45);border:1px solid rgba(148,163,184,0.12);"><span>${lLbl}</span><b class="${lCls} num-nw">${lUsd >= 0 ? '+' : ''}${fmt(lUsd, 2)}$ (${p.lockedPnlPct >= 0 ? '+' : ''}${p.lockedPnlPct}%)</b></div>`;
           }
           return `
-          <div class="ord-card ${edgeCls}">
+          <div class="ord-card pos-clickable ${edgeCls}" data-posidx="${idx}" title="터치 시 진입·손절·익절 라인 차트 열기">
             <div class="row-sb">
               <span style="font-weight:900;font-size:13.5px;" class="${p.side==='LONG'?'up':'dn'}">${p.side==='LONG'?'🟢 롱':'🔴 숏'} ${p.leverage}x · ${p.size} BTC</span>
               <span style="font-weight:900;font-size:14px;" id="posPnl-${p.side}" class="owner-only ${p.pnlUsd>=0?'up':'dn'}">${p.pnlUsd>=0?'+':''}${fmt(p.pnlUsd,2)}$ (${p.roePct>=0?'+':''}${p.roePct}%)</span>
             </div>
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;font-size:12px;">
-              <div><div class="sm-lbl">진입평단</div><b>${fmt(p.entry,1)}</b></div>
+              <div><div class="sm-lbl">진입평단</div><b style="border-bottom:1px dashed rgba(148,163,184,0.4);">${fmt(p.entry,1)}</b></div>
               <div><div class="sm-lbl">목표익절</div><b class="up">${fmt(p.tp,1)}</b></div>
               <div><div class="sm-lbl">보호손절</div><b class="dn">${fmt(p.sl,1)}</b></div>
             </div>
@@ -2931,11 +3246,21 @@
             </div>
           </div>`;
         }).join('');
+
         $('posListWrap').querySelectorAll('[data-pact]').forEach(btn => {
-          btn.onclick = () => {
+          btn.onclick = (ev) => {
+            ev.stopPropagation();
             const s = btn.dataset.pside, m = btn.dataset.pact;
             const label = m === 'half_tp' ? '50% 시장가 부분익절' : (m === 'lock_be' ? '본절(BE+) 즉시 잠금' : '100% 시장가 전량 청산');
             requestPinAndSendCmd(`🚨 [${s} 포지션 제어] ${label}`, 'pos_action', { side: s, mode: m });
+          };
+        });
+        $('posListWrap').querySelectorAll('.ord-card.pos-clickable').forEach(cardEl => {
+          cardEl.onclick = (ev) => {
+            if (ev.target.closest('button')) return;
+            const idx = Number(cardEl.dataset.posidx || 0);
+            const pTarget = (S && S.positions && S.positions[idx]) || posArr[idx];
+            openCandleModal('BTC', '15m', 0, pTarget ? Number(pTarget.entry || 0) : 0);
           };
         });
       }
@@ -2943,7 +3268,8 @@
 
     renderOpenOrdersSection(d);
 
-    if (hasFreshBtc) applyRealtimeQuoteTick();
+    // 웹소켓 상태와 무관하게 매 사이클 보유포지션 손익·ROE·R배수를 최신 시세로 즉시 강제 동기화
+    applyRealtimeQuoteTick();
 
     if (!showOwnerSeed) {
       $('ratBody').innerHTML = '';
@@ -3013,7 +3339,7 @@
     const urls = [];
     if (location.origin.includes('127.0.0.1') || location.origin.includes('localhost')) urls.push('/api/state');
     if (directApi) urls.push(directApi + '/api/state');
-    urls.push('state.json?t=' + Math.floor(Date.now() / 3500));
+    urls.push('state.json?t=' + Math.floor(Date.now() / 3000));
     for (const u of urls) {
       try {
         const r = await fetch(u, { cache:'no-store' });
@@ -3022,7 +3348,7 @@
     }
   }
   fetchStateTick();
-  setInterval(fetchStateTick, 3500);
+  setInterval(fetchStateTick, 3000);
 })();
 </script>
 </body>
