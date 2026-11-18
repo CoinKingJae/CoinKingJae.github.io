@@ -984,7 +984,7 @@
 
   function isEngineOffline() {
     if (!S || !S.ts) return false;
-    return ((Date.now() - Number(S.ts)) / 1000.0) > 55.0;
+    return ((Date.now() - Number(S.ts)) / 1000.0) > (directApi ? 65.0 : 420.0);
   }
 
   function updateTopHeartbeatBadge() {
@@ -2484,14 +2484,32 @@
     } catch(e){}
   }
 
-  async function refreshDirectUrlFromGh() {
+  let lastGhApiTs = 0, stateTickBusy = false;
+  async function fetchJsonFast(url, timeoutMs=3200, extraHeaders=null) {
+    const ctrl = new AbortController();
+    const tmr = setTimeout(() => ctrl.abort(), timeoutMs);
     try {
-      const r = await fetch('state.json?t=' + Date.now(), { cache:'no-store' });
-      if (r.ok) {
-        const j = await r.json();
-        if (j && j.directUrl) directApi = j.directUrl;
-      }
-    } catch(e){}
+      const opts = { cache:'no-store', signal:ctrl.signal };
+      if (extraHeaders) opts.headers = extraHeaders;
+      const r = await fetch(url, opts);
+      clearTimeout(tmr);
+      if (r.ok) return await r.json();
+    } catch(e) { clearTimeout(tmr); }
+    return null;
+  }
+  async function refreshDirectUrlFromGh(forceApi=false) {
+    const rawU = 'https://raw.githubusercontent.com/coinkingjae/coinkingjae.github.io/main/state.json?t=' + Date.now();
+    const apiU = 'https://api.github.com/repos/coinkingjae/coinkingjae.github.io/contents/state.json?ref=main';
+    if (forceApi || (Date.now() - lastGhApiTs > 45000)) {
+      lastGhApiTs = Date.now();
+      const jApi = await fetchJsonFast(apiU, 3500, { 'Accept': 'application/vnd.github.raw+json' });
+      if (jApi && jApi.directUrl) { directApi = jApi.directUrl; return jApi; }
+    }
+    const jRaw = await fetchJsonFast(rawU, 3200);
+    if (jRaw && jRaw.directUrl) { directApi = jRaw.directUrl; return jRaw; }
+    const jPages = await fetchJsonFast('state.json?t=' + Date.now(), 3000);
+    if (jPages && jPages.directUrl) { directApi = jPages.directUrl; return jPages; }
+    return jRaw || jPages;
   }
 
   function requestPinAndSendCmd(actionLabel, action, payload={}) {
@@ -2511,7 +2529,7 @@
     const wantKeep3m = Boolean($('kpKeep3mChk') && $('kpKeep3mChk').checked);
 
     const isLocal = (location.origin.includes('127.0.0.1') || location.origin.includes('localhost'));
-    if (!isLocal && !directApi) await refreshDirectUrlFromGh();
+    if (!isLocal && !directApi) await refreshDirectUrlFromGh(true);
 
     const tryPost = async (baseUrl) => {
       const r = await fetch(baseUrl + '/api/cmd', {
@@ -2573,7 +2591,7 @@
       }
     } catch(e) {
       if (!isLocal) {
-        await refreshDirectUrlFromGh();
+        await refreshDirectUrlFromGh(true);
         if (directApi && directApi !== base) {
           try {
             const res2 = await tryPost(directApi);
@@ -3407,15 +3425,28 @@
   }
 
   async function fetchStateTick() {
-    const urls = [];
-    if (location.origin.includes('127.0.0.1') || location.origin.includes('localhost')) urls.push('/api/state');
-    if (directApi) urls.push(directApi + '/api/state');
-    urls.push('state.json?t=' + Math.floor(Date.now() / 3000));
-    for (const u of urls) {
-      try {
-        const r = await fetch(u, { cache:'no-store' });
-        if (r.ok) { const d = await r.json(); await applyState(d); return; }
-      } catch(e){}
+    if (stateTickBusy) return;
+    stateTickBusy = true;
+    try {
+      if (location.origin.includes('127.0.0.1') || location.origin.includes('localhost')) {
+        const dLoc = await fetchJsonFast('/api/state', 2500);
+        if (dLoc) { await applyState(dLoc); return; }
+      }
+      if (directApi) {
+        const dTun = await fetchJsonFast(directApi + '/api/state?t=' + Date.now(), 2800);
+        if (dTun) { await applyState(dTun); return; }
+        directApi = '';
+      }
+      const dFresh = await refreshDirectUrlFromGh(false);
+      if (dFresh && directApi) {
+        const dTun2 = await fetchJsonFast(directApi + '/api/state?t=' + Date.now(), 2800);
+        if (dTun2) { await applyState(dTun2); return; }
+      }
+      if (dFresh) { await applyState(dFresh); return; }
+      const dFb = await fetchJsonFast('state.json?t=' + Math.floor(Date.now() / 5000), 3000);
+      if (dFb) await applyState(dFb);
+    } finally {
+      stateTickBusy = false;
     }
   }
   fetchStateTick();
