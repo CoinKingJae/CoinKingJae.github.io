@@ -386,6 +386,7 @@
   }
   .kp-btn:active { background:#273756; transform:scale(0.97); }
   .kp-btn.fn { font-size:13.5px; color:#94a3b8; background:#11192a; }
+.econ-new-n{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;margin-left:5px;border-radius:999px;background:linear-gradient(135deg,#f43f5e,#e11d48);color:#fff;font-size:10px;font-weight:900;line-height:1;box-shadow:0 0 8px rgba(244,63,94,0.65);}.econ-new-n.hidden{display:none!important;}
 </style>
 </head>
 <body>
@@ -726,7 +727,7 @@
   <div class="bnav">
     <div class="bnav-in">
       <button class="bnav-btn active" data-tab="dash">⊞ 대시보드</button>
-      <button class="bnav-btn" data-tab="econ">🌐 경제소식</button>
+      <button class="bnav-btn" data-tab="econ">🌐 경제소식<span id="econNewBadge" class="econ-new-n hidden">N</span></button>
       <button class="bnav-btn owner-only" data-tab="rec">≡ 기록<span class="nav-badge" id="recNavBadge">0</span></button>
     </div>
   </div>
@@ -3093,6 +3094,79 @@
       });
     }
   }
+
+  const ECON_SEEN_KEY = 'kj_v40_seen_econ_ts';
+  let _latestEconStamp = '';
+
+  function syncEconNewBadge(stampStr) {
+    const st = String(stampStr || '').trim();
+    if (!st || st === '--:--') return;
+    _latestEconStamp = st;
+    const badge = document.getElementById('econNewBadge');
+    if (!badge) return;
+    const econPane = document.getElementById('tab-econ') || document.getElementById('pane-econ') || document.querySelector('[data-pane="econ"]');
+    const isEconOpen = econPane && econPane.style.display !== 'none' && !econPane.classList.contains('hidden');
+    if (isEconOpen) {
+      try { localStorage.setItem(ECON_SEEN_KEY, st); } catch (e) {}
+      badge.classList.add('hidden');
+      return;
+    }
+    let seen = '';
+    try { seen = localStorage.getItem(ECON_SEEN_KEY) || ''; } catch (e) {}
+    if (!seen) {
+      try { localStorage.setItem(ECON_SEEN_KEY, st); } catch (e) {}
+      badge.classList.add('hidden');
+    } else if (seen !== st) {
+      badge.classList.remove('hidden');
+    } else {
+      badge.classList.add('hidden');
+    }
+  }
+
+  function markEconAsRead() {
+    if (_latestEconStamp) {
+      try { localStorage.setItem(ECON_SEEN_KEY, _latestEconStamp); } catch (e) {}
+    }
+    const badge = document.getElementById('econNewBadge');
+    if (badge) badge.classList.add('hidden');
+  }
+
+  function toggleRecordSubView() {
+    const btnPnl = document.getElementById('subTabPnl') || document.getElementById('btnSubPnl') || Array.from(document.querySelectorAll('button')).find(b => (b.textContent || '').trim() === '실현손익');
+    const btnCyc = document.getElementById('subTabCycle') || document.getElementById('btnSubCycle') || Array.from(document.querySelectorAll('button')).find(b => (b.textContent || '').trim().startsWith('사이클'));
+    if (!btnPnl || !btnCyc) return;
+    const pnlActive = btnPnl.classList.contains('active') || btnPnl.classList.contains('acc') || btnPnl.getAttribute('aria-selected') === 'true';
+    if (pnlActive) {
+      btnCyc.click();
+    } else {
+      btnPnl.click();
+    }
+  }
+
+  (function attachBottomNavEnhancements() {
+    if (window.__kjNavEnhanced) return;
+    window.__kjNavEnhanced = true;
+    document.addEventListener('click', function(ev) {
+      const btn = ev.target && ev.target.closest ? ev.target.closest('button, .nav-btn, [data-tab]') : null;
+      if (!btn) return;
+      const txt = (btn.textContent || '').trim();
+      const tabAttr = (btn.dataset && (btn.dataset.tab || btn.dataset.target)) || '';
+      const isRecBtn = tabAttr === 'logs' || tabAttr === 'record' || txt.includes('기록');
+      const isEconBtn = tabAttr === 'econ' || txt.includes('경제소식');
+      if (isEconBtn) {
+        setTimeout(markEconAsRead, 30);
+        return;
+      }
+      if (isRecBtn && btn.closest('.bottom-nav, nav, #bottomNav')) {
+        const wasActive = btn.classList.contains('active') || btn.classList.contains('acc');
+        if (wasActive) {
+          ev.stopImmediatePropagation();
+          ev.preventDefault();
+          toggleRecordSubView();
+        }
+      }
+    }, true);
+  })();
 
   async function applyState(rawObj) {
     lastRawPayload = rawObj;
