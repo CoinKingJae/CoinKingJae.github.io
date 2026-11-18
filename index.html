@@ -881,7 +881,7 @@
   const setTxt = (id, v) => { const el = $(id); const s = String(v ?? ''); if (el && el.textContent !== s) el.textContent = s; };
   const cleanZero = (n, eps=0.005) => Math.abs(Number(n || 0)) < eps ? 0 : Number(n);
   const fmt = (n, d=1) => cleanZero(n, Math.pow(10, -(d + 1))).toLocaleString('en-US', { minimumFractionDigits:d, maximumFractionDigits:d });
-  const escHtml = (s) => String(s || '').replace(/&/g,'&').replace(/</g,'<').replace(/>/g,'>').replace(/"/g,'"');
+  const escHtml = (s) => String(s ?? '').replace(/&/g, '&' + 'amp;').replace(/</g, '&' + 'lt;').replace(/>/g, '&' + 'gt;').replace(/"/g, '&' + 'quot;');
   const isOwner = () => document.documentElement.getAttribute('data-auth') === 'owner';
 
   function showToast(msg, isErr=false) {
@@ -2031,7 +2031,7 @@
         }));
       });
 
-if (sym === 'BTC' && S && isOwner() && S._vaultUnlocked) {
+      if (sym === 'BTC' && S && isOwner() && S._vaultUnlocked) {
         const exitMks = (S.performance && S.performance.markersAsc) || [];
         const entryMks = (S.performance && S.performance.entryMarkersAsc) || [];
         const lastEx = exitMks.length ? exitMks[exitMks.length - 1] : null;
@@ -2117,7 +2117,7 @@ if (sym === 'BTC' && S && isOwner() && S._vaultUnlocked) {
           cmSeries.setMarkers(snapped);
         }
       }
-      
+
       if (focusKstSec > 0) cmChart.timeScale().setVisibleRange({ from: focusKstSec - 3600 * 5, to: focusKstSec + 3600 * 2 });
       else cmChart.timeScale().fitContent();
 
@@ -2709,8 +2709,8 @@ if (sym === 'BTC' && S && isOwner() && S._vaultUnlocked) {
   $('btnExportCsv').onclick = () => {
     const tDesc = ((S && S.performance && S.performance.tradesDesc) || []);
     if (!tDesc.length) { showToast('내보낼 체결 내역이 없습니다.', true); return; }
-    const header = 'Time(KST),Side,Qty(BTC),Entry($),Exit($),ClosedPnL(USDT)\n';
-    const body = tDesc.map(r => `${r.fullTime},${r.side},${r.qty},${r.entry},${r.exit},${r.pnl}`).join('\n');
+    const header = 'Time(KST),Side,Gear,Qty(BTC),Entry($),Exit($),ClosedPnL(USDT)\n';
+    const body = tDesc.map(r => `${r.fullTime || r.dateStr || r.timeStr || ''},${r.side},${String(r.gear || '').replace(/\+/g, '')},${r.qty},${r.entry},${r.exit},${r.pnl}`).join('\n');
     const blob = new Blob(['\uFEFF' + header + body], { type:'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -2876,17 +2876,26 @@ if (sym === 'BTC' && S && isOwner() && S._vaultUnlocked) {
       if (pnlFilter === 'LOSS') return Number(r.pnl) < 0;
       return true;
     });
-    const nPnlSig = (pf.resetAt || '') + ':' + pnlFilter + ':' + tDesc.length + ':' + (tDesc[0] ? tDesc[0].id : '');
+    const firstItem = tDesc[0] || {};
+    const nPnlSig = (pf.resetAt || '') + ':' + pnlFilter + ':' + tDesc.length + ':' + (firstItem.id || '') + ':' + (firstItem.dateStr || firstItem.timeStr || '') + ':' + (firstItem.gear || '');
     if (pnlSig === nPnlSig) return;
     pnlSig = nPnlSig;
-    $('recPnlWrap').innerHTML = tDesc.length ? tDesc.map(r => `
-      <div class="ord-card ${r.pnl >= 0 ? 'edge-long' : 'edge-short'}" style="display:flex;justify-content:space-between;align-items:center;">
-        <div>
-          <div style="font-size:12.5px;font-weight:900;"><span class="${r.side==='LONG'?'up':'dn'}">${r.side}</span> · ${r.qty} BTC <span style="color:var(--sub);font-size:11px;">(${r.dateStr})</span></div>
-          <div style="font-size:11.5px;color:var(--sub);margin-top:3px;">진입 ${fmt(r.entry,1)}$ → 청산 ${fmt(r.exit,1)}$</div>
+    $('recPnlWrap').innerHTML = tDesc.length ? tDesc.map(r => {
+      let baseDt = String(r.dateStr || r.timeStr || '').trim();
+      if (!baseDt && r.fullTime) baseDt = String(r.fullTime).slice(5, 16).replace('-', '/');
+      if (!baseDt && r.ts) baseDt = fmtKstTs(Math.floor(Number(r.ts) / 1000) + 9 * 3600).full;
+      baseDt = baseDt.replace(/\s*·\s*/g, '·').replace(/\+/g, '');
+      const gClean = String(r.gear || '').replace(/\+/g, '').trim();
+      const dtShow = (baseDt && gClean && !baseDt.includes(gClean)) ? `${baseDt}·${gClean}` : (baseDt || gClean || '--');
+      return `
+      <div class="ord-card ${r.pnl >= 0 ? 'edge-long' : 'edge-short'}" style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+        <div style="min-width:0;flex:1;">
+          <div style="font-size:12px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.25px;"><span class="${r.side==='LONG'?'up':'dn'}">${escHtml(r.side)}</span> · ${r.qty} BTC <span style="color:var(--sub);font-size:10.5px;font-weight:700;">(${escHtml(dtShow)})</span></div>
+          <div style="font-size:11.5px;color:var(--sub);margin-top:3px;white-space:nowrap;">진입 ${fmt(r.entry,1)}$ → 청산 ${fmt(r.exit,1)}$</div>
         </div>
-        <div class="${r.pnl>=0?'up':'dn'}" style="font-size:14px;font-weight:900;">${r.pnl>=0?'+':''}${fmt(r.pnl,2)}$</div>
-      </div>`).join('') : '<div style="color:var(--sub);font-size:12.5px;padding:12px 0;">표시할 실현손익 내역이 없습니다.</div>';
+        <div class="${r.pnl>=0?'up':'dn'} num-nw" style="font-size:13.5px;font-weight:900;flex-shrink:0;">${r.pnl>=0?'+':''}${fmt(r.pnl,2)}$</div>
+      </div>`;
+    }).join('') : '<div style="color:var(--sub);font-size:12.5px;padding:12px 0;">표시할 실현손익 내역이 없습니다.</div>';
   }
 
   function renderOpenOrdersSection(d) {
