@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta id="vpMeta" name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="KingJae">
@@ -395,6 +395,9 @@
   .econ-new-n.hidden { display:none !important; }
   .cm-sym-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:5px; margin-bottom:6px; }
   .cm-sym-grid .chip { padding:6px 2px; font-size:11px; text-align:center; font-weight:900; }
+  #lbScrollWrap { position:relative; overflow:hidden; touch-action:none; user-select:none; -webkit-user-select:none; }
+  #lbImg { transform-origin:0 0; will-change:transform; }
+  .lb-zoom-pill { position:absolute; right:10px; bottom:10px; z-index:5; background:rgba(7,11,20,0.85); border:1px solid rgba(56,189,248,0.45); color:#7dd3fc; font-size:11px; font-weight:900; padding:4px 9px; border-radius:999px; pointer-events:none; font-variant-numeric:tabular-nums; }
 </style>
 </head>
 <body>
@@ -805,8 +808,9 @@
           <button class="btn danger" id="lbClose">✕ 닫기</button>
         </div>
       </div>
-      <div id="lbScrollWrap" style="max-height:82vh;overflow:auto;background:#04070f;touch-action:pan-x pan-y pinch-zoom;">
+      <div id="lbScrollWrap" style="max-height:82vh;background:#04070f;">
         <img id="lbImg" src="" style="width:100%;height:auto;display:block;">
+        <div class="lb-zoom-pill" id="lbZoomPill">1.0x · 두 손가락 확대 / 더블탭</div>
       </div>
     </div>
   </div>
@@ -2888,12 +2892,41 @@
     if (S) renderLogsList(S.logs || []);
   };
 
+  let lbScale = 1, lbTx = 0, lbTy = 0;
+  let lbPinchDist0 = 0, lbPinchScale0 = 1, lbPinchMid0 = { x:0, y:0 }, lbPinchT0 = { x:0, y:0 };
+  let lbPanStart = { x:0, y:0 }, lbPanT0 = { x:0, y:0 }, lbIsPanning = false, lbLastTapTs = 0;
+  let touchStartX = 0, touchStartY = 0;
+
+  function applyLbTransform() {
+    const wrap = $('lbScrollWrap'), im = $('lbImg');
+    if (!wrap || !im) return;
+    const w = wrap.clientWidth || 340, h = im.offsetHeight || wrap.clientHeight || 220;
+    lbScale = Math.max(1, Math.min(4.5, lbScale));
+    if (lbScale <= 1.01) {
+      lbScale = 1; lbTx = 0; lbTy = 0;
+    } else {
+      const minX = w - w * lbScale;
+      const minY = Math.min(0, (wrap.clientHeight || h) - h * lbScale);
+      lbTx = Math.min(0, Math.max(minX, lbTx));
+      lbTy = Math.min(0, Math.max(minY, lbTy));
+    }
+    im.style.transform = `translate3d(${lbTx.toFixed(1)}px, ${lbTy.toFixed(1)}px, 0) scale(${lbScale.toFixed(3)})`;
+    setTxt('lbZoomPill', lbScale > 1.01 ? `${lbScale.toFixed(1)}x · 드래그 이동 / 더블탭 복귀` : '1.0x · 두 손가락 확대 / 더블탭');
+  }
+
+  function resetLbZoom() {
+    lbScale = 1; lbTx = 0; lbTy = 0;
+    applyLbTransform();
+  }
+
   function openLb(idx) {
     if (!curLbArr.length) return;
     curLbIdx = (idx + curLbArr.length) % curLbArr.length;
     const b = curLbArr[curLbIdx];
     setTxt('lbTitle', b.title);
+    resetLbZoom();
     const im = $('lbImg');
+    im.onload = () => resetLbZoom();
     im.onerror = () => { if (b.inlineThumb && im.src !== b.inlineThumb) im.src = b.inlineThumb; };
     im.src = b.full || b.inlineThumb;
     openModalById('lbModal');
@@ -2901,17 +2934,82 @@
   $('lbPrev').onclick = () => openLb(curLbIdx - 1);
   $('lbNext').onclick = () => openLb(curLbIdx + 1);
 
-  let touchStartX = 0, touchStartY = 0;
   $('lbScrollWrap').addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) { touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; }
-  }, { passive:true });
+    const wrap = $('lbScrollWrap');
+    const rect = wrap.getBoundingClientRect();
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      lbIsPanning = false;
+      const t1 = e.touches[0], t2 = e.touches[1];
+      lbPinchDist0 = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY) || 1;
+      lbPinchScale0 = lbScale;
+      lbPinchMid0 = { x: (t1.clientX + t2.clientX) / 2 - rect.left, y: (t1.clientY + t2.clientY) / 2 - rect.top };
+      lbPinchT0 = { x: lbTx, y: lbTy };
+    } else if (e.touches.length === 1) {
+      const t = e.touches[0];
+      touchStartX = t.clientX; touchStartY = t.clientY;
+      if (lbScale > 1.01) {
+        lbIsPanning = true;
+        lbPanStart = { x: t.clientX, y: t.clientY };
+        lbPanT0 = { x: lbTx, y: lbTy };
+      }
+    }
+  }, { passive:false });
+
+  $('lbScrollWrap').addEventListener('touchmove', (e) => {
+    const wrap = $('lbScrollWrap');
+    const rect = wrap.getBoundingClientRect();
+    if (e.touches.length === 2 && lbPinchDist0 > 0) {
+      e.preventDefault();
+      const t1 = e.touches[0], t2 = e.touches[1];
+      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+      const nextScale = Math.max(1, Math.min(4.5, lbPinchScale0 * (dist / lbPinchDist0)));
+      const midX = (t1.clientX + t2.clientX) / 2 - rect.left;
+      const midY = (t1.clientY + t2.clientY) / 2 - rect.top;
+      const ratio = nextScale / lbPinchScale0;
+      lbScale = nextScale;
+      lbTx = midX - (lbPinchMid0.x - lbPinchT0.x) * ratio;
+      lbTy = midY - (lbPinchMid0.y - lbPinchT0.y) * ratio;
+      applyLbTransform();
+    } else if (e.touches.length === 1 && lbIsPanning && lbScale > 1.01) {
+      e.preventDefault();
+      const t = e.touches[0];
+      lbTx = lbPanT0.x + (t.clientX - lbPanStart.x);
+      lbTy = lbPanT0.y + (t.clientY - lbPanStart.y);
+      applyLbTransform();
+    }
+  }, { passive:false });
+
   $('lbScrollWrap').addEventListener('touchend', (e) => {
-    if (e.changedTouches.length === 1 && (!window.visualViewport || window.visualViewport.scale <= 1.05)) {
-      const dx = e.changedTouches[0].clientX - touchStartX;
-      const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
-      if (Math.abs(dx) > 65 && dy < 50) {
-        if (dx < 0) openLb(curLbIdx + 1);
-        else openLb(curLbIdx - 1);
+    if (e.touches.length < 2) lbPinchDist0 = 0;
+    if (e.touches.length === 0) {
+      lbIsPanning = false;
+      if (e.changedTouches.length === 1) {
+        const t = e.changedTouches[0];
+        const dx = t.clientX - touchStartX;
+        const dy = t.clientY - touchStartY;
+        const nowTap = Date.now();
+        if (Math.abs(dx) < 12 && Math.abs(dy) < 12) {
+          if (nowTap - lbLastTapTs < 280) {
+            lbLastTapTs = 0;
+            const rect = $('lbScrollWrap').getBoundingClientRect();
+            const tapX = t.clientX - rect.left, tapY = t.clientY - rect.top;
+            if (lbScale > 1.05) {
+              resetLbZoom();
+            } else {
+              lbScale = 2.4;
+              lbTx = tapX - tapX * lbScale;
+              lbTy = tapY - tapY * lbScale;
+              applyLbTransform();
+            }
+            return;
+          }
+          lbLastTapTs = nowTap;
+        }
+        if (lbScale <= 1.02 && Math.abs(dx) > 65 && Math.abs(dy) < 50) {
+          if (dx < 0) openLb(curLbIdx + 1);
+          else openLb(curLbIdx - 1);
+        }
       }
     }
   }, { passive:true });
