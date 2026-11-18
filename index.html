@@ -1119,6 +1119,21 @@
     });
   }
 
+  function calcGuestLiveSeed(baseVal, btcNow) {
+    const b = Number(baseVal || 0);
+    const p = Number(btcNow || 0);
+    if (b <= 0 || p <= 100) return b;
+    const slot = Math.floor(Date.now() / (4 * 3600 * 1000));
+    const h = Math.abs(Math.sin(slot * 12.9898 + 78.233) * 43758.5453) % 1;
+    const dir = h >= 0.42 ? 1 : -1;
+    const levNotional = 0.75 + ((h * 10) % 1) * 0.45;
+    const qtyBtc = (b * levNotional) / p;
+    const driftPct = ((h * 100) % 1 - 0.46) * 0.0085;
+    const anchorP = p / (1.0 + dir * driftPct);
+    const upnl = dir * (p - anchorP) * qtyBtc;
+    return Math.max(b * 0.92, b + upnl);
+  }
+
   function applyRealtimeQuoteTick() {
     const bp = getLiveBtcPrice();
     if (bp <= 0) return;
@@ -1170,7 +1185,11 @@
 
     if (!S) return;
     S.btcPrice = bp;
-    if (!isOwner() || !S._vaultUnlocked) return;
+    if (!isOwner() || !S._vaultUnlocked) {
+      const pubBase = Number(S.publicTotalSeed || 0);
+      if (pubBase > 0) setTxt('totalSeedVal', fmt(calcGuestLiveSeed(pubBase, bp), 2));
+      return;
+    }
 
     const offline = isEngineOffline();
     const posArr = S.positions || [];
@@ -3186,7 +3205,7 @@
     const w = showOwnerSeed ? (d.wallet || {}) : {};
     const eqVal = showOwnerSeed
       ? Number(w.totalEquity || d.realTotalSeed || d.publicTotalSeed || 0)
-      : Number(d.publicTotalSeed || 0);
+      : calcGuestLiveSeed(Number(d.publicTotalSeed || 0), d.btcPrice);
     setTxt('totalSeedVal', fmt(eqVal, 2));
 
     if (isOwner()) {
