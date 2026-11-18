@@ -333,10 +333,10 @@
     background:rgba(8,13,24,0.95); backdrop-filter:blur(14px); border-top:1px solid rgba(148,163,184,0.18);
     display:flex; justify-content:center; padding:8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
   }
-  .bnav-in { width:100%; max-width:520px; display:flex; gap:8px; }
+  .bnav-in { width:100%; max-width:520px; display:flex; gap:6px; }
   .bnav-btn {
     position:relative; flex:1; background:#131c2e; border:1px solid var(--line); color:var(--sub);
-    font-size:12.5px; font-weight:800; padding:10px 6px; border-radius:11px;
+    font-size:12px; font-weight:800; padding:10px 4px; border-radius:11px;
     cursor:pointer; text-align:center; white-space:nowrap;
   }
   .bnav-btn.active { background:rgba(56,189,248,0.2); border-color:var(--acc); color:#fff; }
@@ -386,8 +386,15 @@
   }
   .kp-btn:active { background:#273756; transform:scale(0.97); }
   .kp-btn.fn { font-size:13.5px; color:#94a3b8; background:#11192a; }
-.econ-new-n{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;margin-left:5px;border-radius:999px;background:linear-gradient(135deg,#f43f5e,#e11d48);color:#fff;font-size:10px;font-weight:900;line-height:1;box-shadow:0 0 8px rgba(244,63,94,0.65);}.econ-new-n.hidden{display:none!important;}
-.cb-tab-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px;}.cb-board-card{background:#0f172a;border:1px solid rgba(148,163,184,0.18);border-radius:12px;overflow:hidden;cursor:pointer;transition:transform .14s ease,border-color .14s ease;}.cb-board-card:active{transform:scale(0.98);border-color:#38bdf8;}.cb-board-card img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;background:#020617;}.cb-board-meta{padding:8px 10px;}.cb-board-ttl{font-size:12px;font-weight:800;color:#f8fafc;}.cb-board-sub{font-size:10.5px;color:#94a3b8;margin-top:2px;}.cb-zoom-modal{position:fixed;inset:0;z-index:9999;background:rgba(2,6,23,0.95);display:none;flex-direction:column;}.cb-zoom-modal.open{display:flex;}.cb-zoom-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid rgba(148,163,184,0.2);}.cb-zoom-body{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:10px;touch-action:pinch-zoom pan-x pan-y;}.cb-zoom-body img{max-width:100%;max-height:100%;border-radius:10px;object-fit:contain;}.guest-hide-owner{display:none!important;}
+  .econ-new-n {
+    display:inline-flex; align-items:center; justify-content:center;
+    min-width:15px; height:15px; padding:0 4px; margin-left:4px; border-radius:999px;
+    background:linear-gradient(135deg,#f43f5e,#e11d48); color:#fff; font-size:9.5px;
+    font-weight:900; line-height:1; vertical-align:1px; box-shadow:0 0 8px rgba(244,63,94,0.65);
+  }
+  .econ-new-n.hidden { display:none !important; }
+  .cm-sym-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:5px; margin-bottom:6px; }
+  .cm-sym-grid .chip { padding:6px 2px; font-size:11px; text-align:center; font-weight:900; }
 </style>
 </head>
 <body>
@@ -512,7 +519,7 @@
       <div id="posListWrap"></div>
     </div>
 
-    <div class="card">
+    <div class="card owner-only" id="ordSectionCard">
       <div class="row-sb">
         <span style="font-size:14.5px;font-weight:900;">대기주문</span>
         <div style="display:flex;align-items:center;gap:5px;">
@@ -550,21 +557,6 @@
         </div>
       </div>
       <div id="ratBody" style="margin-top:10px;font-size:13px;line-height:1.68;color:#dbeafe;word-break:keep-all;"></div>
-    </div>
-
-    <div class="card owner-only">
-      <div class="row-sb">
-        <span style="font-size:14.5px;font-weight:900;">차트 패키지</span>
-        <span class="pill" style="color:#7dd3fc;border-color:rgba(56,189,248,0.35);">마스터 보드 6/6장</span>
-      </div>
-      <div style="font-size:11.5px;color:var(--sub);margin:5px 0 9px;line-height:1.45;word-break:keep-all;">오더플로우 · 청산 히트맵 · MTF SMC 자체 연산 <span class="num-nw">(01·31분 갱신)</span></div>
-      <div class="board-tabs-grid" id="boardTabs">
-        <button class="chip active" data-bgrp="ALL">전체 (6)</button>
-        <button class="chip" data-bgrp="SMC·모멘텀">SMC·모멘텀 (2)</button>
-        <button class="chip" data-bgrp="CVD·청산맵">CVD·청산맵 (2)</button>
-        <button class="chip" data-bgrp="타격·매크로">타격·매크로 (2)</button>
-      </div>
-      <div class="b-grid" id="boardGrid"></div>
     </div>
 
     <div class="pf-card owner-only" id="perfCardHost">
@@ -645,60 +637,73 @@
 
   </div>
 
-  <!-- [탭 2] 경제소식 -->
-  
-  <div id="pane-chartboard" class="tab-pane owner-only guest-hide-owner" data-pane="chartboard" style="display:none;">
-    <div class="card" style="margin-bottom:12px;">
-      <div class="row-sb" style="margin-bottom:8px;">
+    <!-- [탭: 차트·보드 (오너 인증 전용)] -->
+  <div class="tab-pane owner-only" id="pane-chartboard">
+    <div class="card" style="padding:12px 13px;overflow:hidden;">
+      <div class="row-sb" style="padding-bottom:9px;border-bottom:1px solid var(--line);">
         <div>
-          <span style="font-size:14px;font-weight:900;color:#f8fafc;">📈 실시간 멀티 차트 & 5분할 타점</span>
-          <span id="cbLiveTickerBadge" style="font-size:12px;font-weight:800;color:#38bdf8;margin-left:6px;">BTCUSDT</span>
-        </div>
-        <div id="cbTfGroup" style="display:flex;gap:4px;">
-          <button type="button" class="pill cb-tf-btn" data-tf="5m" style="cursor:pointer;">5m</button>
-          <button type="button" class="pill up cb-tf-btn" data-tf="15m" style="cursor:pointer;">15m</button>
-          <button type="button" class="pill cb-tf-btn" data-tf="1h" style="cursor:pointer;">1h</button>
-          <button type="button" class="pill cb-tf-btn" data-tf="4h" style="cursor:pointer;">4h</button>
-          <button type="button" class="pill cb-tf-btn" data-tf="1d" style="cursor:pointer;">1d</button>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <span style="font-size:14px;font-weight:900;" id="cmTitle">BYBIT BTCUSDT Perp</span>
+            <span class="pill" id="cmDelayBadge" style="display:none;font-size:9.5px;padding:2px 6px;color:#fcd34d;border-color:rgba(245,158,11,0.4);">CME 10분 지연</span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:8px;margin-top:3px;flex-wrap:wrap;">
+            <div style="font-size:19px;font-weight:900;font-variant-numeric:tabular-nums;"><span id="cmPrice">--</span> <span style="font-size:12px;" id="cmChg">--</span></div>
+            <span style="font-size:10.5px;font-weight:800;color:#64748b;"><span style="color:#f59e0b;">━</span> EMA20  <span style="color:#8b5cf6;">━</span> EMA50</span>
+          </div>
         </div>
       </div>
-      <div id="cbSymGroup" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
-        <button type="button" class="btn acc cb-sym-btn" data-sym="BTC" style="padding:5px 10px;font-size:11.5px;">BTC</button>
-        <button type="button" class="btn cb-sym-btn" data-sym="NQ100" style="padding:5px 10px;font-size:11.5px;">NQ100</button>
-        <button type="button" class="btn cb-sym-btn" data-sym="NVDA" style="padding:5px 10px;font-size:11.5px;">NVDA</button>
-        <button type="button" class="btn cb-sym-btn" data-sym="SOXL" style="padding:5px 10px;font-size:11.5px;">SOXL</button>
-        <button type="button" class="btn cb-sym-btn" data-sym="GOLD" style="padding:5px 10px;font-size:11.5px;">GOLD</button>
+
+      <div style="padding:9px 0 8px;display:flex;flex-direction:column;gap:6px;">
+        <div class="cm-sym-grid" id="cmSymBar">
+          <button type="button" class="chip active" data-csym="BTC">BTC</button>
+          <button type="button" class="chip" data-csym="NQ100">NQ100</button>
+          <button type="button" class="chip" data-csym="NVDA">NVDA</button>
+          <button type="button" class="chip" data-csym="SOXL">SOXL</button>
+          <button type="button" class="chip" data-csym="GOLD">GOLD</button>
+        </div>
+        <div class="cm-tf-grid" id="cmTfBar">
+          <button type="button" class="chip" data-tf="1m">1분</button>
+          <button type="button" class="chip" data-tf="5m">5분</button>
+          <button type="button" class="chip active" data-tf="15m">15분</button>
+          <button type="button" class="chip" data-tf="1h">1시간</button>
+          <button type="button" class="chip" data-tf="4h">4시간</button>
+          <button type="button" class="chip" data-tf="1D">일봉</button>
+        </div>
+        <div class="tabs-line" id="cmBtcTools">
+          <button type="button" class="chip active" id="btnToggleLines">🎯 타점선 ON</button>
+          <button type="button" class="chip active owner-only" id="btnToggleMarks">📍 체결기록 ON</button>
+        </div>
       </div>
-      <div id="cbInlineChartHost" style="width:100%;height:330px;background:#070d19;border:1px solid rgba(148,163,184,0.16);border-radius:12px;overflow:hidden;position:relative;"></div>
-      <div id="cbOverlayLegend" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:11px;color:#94a3b8;">
-        <span><b style="color:#38bdf8;">---</b> 5분할 지정가</span>
-        <span><b style="color:#10b981;">---</b> 목표익절·순환선</span>
-        <span><b style="color:#f43f5e;">---</b> 보호손절</span>
+
+      <div class="row-sb owner-only" id="cmLastTradeStrip" style="display:none;padding:7px 10px;margin-bottom:6px;border-radius:9px;background:#10192d;border:1px solid var(--line);font-size:11.5px;font-weight:800;">
+        <span id="cmLastTradeTxt" style="color:#e2e8f0;line-height:1.35;">최근 체결</span>
+        <button type="button" class="btn acc" id="btnJumpTrade" style="padding:4px 8px;font-size:11px;">캔들 이동 →</button>
+      </div>
+
+      <div id="cmCanvas" style="width:100%;height:340px;background:#070b14;border-radius:11px;border:1px solid rgba(148,163,184,0.14);overflow:hidden;"></div>
+      <div id="cmCrossBar" style="margin-top:8px;padding:8px 11px;border-radius:9px;background:#0b1222;border:1px solid var(--line);font-size:11.5px;font-weight:800;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+        <span style="color:var(--sub);">📅 차트 캔들을 터치하면 날짜와 현재가 대비(%)가 표시됩니다</span>
       </div>
     </div>
 
     <div class="card">
       <div class="row-sb">
-        <span style="font-size:14px;font-weight:900;color:#f8fafc;">🧭 오더플로우 마스터 보드 (6/6)</span>
-        <span style="font-size:11px;color:#94a3b8;">터치 시 전체화면 확대</span>
+        <span style="font-size:14.5px;font-weight:900;">마스터 보드 (6/6)</span>
+        <span class="pill" style="color:#7dd3fc;border-color:rgba(56,189,248,0.35);">터치 시 핀치줌 확대</span>
       </div>
-      <div id="cbBoardsGrid" class="cb-tab-grid">
-        <div style="grid-column:1/-1;color:#94a3b8;font-size:12px;padding:14px 0;text-align:center;">정시 분석 완료 시 6종 마스터 보드가 자동 표시됩니다.</div>
+      <div style="font-size:11.5px;color:var(--sub);margin:5px 0 9px;line-height:1.45;word-break:keep-all;">오더플로우 · 청산 히트맵 · MTF SMC 자체 연산 <span class="num-nw">(01·31분 갱신)</span></div>
+      <div class="board-tabs-grid" id="boardTabs">
+        <button type="button" class="chip active" data-bgrp="ALL">전체 (6)</button>
+        <button type="button" class="chip" data-bgrp="SMC·모멘텀">SMC·모멘텀 (2)</button>
+        <button type="button" class="chip" data-bgrp="CVD·청산맵">CVD·청산맵 (2)</button>
+        <button type="button" class="chip" data-bgrp="타격·매크로">타격·매크로 (2)</button>
       </div>
+      <div class="b-grid" id="boardGrid"></div>
     </div>
   </div>
 
-  <div id="cbBoardZoomModal" class="cb-zoom-modal">
-    <div class="cb-zoom-head">
-      <span id="cbZoomTitle" style="font-size:13.5px;font-weight:900;color:#f8fafc;">마스터 보드 상세</span>
-      <button type="button" id="cbZoomCloseBtn" class="btn danger" style="padding:5px 12px;font-size:12px;">✕ 닫기</button>
-    </div>
-    <div class="cb-zoom-body">
-      <img id="cbZoomImg" src="" alt="Master Board" />
-    </div>
-  </div>
-
-<div class="tab-pane" id="pane-econ">
+  <!-- [탭 2] 경제소식 -->
+  <div class="tab-pane" id="pane-econ">
     <div class="card">
       <div class="row-sb" style="margin-bottom:10px;">
         <div style="min-width:0;">
@@ -779,52 +784,15 @@
   <!-- 하단 네비게이션 -->
   <div class="bnav">
     <div class="bnav-in">
-      <button class="bnav-btn active" data-tab="dash">⊞ 대시보드</button><button type="button" id="navChartBoardBtn" class="nav-btn owner-only guest-hide-owner" data-tab="chartboard">📊 차트·보드</button>
+      <button class="bnav-btn active" data-tab="dash">⊞ 대시보드</button>
+      <button class="bnav-btn owner-only" data-tab="chartboard" id="navChartBoardBtn">📊 차트·보드</button>
       <button class="bnav-btn" data-tab="econ">🌐 경제소식<span id="econNewBadge" class="econ-new-n hidden">N</span></button>
       <button class="bnav-btn owner-only" data-tab="rec">≡ 기록<span class="nav-badge" id="recNavBadge">0</span></button>
     </div>
   </div>
 
-  <!-- [모달 1] 캔들 차트 -->
-  <div class="modal-bg" id="candleModal">
-    <div class="modal-card">
-      <div class="row-sb" style="padding:11px 14px;border-bottom:1px solid var(--line);">
-        <div>
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-            <span style="font-size:13.5px;font-weight:900;" id="cmTitle">BYBIT BTCUSDT Perp</span>
-            <span class="pill" id="cmDelayBadge" style="display:none;font-size:9.5px;padding:2px 6px;color:#fcd34d;border-color:rgba(245,158,11,0.4);">CME 10분 지연</span>
-          </div>
-          <div style="display:flex;align-items:baseline;gap:8px;margin-top:2px;flex-wrap:wrap;">
-            <div style="font-size:18px;font-weight:900;font-variant-numeric:tabular-nums;"><span id="cmPrice">--</span> <span style="font-size:12px;" id="cmChg">--</span></div>
-            <span style="font-size:10.5px;font-weight:800;color:#64748b;"><span style="color:#f59e0b;">━</span> EMA20  <span style="color:#8b5cf6;">━</span> EMA50</span>
-          </div>
-        </div>
-        <button class="btn danger" id="cmCloseBtn">✕ 닫기</button>
-      </div>
-      <div style="padding:7px 12px;background:#090e1a;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:6px;">
-        <div class="cm-tf-grid" id="cmTfBar">
-          <button class="chip" data-tf="1m">1분</button>
-          <button class="chip" data-tf="5m">5분</button>
-          <button class="chip active" data-tf="15m">15분</button>
-          <button class="chip" data-tf="1h">1시간</button>
-          <button class="chip" data-tf="4h">4시간</button>
-          <button class="chip" data-tf="1D">일봉</button>
-        </div>
-        <div class="tabs-line" id="cmBtcTools">
-          <button class="chip active" id="btnToggleLines">🎯 타점선 ON</button>
-          <button class="chip active owner-only" id="btnToggleMarks">📍 체결기록 ON</button>
-        </div>
-      </div>
-      <div class="row-sb owner-only" id="cmLastTradeStrip" style="display:none;padding:7px 12px;background:#10192d;border-bottom:1px solid var(--line);font-size:11.5px;font-weight:800;">
-        <span id="cmLastTradeTxt" style="color:#e2e8f0;line-height:1.35;">최근 체결</span>
-        <button class="btn acc" id="btnJumpTrade" style="padding:4px 8px;font-size:11px;">캔들 이동 →</button>
-      </div>
-      <div id="cmCanvas" style="width:100%;height:340px;background:#070b14;"></div>
-      <div id="cmCrossBar" style="padding:9px 13px;background:#0b1222;border-top:1px solid var(--line);font-size:12px;font-weight:800;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-        <span style="color:var(--sub);">📅 차트 캔들을 터치하면 날짜와 현재가 대비(%)가 표시됩니다</span>
-      </div>
-    </div>
-  </div>
+  <!-- [차트 인라인 전환 완료] -->
+  <div class="modal-bg" id="candleModal" style="display:none!important;"><button id="cmCloseBtn" style="display:none;"></button></div>
 
   <!-- [모달 2] 마스터 보드 확대 -->
   <div class="modal-bg" id="lbModal">
@@ -1170,10 +1138,6 @@
     requestAnimationFrame(() => {
       wsLive.rafPending = false;
       applyRealtimeQuoteTick();
-    enforceOwnerOnlyVisibility(Boolean(d._vaultUnlocked));
-    if (d._vaultUnlocked) { renderInlineChartBoard(d); renderMasterBoardsTab(d); }
-    enforceOwnerOnlyVisibility(Boolean(d._vaultUnlocked));
-    if (d._vaultUnlocked) { renderInlineChartBoard(d); renderMasterBoardsTab(d); }
     });
   }
 
@@ -1244,7 +1208,7 @@
       setTxt('kimpBadge', `김프 ${kp >= 0 ? '+' : ''}${kp.toFixed(2)}%`);
     }
 
-    if ($('candleModal').classList.contains('open') && cmSym === 'BTC') {
+    if (activeTab === 'chartboard' && cmSym === 'BTC') {
       setTxt('cmPrice', fmt(bp, 1));
       if (wsLive.btcChg24h !== null) {
         const c = Number(wsLive.btcChg24h);
@@ -2001,17 +1965,21 @@
 
   // 어떤 통신 조건에서도 터치 즉시(0.01초) 팝업을 먼저 열고 차트를 렌더링합니다.
   async function openCandleModal(sym, tf='15m', focusKstSec=0, focusPrice=0) {
+    if (!isOwner()) return;
     const mySeq = ++cmReqSeq;
     if (cmMacroPollTmr) { clearInterval(cmMacroPollTmr); cmMacroPollTmr = null; }
     if (cmNativeCtrl) { try { cmNativeCtrl.destroy(); } catch(e){} cmNativeCtrl = null; }
     if (cmChart) { try { cmChart.remove(); } catch(e){} cmChart = null; cmSeries = null; cmPriceLines = []; }
 
-    cmSym = sym; cmTf = tf; cmLastCandle = null;
-    openModalById('candleModal');
+    cmSym = sym || 'BTC'; cmTf = tf || '15m'; cmLastCandle = null;
+    if (activeTab !== 'chartboard') {
+      switchMainTab('chartboard', true);
+    }
 
-    setTxt('cmTitle', SYM_TITLES[sym] || sym);
-    $('cmDelayBadge').style.display = (sym === 'NQ100' || sym === 'GOLD') ? 'inline-flex' : 'none';
-    document.querySelectorAll('#cmTfBar .chip').forEach(b => b.classList.toggle('active', b.dataset.tf === tf));
+    setTxt('cmTitle', SYM_TITLES[cmSym] || cmSym);
+    $('cmDelayBadge').style.display = (cmSym === 'NQ100' || cmSym === 'GOLD') ? 'inline-flex' : 'none';
+    document.querySelectorAll('#cmSymBar .chip').forEach(b => b.classList.toggle('active', b.dataset.csym === cmSym));
+    document.querySelectorAll('#cmTfBar .chip').forEach(b => b.classList.toggle('active', b.dataset.tf === cmTf));
     $('cmBtcTools').style.display = sym === 'BTC' ? 'flex' : 'none';
     $('cmLastTradeStrip').style.display = 'none';
 
@@ -2042,7 +2010,7 @@
     }
 
     const hasLib = await libReadyPromise;
-    if (mySeq !== cmReqSeq || !$('candleModal').classList.contains('open')) return;
+    if (mySeq !== cmReqSeq || activeTab !== 'chartboard') return;
 
     if (!rawRows.length) {
       wrap.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:13px;">캔들 데이터를 동기화 중입니다. 잠시 후 다시 터치해 주세요.</div>';
@@ -2065,7 +2033,12 @@
       if (showOwner) {
         (S.positions || []).forEach(p => {
           lineSpecs.push({ price:p.entry, color:'#38bdf8', lineWidth:2, lineStyle:0, title:`${p.side==='LONG'?'롱':'숏'} 진입` });
-          if (p.r1Price > 0 && p.stage === 0) lineSpecs.push({ price:p.r1Price, color:'#f59e0b', lineWidth:1, lineStyle:3, title:'1R(확정익절)' });
+          const rtpM = String(p.stageNote || '').match(/순환익절\s*([\d,]+(?:\.\d+)?)\$/);
+          if (rtpM) {
+            const rtpPx = Number(rtpM[1].replace(/,/g, ''));
+            if (rtpPx > 0) lineSpecs.push({ price:rtpPx, color:'#22d3ee', lineWidth:1, lineStyle:2, title:'🎯 순환익절' });
+          }
+          if (p.r1Price > 0 && p.stage === 0) lineSpecs.push({ price:p.r1Price, color:'#f59e0b', lineWidth:1, lineStyle:3, title:'1R(여유방어)' });
           if (p.sl > 0) lineSpecs.push({ price:p.sl, color:'#f43f5e', lineWidth:1, lineStyle:2, title:'보유 손절' });
           if (p.tp > 0) lineSpecs.push({ price:p.tp, color:'#10b981', lineWidth:1, lineStyle:2, title:'보유 익절' });
         });
@@ -2239,7 +2212,7 @@
 
     if (sym !== 'BTC') {
       const syncMacroLiveTick = async () => {
-        if (!$('candleModal').classList.contains('open') || cmSym !== sym || cmTf !== tf) return;
+        if (activeTab !== 'chartboard' || cmSym !== sym || cmTf !== tf) return;
         const liveM = await fetchMacroKlinesFromServer(sym, tf);
         if (!liveM || !Array.isArray(liveM.bars) || !liveM.bars.length) return;
         const dLive = liveM.price >= 1000 ? 1 : 2;
@@ -2351,6 +2324,10 @@
   document.querySelectorAll('.m-box').forEach(b => {
     b.onclick = () => openCandleModal(b.dataset.msym, '15m');
   });
+  $('cmSymBar').onclick = (ev) => {
+    const b = ev.target.closest('.chip');
+    if (b && b.dataset.csym) openCandleModal(b.dataset.csym, cmTf);
+  };
   $('cmTfBar').onclick = (ev) => {
     const b = ev.target.closest('.chip');
     if (b) openCandleModal(cmSym, b.dataset.tf);
@@ -2390,6 +2367,9 @@
   window.addEventListener('resize', () => {
     if (perfChart && $('perfChartBox') && $('perfChartBox').clientWidth > 40) {
       perfChart.applyOptions({ width: $('perfChartBox').clientWidth });
+    }
+    if (cmChart && activeTab === 'chartboard' && $('cmCanvas') && $('cmCanvas').clientWidth > 40) {
+      cmChart.applyOptions({ width: $('cmCanvas').clientWidth });
     }
   });
 
@@ -2779,8 +2759,64 @@
     $('recNavBadge').style.display = 'none';
   }
 
-  function switchMainTab(targetTab) {
+  const ECON_SEEN_KEY = 'kj_v40_seen_econ_ts';
+  let _latestEconStamp = '';
+
+  function syncEconNewBadge(stampStr) {
+    const st = String(stampStr || '').trim();
+    if (!st || st === '--:--' || st.startsWith('|')) return;
+    _latestEconStamp = st;
+    const badge = $('econNewBadge');
+    if (!badge) return;
+    if (activeTab === 'econ') {
+      try { localStorage.setItem(ECON_SEEN_KEY, st); } catch(e){}
+      badge.classList.add('hidden');
+      return;
+    }
+    let seen = '';
+    try { seen = localStorage.getItem(ECON_SEEN_KEY) || ''; } catch(e){}
+    if (!seen) {
+      try { localStorage.setItem(ECON_SEEN_KEY, st); } catch(e){}
+      badge.classList.add('hidden');
+    } else if (seen !== st) {
+      badge.classList.remove('hidden');
+    } else {
+      badge.classList.add('hidden');
+    }
+  }
+
+  function markEconAsRead() {
+    if (_latestEconStamp) {
+      try { localStorage.setItem(ECON_SEEN_KEY, _latestEconStamp); } catch(e){}
+    }
+    const badge = $('econNewBadge');
+    if (badge) badge.classList.add('hidden');
+  }
+
+  function switchMainTab(targetTab, skipAutoChart=false) {
+    if ((targetTab === 'chartboard' || targetTab === 'rec') && !isOwner()) return;
     const sameTab = (activeTab === targetTab);
+
+    if (sameTab && targetTab === 'rec') {
+      const btnPnl = document.querySelector('#recSubTabs .chip[data-rsub="pnl"]');
+      const btnLogs = document.querySelector('#recSubTabs .chip[data-rsub="logs"]');
+      if (btnPnl && btnLogs) {
+        const toLogs = btnPnl.classList.contains('active');
+        btnPnl.classList.toggle('active', !toLogs);
+        btnLogs.classList.toggle('active', toLogs);
+        $('recPnlPane').style.display = toLogs ? 'none' : 'block';
+        $('recLogsPane').style.display = toLogs ? 'block' : 'none';
+      }
+      markRecAsSeen();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    if (targetTab !== 'chartboard' && cmMacroPollTmr) {
+      clearInterval(cmMacroPollTmr);
+      cmMacroPollTmr = null;
+    }
+
     activeTab = targetTab;
     document.querySelectorAll('.bnav-btn').forEach(x => x.classList.toggle('active', x.dataset.tab === targetTab));
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'pane-' + targetTab));
@@ -2789,13 +2825,22 @@
     else { window.scrollTo(0, 0); document.documentElement.scrollTop = 0; document.body.scrollTop = 0; }
 
     if (targetTab === 'rec') markRecAsSeen();
+    if (targetTab === 'econ') markEconAsRead();
     if (targetTab === 'dash' && isOwner()) { perfSig = ''; setTimeout(renderPerfCard, 35); }
+    if (targetTab === 'chartboard' && isOwner()) {
+      brdSig = '';
+      renderBoards();
+      if (!skipAutoChart) {
+        setTimeout(() => openCandleModal(cmSym || 'BTC', cmTf || '15m'), 15);
+      }
+    }
   }
   document.querySelectorAll('.bnav-btn').forEach(btn => { btn.onclick = () => switchMainTab(btn.dataset.tab); });
 
   try {
     const initTabQ = new URLSearchParams(location.search).get('tab');
     if (initTabQ === 'econ') switchMainTab('econ');
+    else if (initTabQ === 'chartboard' && isOwner()) switchMainTab('chartboard');
   } catch(e){}
 
   $('btnToggleRat').onclick = () => {
@@ -3004,7 +3049,7 @@
       return `
       <div class="ord-card ${r.pnl >= 0 ? 'edge-long' : 'edge-short'}" style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
         <div style="min-width:0;flex:1;">
-          <div style="font-size:12px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.25px;"><span class="${r.side==='LONG'?'up':'dn'}">${escHtml(r.side)}</span> · ${r.qty} BTC <span style="color:var(--sub);font-size:10.5px;font-weight:700;">(${escHtml(dtShow)})</span></div>
+          <div style="font-size:12px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.25px;"><span class="${r.side==='LONG'?'up':'dn'}">${escHtml(r.side)}</span> · ${r.qty} BTC <span style="color:var(--sub);font-size:10.5px;font-weight:700;">(${escHtml(dtShow)})</span>${Number(r.recycleCount || 0) > 0 ? `<span class="pill" style="font-size:9.5px;padding:1px 5.5px;margin-left:4px;color:#38bdf8;border-color:rgba(56,189,248,0.38);background:rgba(56,189,248,0.10);">♻️ 순환 ${r.recycleCount}회</span>` : ''}</div>
           <div style="font-size:11.5px;color:var(--sub);margin-top:3px;white-space:nowrap;">진입 ${fmt(r.entry,1)}$ → 청산 ${fmt(r.exit,1)}$</div>
         </div>
         <div class="${r.pnl>=0?'up':'dn'} num-nw" style="font-size:13.5px;font-weight:900;flex-shrink:0;">${r.pnl>=0?'+':''}${fmt(r.pnl,2)}$</div>
@@ -3151,310 +3196,6 @@
       });
     }
   }
-
-  const ECON_SEEN_KEY = 'kj_v40_seen_econ_ts';
-  let _latestEconStamp = '';
-
-  function syncEconNewBadge(stampStr) {
-    const st = String(stampStr || '').trim();
-    if (!st || st === '--:--') return;
-    _latestEconStamp = st;
-    const badge = document.getElementById('econNewBadge');
-    if (!badge) return;
-    const econPane = document.getElementById('tab-econ') || document.getElementById('pane-econ') || document.querySelector('[data-pane="econ"]');
-    const isEconOpen = econPane && econPane.style.display !== 'none' && !econPane.classList.contains('hidden');
-    if (isEconOpen) {
-      try { localStorage.setItem(ECON_SEEN_KEY, st); } catch (e) {}
-      badge.classList.add('hidden');
-      return;
-    }
-    let seen = '';
-    try { seen = localStorage.getItem(ECON_SEEN_KEY) || ''; } catch (e) {}
-    if (!seen) {
-      try { localStorage.setItem(ECON_SEEN_KEY, st); } catch (e) {}
-      badge.classList.add('hidden');
-    } else if (seen !== st) {
-      badge.classList.remove('hidden');
-    } else {
-      badge.classList.add('hidden');
-    }
-  }
-
-  function markEconAsRead() {
-    if (_latestEconStamp) {
-      try { localStorage.setItem(ECON_SEEN_KEY, _latestEconStamp); } catch (e) {}
-    }
-    const badge = document.getElementById('econNewBadge');
-    if (badge) badge.classList.add('hidden');
-  }
-
-  function toggleRecordSubView() {
-    const btnPnl = document.getElementById('subTabPnl') || document.getElementById('btnSubPnl') || Array.from(document.querySelectorAll('button')).find(b => (b.textContent || '').trim() === '실현손익');
-    const btnCyc = document.getElementById('subTabCycle') || document.getElementById('btnSubCycle') || Array.from(document.querySelectorAll('button')).find(b => (b.textContent || '').trim().startsWith('사이클'));
-    if (!btnPnl || !btnCyc) return;
-    const pnlActive = btnPnl.classList.contains('active') || btnPnl.classList.contains('acc') || btnPnl.getAttribute('aria-selected') === 'true';
-    if (pnlActive) {
-      btnCyc.click();
-    } else {
-      btnPnl.click();
-    }
-  }
-
-  (function attachBottomNavEnhancements() {
-    if (window.__kjNavEnhanced) return;
-    window.__kjNavEnhanced = true;
-    document.addEventListener('click', function(ev) {
-      const btn = ev.target && ev.target.closest ? ev.target.closest('button, .nav-btn, [data-tab]') : null;
-      if (!btn) return;
-      const txt = (btn.textContent || '').trim();
-      const tabAttr = (btn.dataset && (btn.dataset.tab || btn.dataset.target)) || '';
-      const isRecBtn = tabAttr === 'logs' || tabAttr === 'record' || txt.includes('기록');
-      const isEconBtn = tabAttr === 'econ' || txt.includes('경제소식');
-      if (isEconBtn) {
-        setTimeout(markEconAsRead, 30);
-        return;
-      }
-      if (isRecBtn && btn.closest('.bottom-nav, nav, #bottomNav')) {
-        const wasActive = btn.classList.contains('active') || btn.classList.contains('acc');
-        if (wasActive) {
-          ev.stopImmediatePropagation();
-          ev.preventDefault();
-          toggleRecordSubView();
-        }
-      }
-    }, true);
-  })();
-
-  let _cbSym = 'BTC';
-  let _cbTf = '15m';
-  let _cbFocusPrice = 0;
-  let _cbLastState = null;
-
-  function enforceOwnerOnlyVisibility(unlocked) {
-    const navCb = document.getElementById('navChartBoardBtn');
-    const paneCb = document.getElementById('pane-chartboard');
-    if (navCb) navCb.classList.toggle('guest-hide-owner', !unlocked);
-    if (paneCb && !unlocked) {
-      paneCb.classList.add('guest-hide-owner');
-      paneCb.style.display = 'none';
-    } else if (paneCb && unlocked) {
-      paneCb.classList.remove('guest-hide-owner');
-    }
-
-    // 기존 대시보드 내 내장 차트/패키지 카드가 있다면 비활성 숨김 처리
-    ['dashChartCard', 'chartPackageCard', 'inlineChartBox', 'masterBoardsDashCard'].forEach(cid => {
-      const el = document.getElementById(cid);
-      if (el) el.style.display = 'none';
-    });
-
-    // 대기주문 섹션 전체를 인증 기기 전용으로 잠금
-    const ordWrap = document.getElementById('ordListWrap');
-    const ordSec = ordWrap ? (ordWrap.closest('.card') || ordWrap.parentElement) : null;
-    if (ordSec) {
-      ordSec.style.display = unlocked ? '' : 'none';
-    }
-    const expBox = document.getElementById('ordExposureBox');
-    if (expBox && !unlocked) expBox.style.display = 'none';
-  }
-
-  function renderInlineChartBoard(d) {
-    if (!d) return;
-    _cbLastState = d;
-    const host = document.getElementById('cbInlineChartHost');
-    if (!host) return;
-
-    const allOhlc = d.allOhlc || {};
-    const symMap = allOhlc[_cbSym] || allOhlc['BTC'] || {};
-    const bars = Array.isArray(symMap[_cbTf]) ? symMap[_cbTf] : (Array.isArray(symMap['15m']) ? symMap['15m'] : []);
-
-    const tBadge = document.getElementById('cbLiveTickerBadge');
-    if (tBadge) {
-      const pxNow = _cbSym === 'BTC' ? Number(d.btcPrice || 0) : ((d.macroQuotes || {})[_cbSym]?.price || 0);
-      tBadge.textContent = pxNow > 0 ? `${_cbSym} · ${Number(pxNow).toLocaleString()}` : _cbSym;
-    }
-
-    if (!bars.length) {
-      host.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;font-size:12px;">실시간 캔들 데이터 동기화 중...</div>';
-      return;
-    }
-
-    const viewBars = bars.slice(-72);
-    const W = Math.max(320, host.clientWidth || 360);
-    const H = 330;
-    const padL = 8, padR = 64, padT = 16, padB = 20;
-    const plotW = W - padL - padR;
-    const plotH = H - padT - padB;
-
-    const overlayLines = [];
-    if (_cbSym === 'BTC') {
-      (d.positions || []).forEach(p => {
-        if (Number(p.entry) > 0) overlayLines.push({ p: Number(p.entry), c: '#38bdf8', lbl: `평단 ${Number(p.entry).toFixed(0)}`, dash: '' });
-        if (Number(p.sl) > 0) overlayLines.push({ p: Number(p.sl), c: '#f43f5e', lbl: `손절 ${Number(p.sl).toFixed(0)}`, dash: '4,3' });
-        if (Number(p.tp) > 0) overlayLines.push({ p: Number(p.tp), c: '#10b981', lbl: `익절 ${Number(p.tp).toFixed(0)}`, dash: '4,3' });
-      });
-      (d.openOrders || []).forEach(o => {
-        const op = Number(o.price || 0);
-        if (op > 0) {
-          const isLong = o.side === 'LONG';
-          overlayLines.push({
-            p: op,
-            c: isLong ? '#22d3ee' : '#fb7185',
-            lbl: `${o.leg ? o.leg + '차 ' : ''}${op.toFixed(0)}`,
-            dash: '3,3',
-          });
-        }
-      });
-      if (_cbFocusPrice > 0) {
-        overlayLines.push({ p: _cbFocusPrice, c: '#facc15', lbl: `선택 ${_cbFocusPrice.toFixed(1)}`, dash: '2,2' });
-      }
-    }
-
-    let hi = Math.max(...viewBars.map(b => Number(b.h ?? b[2] ?? 0)));
-    let lo = Math.min(...viewBars.map(b => Number(b.l ?? b[3] ?? 0)));
-    overlayLines.forEach(ln => {
-      if (ln.p > lo * 0.94 && ln.p < hi * 1.06) {
-        hi = Math.max(hi, ln.p);
-        lo = Math.min(lo, ln.p);
-      }
-    });
-    const span = Math.max(hi - lo, 1e-6);
-    hi += span * 0.06;
-    lo -= span * 0.06;
-    const rng = Math.max(hi - lo, 1e-6);
-    const yOf = v => padT + ((hi - v) / rng) * plotH;
-
-    const stepX = plotW / viewBars.length;
-    const bodyW = Math.max(2.5, Math.min(9, stepX * 0.62));
-    let svgParts = [`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`];
-
-    for (let g = 0; g <= 4; g++) {
-      const gy = padT + (plotH * g) / 4;
-      const gv = hi - (rng * g) / 4;
-      svgParts.push(`<line x1="${padL}" y1="${gy.toFixed(1)}" x2="${W - padR}" y2="${gy.toFixed(1)}" stroke="rgba(148,163,184,0.10)" stroke-width="1"/>`);
-      svgParts.push(`<text x="${W - padR + 5}" y="${(gy + 3.5).toFixed(1)}" fill="#64748b" font-size="9.5" font-family="monospace">${gv >= 1000 ? gv.toFixed(0) : gv.toFixed(2)}</text>`);
-    }
-
-    viewBars.forEach((b, idx) => {
-      const o = Number(b.o ?? b[1] ?? 0);
-      const h = Number(b.h ?? b[2] ?? 0);
-      const l = Number(b.l ?? b[3] ?? 0);
-      const c = Number(b.c ?? b[4] ?? 0);
-      const cx = padL + idx * stepX + stepX * 0.5;
-      const up = c >= o;
-      const col = up ? '#10b981' : '#f43f5e';
-      const yH = yOf(h), yL = yOf(l), yO = yOf(o), yC = yOf(c);
-      const topY = Math.min(yO, yC);
-      const rectH = Math.max(1.5, Math.abs(yC - yO));
-      svgParts.push(`<line x1="${cx.toFixed(1)}" y1="${yH.toFixed(1)}" x2="${cx.toFixed(1)}" y2="${yL.toFixed(1)}" stroke="${col}" stroke-width="1.1"/>`);
-      svgParts.push(`<rect x="${(cx - bodyW / 2).toFixed(1)}" y="${topY.toFixed(1)}" width="${bodyW.toFixed(1)}" height="${rectH.toFixed(1)}" fill="${col}" rx="0.8"/>`);
-    });
-
-    overlayLines.forEach(ln => {
-      if (ln.p < lo || ln.p > hi) return;
-      const ly = yOf(ln.p);
-      const dashAttr = ln.dash ? `stroke-dasharray="${ln.dash}"` : '';
-      svgParts.push(`<line x1="${padL}" y1="${ly.toFixed(1)}" x2="${W - padR}" y2="${ly.toFixed(1)}" stroke="${ln.c}" stroke-width="1.1" ${dashAttr}/>`);
-      svgParts.push(`<rect x="${W - padR + 2}" y="${(ly - 7).toFixed(1)}" width="${padR - 4}" height="14" rx="3" fill="${ln.c}"/>`);
-      svgParts.push(`<text x="${W - padR + 5}" y="${(ly + 3.2).toFixed(1)}" fill="#020617" font-weight="800" font-size="9" font-family="monospace">${ln.lbl}</text>`);
-    });
-
-    svgParts.push('</svg>');
-    host.innerHTML = svgParts.join('');
-  }
-
-  function renderMasterBoardsTab(d) {
-    const grid = document.getElementById('cbBoardsGrid');
-    if (!grid || !d) return;
-    const boards = Array.isArray(d.boards) ? d.boards : [];
-    if (!boards.length) return;
-    const sig = boards.map(b => b.full || b.thumb || b.num).join('|');
-    if (grid.dataset.bsig === sig) return;
-    grid.dataset.bsig = sig;
-
-    grid.innerHTML = boards.map(b => {
-      const imgSrc = b.thumb || b.inlineThumb || b.full || '';
-      const fullSrc = b.full || imgSrc;
-      const ttl = `${b.num || ''} ${b.title || ''}`.trim();
-      return `
-        <div class="cb-board-card" data-fullsrc="${escHtml(fullSrc)}" data-btitle="${escHtml(ttl)}">
-          <img src="${escHtml(imgSrc)}" alt="${escHtml(ttl)}" loading="lazy" />
-          <div class="cb-board-meta">
-            <div class="cb-board-ttl">${escHtml(ttl)}</div>
-            <div class="cb-board-sub">${escHtml(b.desc || b.group || '')}</div>
-          </div>
-        </div>`;
-    }).join('');
-
-    grid.querySelectorAll('.cb-board-card').forEach(card => {
-      card.onclick = () => {
-        const modal = document.getElementById('cbBoardZoomModal');
-        const img = document.getElementById('cbZoomImg');
-        const tEl = document.getElementById('cbZoomTitle');
-        if (modal && img) {
-          img.src = card.dataset.fullsrc || '';
-          if (tEl) tEl.textContent = card.dataset.btitle || '마스터 보드 상세';
-          modal.classList.add('open');
-        }
-      };
-    });
-  }
-
-  function openCandleModal(sym, tf, focusPrice) {
-    if (sym) _cbSym = sym;
-    if (tf) _cbTf = tf;
-    _cbFocusPrice = Number(focusPrice || 0);
-    document.querySelectorAll('.cb-sym-btn').forEach(b => {
-      b.classList.toggle('acc', b.dataset.sym === _cbSym);
-    });
-    document.querySelectorAll('.cb-tf-btn').forEach(b => {
-      b.classList.toggle('up', b.dataset.tf === _cbTf);
-    });
-    const navBtn = document.getElementById('navChartBoardBtn');
-    if (navBtn) navBtn.click();
-    if (_cbLastState) {
-      renderInlineChartBoard(_cbLastState);
-      renderMasterBoardsTab(_cbLastState);
-    }
-  }
-
-  (function initChartBoardInteractions() {
-    if (window.__kjChartBoardInit) return;
-    window.__kjChartBoardInit = true;
-    document.addEventListener('click', function(ev) {
-      const symBtn = ev.target && ev.target.closest ? ev.target.closest('.cb-sym-btn') : null;
-      if (symBtn) {
-        _cbSym = symBtn.dataset.sym || 'BTC';
-        _cbFocusPrice = 0;
-        document.querySelectorAll('.cb-sym-btn').forEach(b => b.classList.toggle('acc', b === symBtn));
-        if (_cbLastState) renderInlineChartBoard(_cbLastState);
-        return;
-      }
-      const tfBtn = ev.target && ev.target.closest ? ev.target.closest('.cb-tf-btn') : null;
-      if (tfBtn) {
-        _cbTf = tfBtn.dataset.tf || '15m';
-        document.querySelectorAll('.cb-tf-btn').forEach(b => b.classList.toggle('up', b === tfBtn));
-        if (_cbLastState) renderInlineChartBoard(_cbLastState);
-        return;
-      }
-      const navBtn = ev.target && ev.target.closest ? ev.target.closest('#navChartBoardBtn') : null;
-      if (navBtn) {
-        document.querySelectorAll('.tab-pane, [data-pane]').forEach(p => { p.style.display = 'none'; });
-        const cbPane = document.getElementById('pane-chartboard');
-        if (cbPane) cbPane.style.display = 'block';
-        document.querySelectorAll('.bottom-nav button, nav button, .nav-btn').forEach(b => b.classList.remove('active', 'acc'));
-        navBtn.classList.add('active', 'acc');
-        if (_cbLastState) {
-          renderInlineChartBoard(_cbLastState);
-          renderMasterBoardsTab(_cbLastState);
-        }
-        return;
-      }
-      if (ev.target && (ev.target.id === 'cbZoomCloseBtn' || ev.target.id === 'cbBoardZoomModal')) {
-        const modal = document.getElementById('cbBoardZoomModal');
-        if (modal) modal.classList.remove('open');
-      }
-    });
-  })();
 
   async function applyState(rawObj) {
     lastRawPayload = rawObj;
@@ -3755,7 +3496,9 @@
       }
     }
 
-    renderOpenOrdersSection(d);
+    const ordCardEl = $('ordSectionCard');
+    if (ordCardEl) ordCardEl.style.display = showOwnerSeed ? 'block' : 'none';
+    if (showOwnerSeed) renderOpenOrdersSection(d);
 
     // 웹소켓 상태와 무관하게 매 사이클 보유포지션 손익·ROE·R배수를 최신 시세로 즉시 강제 동기화
     applyRealtimeQuoteTick();
@@ -3824,6 +3567,9 @@
     if (showOwnerSeed) {
       renderLogsList(d.logs || []);
       renderBoards();
+      if (activeTab === 'chartboard' && !cmChart && !cmNativeCtrl) {
+        openCandleModal(cmSym || 'BTC', cmTf || '15m');
+      }
     }
   }
 
