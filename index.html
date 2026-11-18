@@ -398,6 +398,13 @@
   #lbScrollWrap { position:relative; overflow:hidden; touch-action:none; user-select:none; -webkit-user-select:none; }
   #lbImg { transform-origin:0 0; will-change:transform; }
   .lb-zoom-pill { position:absolute; right:10px; bottom:10px; z-index:5; background:rgba(7,11,20,0.85); border:1px solid rgba(56,189,248,0.45); color:#7dd3fc; font-size:11px; font-weight:900; padding:4px 9px; border-radius:999px; pointer-events:none; font-variant-numeric:tabular-nums; }
+  .tac-grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:9px; }
+  .tac-box { background:#0c1322; border:1px solid rgba(148,163,184,0.16); border-radius:12px; padding:10px 11px; }
+  .tac-box.long { border-left:3px solid #10b981; }
+  .tac-box.short { border-left:3px solid #f43f5e; }
+  .tac-row { display:flex; justify-content:space-between; align-items:center; font-size:11.5px; margin-top:4px; font-variant-numeric:tabular-nums; }
+  .tac-leg-chips { display:flex; flex-wrap:wrap; gap:4px; margin-top:7px; padding-top:7px; border-top:1px solid rgba(148,163,184,0.12); }
+  .tac-leg-tag { font-size:10px; font-weight:800; padding:2px 6px; border-radius:6px; background:#131d32; color:#cbd5e1; font-variant-numeric:tabular-nums; }
 </style>
 </head>
 <body>
@@ -689,19 +696,17 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card" id="cbTacticalCard">
       <div class="row-sb">
-        <span style="font-size:14.5px;font-weight:900;">마스터 보드 (6/6)</span>
-        <span class="pill" style="color:#7dd3fc;border-color:rgba(56,189,248,0.35);">터치 시 핀치줌 확대</span>
+        <div style="display:flex;align-items:center;gap:6px;min-width:0;">
+          <span style="font-size:14.5px;font-weight:900;white-space:nowrap;">🎯 5분할 전술 & AI 브리핑</span>
+          <span class="pill" id="cbTacRegime" style="color:#7dd3fc;border-color:rgba(56,189,248,0.35);font-size:10.5px;">분석 대기</span>
+        </div>
+        <span class="pill" id="cbTacTime" style="font-size:10.5px;">--:--</span>
       </div>
-      <div style="font-size:11.5px;color:var(--sub);margin:5px 0 9px;line-height:1.45;word-break:keep-all;">오더플로우 · 청산 히트맵 · MTF SMC 자체 연산 <span class="num-nw">(01·31분 갱신)</span></div>
-      <div class="board-tabs-grid" id="boardTabs">
-        <button type="button" class="chip active" data-bgrp="ALL">전체 (6)</button>
-        <button type="button" class="chip" data-bgrp="SMC·모멘텀">SMC·모멘텀 (2)</button>
-        <button type="button" class="chip" data-bgrp="CVD·청산맵">CVD·청산맵 (2)</button>
-        <button type="button" class="chip" data-bgrp="타격·매크로">타격·매크로 (2)</button>
-      </div>
-      <div class="b-grid" id="boardGrid"></div>
+      <div id="cbTacSummaryWrap" style="margin-top:9px;font-size:12.5px;line-height:1.65;color:#dbeafe;word-break:keep-all;"></div>
+      <div id="cbTacLadderCards" class="tac-grid-2"></div>
+      <div id="cbTacReasonsWrap" style="margin-top:9px;display:flex;flex-direction:column;gap:7px;"></div>
     </div>
   </div>
 
@@ -788,7 +793,7 @@
   <div class="bnav">
     <div class="bnav-in">
       <button class="bnav-btn active" data-tab="dash">⊞ 대시보드</button>
-      <button class="bnav-btn owner-only" data-tab="chartboard" id="navChartBoardBtn">📊 차트·보드</button>
+      <button class="bnav-btn owner-only" data-tab="chartboard" id="navChartBoardBtn">📊 차트·전술</button>
       <button class="bnav-btn" data-tab="econ">🌐 경제소식<span id="econNewBadge" class="econ-new-n hidden">N</span></button>
       <button class="bnav-btn owner-only" data-tab="rec">≡ 기록<span class="nav-badge" id="recNavBadge">0</span></button>
     </div>
@@ -797,23 +802,8 @@
   <!-- [차트 인라인 전환 완료] -->
   <div class="modal-bg" id="candleModal" style="display:none!important;"><button id="cmCloseBtn" style="display:none;"></button></div>
 
-  <!-- [모달 2] 마스터 보드 확대 -->
-  <div class="modal-bg" id="lbModal">
-    <div class="modal-card" style="max-width:740px;">
-      <div class="row-sb" style="padding:11px 14px;border-bottom:1px solid var(--line);">
-        <span id="lbTitle" style="font-size:13px;font-weight:900;line-height:1.35;">마스터 보드</span>
-        <div style="display:flex;gap:5px;flex-shrink:0;">
-          <button class="btn" id="lbPrev">◀</button>
-          <button class="btn" id="lbNext">▶</button>
-          <button class="btn danger" id="lbClose">✕ 닫기</button>
-        </div>
-      </div>
-      <div id="lbScrollWrap" style="max-height:82vh;background:#04070f;">
-        <img id="lbImg" src="" style="width:100%;height:auto;display:block;">
-        <div class="lb-zoom-pill" id="lbZoomPill">1.0x · 두 손가락 확대 / 더블탭</div>
-      </div>
-    </div>
-  </div>
+  <!-- [보드 모달 제거됨] -->
+  <div class="modal-bg" id="lbModal" style="display:none!important;"><button id="lbClose" style="display:none;"></button><button id="lbPrev" style="display:none;"></button><button id="lbNext" style="display:none;"></button><div id="lbScrollWrap"></div></div>
 
   <!-- [모달 3] Days Trading 바텀시트 -->
   <div class="modal-bg sheet-align" id="daysSheetModal">
@@ -3014,29 +3004,68 @@
     }
   }, { passive:true });
 
-  $('boardTabs').onclick = (ev) => {
-    const b = ev.target.closest('.chip'); if (!b) return;
-    boardGrp = b.dataset.bgrp;
-    document.querySelectorAll('#boardTabs .chip').forEach(x => x.classList.toggle('active', x === b));
-    brdSig = ''; renderBoards();
-  };
-
   function renderBoards() {
-    if (!isOwner() || !S || !S._vaultUnlocked || !Array.isArray(S.boards)) return;
-    const flt = boardGrp === 'ALL' ? S.boards : S.boards.filter(x => x.group === boardGrp);
-    curLbArr = flt;
-    const sig = boardGrp + ':' + flt.map(x => x.full).join('|');
+    if (!isOwner() || !S || !S._vaultUnlocked || !S.rationaleInfo) return;
+    const ri = S.rationaleInfo;
+    const sig = JSON.stringify([ri.updatedAt, ri.rationale, ri.longSniper, ri.longLadder, ri.shortSniper, ri.shortLadder]);
     if (brdSig === sig) return;
     brdSig = sig;
-    $('boardGrid').innerHTML = flt.map((b, i) => `
-      <div class="b-card" data-bidx="${i}">
-        <div class="b-thumb"><span class="b-num">#${b.num}</span><img src="${b.inlineThumb || b.thumb}" alt="${escHtml(b.title)}"></div>
-        <div style="padding:8px 9px;">
-          <div class="b-title">${escHtml(b.title)}</div>
-          <div class="b-desc">${escHtml(b.desc)}</div>
-        </div>
-      </div>`).join('');
-    $('boardGrid').querySelectorAll('.b-card').forEach(c => { c.onclick = () => openLb(Number(c.dataset.bidx)); });
+
+    setTxt('cbTacRegime', ri.marketRegimeKo || '수급 분석');
+    setTxt('cbTacTime', String(ri.updatedAtHm || String(ri.updatedAt || '--:--').slice(-5)));
+
+    const paras = Array.isArray(ri.paragraphs) && ri.paragraphs.length ? ri.paragraphs : [ri.rationale || '타점 분석 대기 중입니다.'];
+    $('cbTacSummaryWrap').innerHTML = paras.map((pTxt, idx) =>
+      `<div style="${idx > 0 ? 'margin-top:6px;' : ''}">${fmtInlineRich(pTxt)}</div>`
+    ).join('');
+
+    const buildLadderBox = (sideCls, titleKo, lad) => {
+      if (!lad || typeof lad !== 'object') return '';
+      const legs = Array.isArray(lad.legs) ? lad.legs : [];
+      const legTags = legs.map(lg => `<span class="tac-leg-tag">${lg.legIdx}차 ${fmt(lg.price, 0)}$ (${lg.weightPct}%)</span>`).join('');
+      return `
+        <div class="tac-box ${sideCls}">
+          <div class="row-sb">
+            <b style="font-size:12.5px;color:#f8fafc;">${titleKo} (${lad.grade || 'S'}급)</b>
+            <span class="pill" style="font-size:10px;padding:2px 6px;">폭 ${lad.spanPct || 0}%</span>
+          </div>
+          <div class="tac-row"><span style="color:var(--sub);">가중평단</span><b>${fmt(lad.wAvg, 1)}$ (${lad.totQty || 0} BTC)</b></div>
+          <div class="tac-row"><span style="color:var(--sub);">전량익절</span><b class="up">${fmt(lad.tp, 1)}$ (+${fmt(lad.fullTpUsd, 0)}$)</b></div>
+          <div class="tac-row"><span style="color:var(--sub);">최종손절</span><b class="dn">${fmt(lad.sl, 1)}$ (1:${lad.rr || 0})</b></div>
+          ${legTags ? `<div class="tac-leg-chips">${legTags}</div>` : ''}
+        </div>`;
+    };
+
+    const lBox = buildLadderBox('long', '🟢 롱 5분할', ri.longLadder);
+    const sBox = buildLadderBox('short', '🔴 숏 5분할', ri.shortLadder);
+    const gridEl = $('cbTacLadderCards');
+    if (lBox || sBox) {
+      gridEl.style.display = 'grid';
+      gridEl.style.gridTemplateColumns = (lBox && sBox) ? 'repeat(2,minmax(0,1fr))' : '1fr';
+      gridEl.innerHTML = lBox + sBox;
+    } else {
+      gridEl.style.display = 'none';
+      gridEl.innerHTML = '';
+    }
+
+    const rCards = [];
+    [
+      [ri.longSniper, 'up', '⚡ 단타 롱', ri.longSniper ? `${fmt(ri.longSniper.entry, 1)}$` : ''],
+      [ri.longLadder, 'up', '🛡 심층 5분할 롱', ri.longLadder ? `${fmt(ri.longLadder.zone_high, 0)}~${fmt(ri.longLadder.zone_low, 0)}$` : ''],
+      [ri.shortSniper, 'dn', '⚡ 단타 숏', ri.shortSniper ? `${fmt(ri.shortSniper.entry, 1)}$` : ''],
+      [ri.shortLadder, 'dn', '🛡 심층 5분할 숏', ri.shortLadder ? `${fmt(ri.shortLadder.zone_low, 0)}~${fmt(ri.shortLadder.zone_high, 0)}$` : ''],
+    ].forEach(([obj, clsS, lbl, pxS]) => {
+      if (!obj || !obj.reason) return;
+      rCards.push(`
+        <div class="econ-row">
+          <div class="row-sb" style="margin-bottom:5px;">
+            <span class="pill ${clsS}">${lbl} (${obj.grade || 'A'}급)</span>
+            <span class="num-nw" style="font-size:11.5px;font-weight:900;color:#f8fafc;">${pxS}</span>
+          </div>
+          <div class="econ-row-body" style="font-size:12.5px;">${fmtInlineRich(obj.reason)}</div>
+        </div>`);
+    });
+    $('cbTacReasonsWrap').innerHTML = rCards.join('');
   }
 
   function renderEconSectionView(econObj) {
