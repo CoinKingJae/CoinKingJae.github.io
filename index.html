@@ -3038,7 +3038,7 @@
         const dispBadge = showOwnerDetails ? o.badge : (o.guestBadge || o.badge);
         const edgeCls = o.side === 'LONG' ? 'edge-long' : 'edge-short';
         const ladNote = (showOwnerDetails && o.track === 'LADDER' && o.ladderFullTpUsd > 0)
-          ? `<div class="row-sb" style="font-size:11px;color:#7dd3fc;margin-top:6px;"><span>🛡 심층 3분할 전량 익절 시</span><b class="num-nw">+${fmt(o.ladderFullTpPct, 2)}% (+${fmt(o.ladderFullTpUsd, 0)}$)</b></div>`
+          ? `<div class="row-sb" style="font-size:11px;color:#7dd3fc;margin-top:6px;"><span>🛡 심층 ${o.ladderLegCount || 5}분할 합산 익절 시</span><b class="num-nw">+${fmt(o.ladderFullTpPct, 2)}% (+${fmt(o.ladderFullTpUsd, 0)}$)</b></div>`
           : '';
         return `
         <div class="ord-card ${edgeCls}">
@@ -3078,7 +3078,7 @@
             </div>
             ${ladNote}
             <div class="row-sb" style="font-size:11px;color:#cbd5e1;margin-top:6px;">
-              <span>1R 방어선 (확정익절·BE+)</span>
+              <span>1R 방어선 (부분익절·-0.25R 여유)</span>
               <b class="num-nw">${fmt(o.r1Price,1)}$</b>
             </div>
           </div>` : ''}
@@ -3360,11 +3360,11 @@
             <div style="font-size:11px;color:#cbd5e1;margin-top:7px;" id="posRmult-${p.side}">수비 진행: ${p.rMultiple>=0?'+':''}${p.rMultiple}R / +1R (${fmt(p.r1Price,1)}$)</div>
             <div class="prox-track">
               <div class="ms-tick" style="left:37.5%;" title="0.75R 손실압축"></div>
-              <div class="ms-tick" style="left:50%;" title="1.0R 확정익절·BE+"></div>
-              <div class="ms-tick" style="left:75%;" title="1.5R +0.65R잠금"></div>
+              <div class="ms-tick" style="left:50%;" title="1.0R 부분익절·-0.25R 여유방어"></div>
+              <div class="ms-tick" style="left:75%;" title="1.5R +0.55R 무패잠금"></div>
               <div class="prox-fill" id="posRbar-${p.side}" style="width:${p.milestonePct || 0}%;background:#38bdf8;"></div>
             </div>
-            <div class="ms-labels"><span>진입</span><span>0.75R 압축</span><span>1R 익절·BE+</span><span>1.5R 잠금</span><span>2R+</span></div>
+            <div class="ms-labels"><span>진입</span><span>0.75R 압축</span><span>1R 여유방어</span><span>1.5R 무패잠금</span><span>2R+</span></div>
             <div style="font-size:11.5px;color:#7dd3fc;margin-top:6px;">상태: ${escHtml(p.stageNote)}</div>
             <div style="display:flex;gap:6px;margin-top:9px;padding-top:9px;border-top:1px solid var(--line);">
               <button class="btn acc" data-pact="half_tp" data-pside="${p.side}" style="flex:1;">⚡ 50% 익절</button>
@@ -3428,10 +3428,12 @@
             </div>`);
         };
 
+        const lLadN = (ri.longLadder && Array.isArray(ri.longLadder.legs) && ri.longLadder.legs.length >= 4) ? ri.longLadder.legs.length : 5;
+        const sLadN = (ri.shortLadder && Array.isArray(ri.shortLadder.legs) && ri.shortLadder.legs.length >= 4) ? ri.shortLadder.legs.length : 5;
         renderSubCard(ri.longSniper, 'up', '⚡ 단타 롱', ri.longSniper ? `${fmt(ri.longSniper.entry,1)}$` : '');
-        renderSubCard(ri.longLadder, 'up', '🛡 심층 3분할 롱', ri.longLadder ? `${fmt(ri.longLadder.zone_high,0)}~${fmt(ri.longLadder.zone_low,0)}$` : '');
+        renderSubCard(ri.longLadder, 'up', `🛡 심층 ${lLadN}분할 롱`, ri.longLadder ? `${fmt(ri.longLadder.zone_high,0)}~${fmt(ri.longLadder.zone_low,0)}$` : '');
         renderSubCard(ri.shortSniper, 'dn', '⚡ 단타 숏', ri.shortSniper ? `${fmt(ri.shortSniper.entry,1)}$` : '');
-        renderSubCard(ri.shortLadder, 'dn', '🛡 심층 3분할 숏', ri.shortLadder ? `${fmt(ri.shortLadder.zone_low,0)}~${fmt(ri.shortLadder.zone_high,0)}$` : '');
+        renderSubCard(ri.shortLadder, 'dn', `🛡 심층 ${sLadN}분할 숏`, ri.shortLadder ? `${fmt(ri.shortLadder.zone_low,0)}~${fmt(ri.shortLadder.zone_high,0)}$` : '');
 
         const removedArr = Array.isArray(ri.removedNotices) ? ri.removedNotices : [];
         const removedHtml = removedArr.length
