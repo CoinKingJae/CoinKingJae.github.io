@@ -1855,8 +1855,8 @@
 
     setTxt('pfLastTradeTxt', `${lastTrStr}  ›`);
     $('pfLastTradeBar').onclick = () => {
-      if (pf.lastTrade && pf.lastTrade.timeSec) openChartBoardTab('BTC', '15m', Number(pf.lastTrade.timeSec) + 9 * 3600);
-      else openChartBoardTab('BTC', '15m');
+      if (pf.lastTrade && pf.lastTrade.timeSec) openCandleModal('BTC', '15m', Number(pf.lastTrade.timeSec) + 9 * 3600);
+      else openCandleModal('BTC', '15m');
     };
 
     setTxt('pfDaysTradingTxt', `${daysNum}일차  ›`);
@@ -2000,7 +2000,7 @@
   }
 
   // 어떤 통신 조건에서도 터치 즉시(0.01초) 팝업을 먼저 열고 차트를 렌더링합니다.
-  async function openChartBoardTab(sym, tf='15m', focusKstSec=0, focusPrice=0) {
+  async function openCandleModal(sym, tf='15m', focusKstSec=0, focusPrice=0) {
     const mySeq = ++cmReqSeq;
     if (cmMacroPollTmr) { clearInterval(cmMacroPollTmr); cmMacroPollTmr = null; }
     if (cmNativeCtrl) { try { cmNativeCtrl.destroy(); } catch(e){} cmNativeCtrl = null; }
@@ -2347,23 +2347,23 @@
   $('daysSheetOkBtn').onclick = () => closeModalById('daysSheetModal');
   $('kpCloseBtn').onclick = () => { pendingCmd = null; closeModalById('keypadModal'); };
 
-  $('btcHeroCard').onclick = () => openChartBoardTab('BTC', cmTf);
+  $('btcHeroCard').onclick = () => openCandleModal('BTC', cmTf);
   document.querySelectorAll('.m-box').forEach(b => {
-    b.onclick = () => openChartBoardTab(b.dataset.msym, '15m');
+    b.onclick = () => openCandleModal(b.dataset.msym, '15m');
   });
   $('cmTfBar').onclick = (ev) => {
     const b = ev.target.closest('.chip');
-    if (b) openChartBoardTab(cmSym, b.dataset.tf);
+    if (b) openCandleModal(cmSym, b.dataset.tf);
   };
   $('btnToggleLines').onclick = () => {
     showLines = !showLines;
     $('btnToggleLines').classList.toggle('active', showLines);
-    openChartBoardTab(cmSym, cmTf);
+    openCandleModal(cmSym, cmTf);
   };
   $('btnToggleMarks').onclick = () => {
     showMarks = !showMarks;
     $('btnToggleMarks').classList.toggle('active', showMarks);
-    openChartBoardTab(cmSym, cmTf);
+    openCandleModal(cmSym, cmTf);
   };
   $('btnJumpTrade').onclick = () => {
     if (cmChart && lastTradeTs > 0) {
@@ -3147,7 +3147,7 @@
         b.onclick = () => requestPinAndSendCmd(`🗑 [개별 주문 취소] ${b.dataset.cdesc}`, 'cancel_order', { orderId: b.dataset.coid });
       });
       $('ordListWrap').querySelectorAll('[data-oprice]').forEach(el => {
-        el.onclick = () => openChartBoardTab('BTC', '15m', 0, Number(el.dataset.oprice || 0));
+        el.onclick = () => openCandleModal('BTC', '15m', 0, Number(el.dataset.oprice || 0));
       });
     }
   }
@@ -3399,7 +3399,7 @@
     });
   }
 
-  function openChartBoardTab(sym, tf, focusPrice) {
+  function openCandleModal(sym, tf, focusPrice) {
     if (sym) _cbSym = sym;
     if (tf) _cbTf = tf;
     _cbFocusPrice = Number(focusPrice || 0);
@@ -3455,236 +3455,6 @@
       }
     });
   })();
-
-  window.__kjV40FullUxReady = true;
-  const ECON_SEEN_KEY = 'kj_v40_seen_econ_ts';
-  let _latestEconStamp = '';
-  let _cbSym = 'BTC';
-  let _cbTf = '15m';
-  let _cbFocusPrice = 0;
-  let _cbLastState = null;
-
-  function syncEconNewBadge(stampStr) {
-    const st = String(stampStr || '').trim();
-    if (!st || st === '--:--') return;
-    _latestEconStamp = st;
-    const badge = document.getElementById('econNewBadge');
-    if (!badge) return;
-    const econPane = document.getElementById('pane-econ') || document.getElementById('tab-econ') || document.querySelector('[data-pane="econ"]');
-    const isEconOpen = econPane && econPane.style.display !== 'none';
-    if (isEconOpen) {
-      try { localStorage.setItem(ECON_SEEN_KEY, st); } catch (e) {}
-      badge.classList.add('hidden');
-      return;
-    }
-    let seen = '';
-    try { seen = localStorage.getItem(ECON_SEEN_KEY) || ''; } catch (e) {}
-    if (!seen) {
-      try { localStorage.setItem(ECON_SEEN_KEY, st); } catch (e) {}
-      badge.classList.add('hidden');
-    } else if (seen !== st) {
-      badge.classList.remove('hidden');
-    } else {
-      badge.classList.add('hidden');
-    }
-  }
-
-  function markEconAsRead() {
-    if (_latestEconStamp) {
-      try { localStorage.setItem(ECON_SEEN_KEY, _latestEconStamp); } catch (e) {}
-    }
-    const badge = document.getElementById('econNewBadge');
-    if (badge) badge.classList.add('hidden');
-  }
-
-  function toggleRecordSubView() {
-    const allBtns = Array.from(document.querySelectorAll('button'));
-    const btnPnl = allBtns.find(b => (b.textContent || '').trim() === '실현손익');
-    const btnCyc = allBtns.find(b => (b.textContent || '').trim().startsWith('사이클'));
-    if (!btnPnl || !btnCyc) return;
-    const pnlActive = btnPnl.classList.contains('active') || btnPnl.classList.contains('acc');
-    if (pnlActive) btnCyc.click();
-    else btnPnl.click();
-  }
-
-  function enforceOwnerOnlyVisibility(unlocked) {
-    const navCb = document.getElementById('navChartBoardBtn');
-    const paneCb = document.getElementById('pane-chartboard');
-    if (navCb) navCb.classList.toggle('guest-hide-owner', !unlocked);
-    if (paneCb) {
-      if (!unlocked) {
-        paneCb.classList.add('guest-hide-owner');
-        paneCb.style.display = 'none';
-      } else {
-        paneCb.classList.remove('guest-hide-owner');
-      }
-    }
-    const ordWrap = document.getElementById('ordListWrap');
-    const ordSec = ordWrap ? (ordWrap.closest('.card') || ordWrap.parentElement) : null;
-    if (ordSec) ordSec.style.display = unlocked ? '' : 'none';
-    const expBox = document.getElementById('ordExposureBox');
-    if (expBox && !unlocked) expBox.style.display = 'none';
-  }
-
-  function renderInlineChartBoard(d) {
-    if (!d) return;
-    _cbLastState = d;
-    const host = document.getElementById('cbInlineChartHost');
-    if (!host) return;
-    const allOhlc = d.allOhlc || {};
-    const symMap = allOhlc[_cbSym] || allOhlc['BTC'] || {};
-    const bars = Array.isArray(symMap[_cbTf]) ? symMap[_cbTf] : (Array.isArray(symMap['15m']) ? symMap['15m'] : []);
-    const tBadge = document.getElementById('cbLiveTickerBadge');
-    if (tBadge) {
-      const pxNow = _cbSym === 'BTC' ? Number(d.btcPrice || 0) : ((d.macroQuotes || {})[_cbSym]?.price || 0);
-      tBadge.textContent = pxNow > 0 ? `${_cbSym} · ${Number(pxNow).toLocaleString()}` : _cbSym;
-    }
-    if (!bars.length) {
-      host.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;font-size:12px;">실시간 캔들 데이터 동기화 중...</div>';
-      return;
-    }
-    const viewBars = bars.slice(-72);
-    const W = Math.max(320, host.clientWidth || 360);
-    const H = 330;
-    const padL = 8, padR = 64, padT = 16, padB = 20;
-    const plotW = W - padL - padR, plotH = H - padT - padB;
-    const overlayLines = [];
-    if (_cbSym === 'BTC') {
-      (d.positions || []).forEach(p => {
-        if (Number(p.entry) > 0) overlayLines.push({ p: Number(p.entry), c: '#38bdf8', lbl: `평단 ${Number(p.entry).toFixed(0)}`, dash: '' });
-        if (Number(p.sl) > 0) overlayLines.push({ p: Number(p.sl), c: '#f43f5e', lbl: `손절 ${Number(p.sl).toFixed(0)}`, dash: '4,3' });
-        if (Number(p.tp) > 0) overlayLines.push({ p: Number(p.tp), c: '#10b981', lbl: `익절 ${Number(p.tp).toFixed(0)}`, dash: '4,3' });
-      });
-      (d.openOrders || []).forEach(o => {
-        const op = Number(o.price || 0);
-        if (op > 0) overlayLines.push({ p: op, c: o.side === 'LONG' ? '#22d3ee' : '#fb7185', lbl: `${o.leg ? o.leg + '차 ' : ''}${op.toFixed(0)}`, dash: '3,3' });
-      });
-      if (_cbFocusPrice > 0) overlayLines.push({ p: _cbFocusPrice, c: '#facc15', lbl: `선택 ${_cbFocusPrice.toFixed(1)}`, dash: '2,2' });
-    }
-    let hi = Math.max(...viewBars.map(b => Number(b.h ?? b[2] ?? 0)));
-    let lo = Math.min(...viewBars.map(b => Number(b.l ?? b[3] ?? 0)));
-    overlayLines.forEach(ln => {
-      if (ln.p > lo * 0.94 && ln.p < hi * 1.06) { hi = Math.max(hi, ln.p); lo = Math.min(lo, ln.p); }
-    });
-    const span = Math.max(hi - lo, 1e-6);
-    hi += span * 0.06; lo -= span * 0.06;
-    const rng = Math.max(hi - lo, 1e-6);
-    const yOf = v => padT + ((hi - v) / rng) * plotH;
-    const stepX = plotW / viewBars.length;
-    const bodyW = Math.max(2.5, Math.min(9, stepX * 0.62));
-    let svgParts = [`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`];
-    for (let g = 0; g <= 4; g++) {
-      const gy = padT + (plotH * g) / 4;
-      const gv = hi - (rng * g) / 4;
-      svgParts.push(`<line x1="${padL}" y1="${gy.toFixed(1)}" x2="${W - padR}" y2="${gy.toFixed(1)}" stroke="rgba(148,163,184,0.10)" stroke-width="1"/>`);
-      svgParts.push(`<text x="${W - padR + 5}" y="${(gy + 3.5).toFixed(1)}" fill="#64748b" font-size="9.5" font-family="monospace">${gv >= 1000 ? gv.toFixed(0) : gv.toFixed(2)}</text>`);
-    }
-    viewBars.forEach((b, idx) => {
-      const o = Number(b.o ?? b[1] ?? 0), h = Number(b.h ?? b[2] ?? 0), l = Number(b.l ?? b[3] ?? 0), c = Number(b.c ?? b[4] ?? 0);
-      const cx = padL + idx * stepX + stepX * 0.5;
-      const col = c >= o ? '#10b981' : '#f43f5e';
-      const yH = yOf(h), yL = yOf(l), yO = yOf(o), yC = yOf(c);
-      svgParts.push(`<line x1="${cx.toFixed(1)}" y1="${yH.toFixed(1)}" x2="${cx.toFixed(1)}" y2="${yL.toFixed(1)}" stroke="${col}" stroke-width="1.1"/>`);
-      svgParts.push(`<rect x="${(cx - bodyW / 2).toFixed(1)}" y="${Math.min(yO, yC).toFixed(1)}" width="${bodyW.toFixed(1)}" height="${Math.max(1.5, Math.abs(yC - yO)).toFixed(1)}" fill="${col}" rx="0.8"/>`);
-    });
-    overlayLines.forEach(ln => {
-      if (ln.p < lo || ln.p > hi) return;
-      const ly = yOf(ln.p);
-      svgParts.push(`<line x1="${padL}" y1="${ly.toFixed(1)}" x2="${W - padR}" y2="${ly.toFixed(1)}" stroke="${ln.c}" stroke-width="1.1" ${ln.dash ? `stroke-dasharray="${ln.dash}"` : ''}/>`);
-      svgParts.push(`<rect x="${W - padR + 2}" y="${(ly - 7).toFixed(1)}" width="${padR - 4}" height="14" rx="3" fill="${ln.c}"/>`);
-      svgParts.push(`<text x="${W - padR + 5}" y="${(ly + 3.2).toFixed(1)}" fill="#020617" font-weight="800" font-size="9" font-family="monospace">${ln.lbl}</text>`);
-    });
-    svgParts.push('</svg>');
-    host.innerHTML = svgParts.join('');
-  }
-
-  function renderMasterBoardsTab(d) {
-    const grid = document.getElementById('cbBoardsGrid');
-    if (!grid || !d) return;
-    const boards = Array.isArray(d.boards) ? d.boards : [];
-    if (!boards.length) return;
-    const sig = boards.map(b => b.full || b.thumb || b.num).join('|');
-    if (grid.dataset.bsig === sig) return;
-    grid.dataset.bsig = sig;
-    grid.innerHTML = boards.map(b => {
-      const imgSrc = b.thumb || b.inlineThumb || b.full || '';
-      const fullSrc = b.full || imgSrc;
-      const ttl = `${b.num || ''} ${b.title || ''}`.trim();
-      return `<div class="cb-board-card" data-fullsrc="${escHtml(fullSrc)}" data-btitle="${escHtml(ttl)}"><img src="${escHtml(imgSrc)}" alt="${escHtml(ttl)}" loading="lazy" /><div class="cb-board-meta"><div class="cb-board-ttl">${escHtml(ttl)}</div><div class="cb-board-sub">${escHtml(b.desc || b.group || '')}</div></div></div>`;
-    }).join('');
-    grid.querySelectorAll('.cb-board-card').forEach(card => {
-      card.onclick = () => {
-        const modal = document.getElementById('cbBoardZoomModal');
-        const img = document.getElementById('cbZoomImg');
-        const tEl = document.getElementById('cbZoomTitle');
-        if (modal && img) {
-          img.src = card.dataset.fullsrc || '';
-          if (tEl) tEl.textContent = card.dataset.btitle || '마스터 보드 상세';
-          modal.classList.add('open');
-        }
-      };
-    });
-  }
-
-  function openChartBoardTab(sym, tf, focusPrice) {
-    if (sym) _cbSym = sym;
-    if (tf) _cbTf = tf;
-    _cbFocusPrice = Number(focusPrice || 0);
-    document.querySelectorAll('.cb-sym-btn').forEach(b => b.classList.toggle('acc', b.dataset.sym === _cbSym));
-    document.querySelectorAll('.cb-tf-btn').forEach(b => b.classList.toggle('up', b.dataset.tf === _cbTf));
-    const navBtn = document.getElementById('navChartBoardBtn');
-    if (navBtn) navBtn.click();
-  }
-
-  document.addEventListener('click', function(ev) {
-    const btn = ev.target && ev.target.closest ? ev.target.closest('button') : null;
-    if (btn) {
-      if (btn.id === 'navChartBoardBtn') {
-        document.querySelectorAll('.tab-pane, [data-pane]').forEach(p => { p.style.display = 'none'; });
-        const cbPane = document.getElementById('pane-chartboard');
-        if (cbPane) cbPane.style.display = 'block';
-        document.querySelectorAll('.bottom-nav button, .tab-bar button, .nav-bar button, nav button').forEach(b => b.classList.remove('active', 'acc'));
-        btn.classList.add('active', 'acc');
-        if (_cbLastState) { renderInlineChartBoard(_cbLastState); renderMasterBoardsTab(_cbLastState); }
-        return;
-      }
-      if (btn.classList.contains('cb-sym-btn')) {
-        _cbSym = btn.dataset.sym || 'BTC';
-        _cbFocusPrice = 0;
-        document.querySelectorAll('.cb-sym-btn').forEach(b => b.classList.toggle('acc', b === btn));
-        if (_cbLastState) renderInlineChartBoard(_cbLastState);
-        return;
-      }
-      if (btn.classList.contains('cb-tf-btn')) {
-        _cbTf = btn.dataset.tf || '15m';
-        document.querySelectorAll('.cb-tf-btn').forEach(b => b.classList.toggle('up', b === btn));
-        if (_cbLastState) renderInlineChartBoard(_cbLastState);
-        return;
-      }
-      const txt = (btn.textContent || '').trim();
-      const inNav = Boolean(btn.closest('.bottom-nav, .tab-bar, .nav-bar, nav'));
-      if (inNav && txt.includes('경제소식')) {
-        setTimeout(markEconAsRead, 30);
-      }
-      if (inNav && txt.includes('기록')) {
-        const wasActive = btn.classList.contains('active') || btn.classList.contains('acc');
-        if (wasActive) {
-          ev.stopImmediatePropagation();
-          ev.preventDefault();
-          toggleRecordSubView();
-          return;
-        }
-      }
-      if (inNav && btn.id !== 'navChartBoardBtn') {
-        const cbPane = document.getElementById('pane-chartboard');
-        if (cbPane) cbPane.style.display = 'none';
-      }
-    }
-    if (ev.target && (ev.target.id === 'cbZoomCloseBtn' || ev.target.id === 'cbBoardZoomModal')) {
-      const modal = document.getElementById('cbBoardZoomModal');
-      if (modal) modal.classList.remove('open');
-    }
-  }, true);
 
   async function applyState(rawObj) {
     lastRawPayload = rawObj;
@@ -3979,7 +3749,7 @@
             if (ev.target.closest('button')) return;
             const idx = Number(cardEl.dataset.posidx || 0);
             const pTarget = (S && S.positions && S.positions[idx]) || posArr[idx];
-            openChartBoardTab('BTC', '15m', 0, pTarget ? Number(pTarget.entry || 0) : 0);
+            openCandleModal('BTC', '15m', 0, pTarget ? Number(pTarget.entry || 0) : 0);
           };
         });
       }
