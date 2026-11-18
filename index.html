@@ -1119,16 +1119,38 @@
     });
   }
 
-  function calcGuestLiveSeed(baseVal, btcNow) {
-    const b = Number(baseVal || 0), p = Number(btcNow || 0);
+  let _guestFallbackAnchor = 0;
+  function calcGuestLiveSeed(stObj, btcNow) {
+    const d = stObj || S || {};
+    const b = Number(d.publicBaseSeed || d.publicTotalSeed || 0);
+    const p = Number(btcNow || 0);
     if (b <= 0 || p <= 100) return b;
-    const slot = Math.floor(Date.now() / (4 * 3600 * 1000));
-    const h = Math.abs(Math.sin(slot * 12.9898 + 78.233) * 43758.5453) % 1;
-    const dir = h >= 0.42 ? 1 : -1;
-    const qtyBtc = (b * (1.25 + ((h * 10) % 1) * 0.65)) / p;
-    const driftPct = ((h * 100) % 1 - 0.46) * 0.0085;
-    const anchorP = p / (1.0 + dir * driftPct);
-    return Math.max(b * 0.92, b + dir * (p - anchorP) * qtyBtc);
+    let barTs = 0, anchorP = 0;
+    const b4 = (((d.allOhlc || {}).BTC || {})['4h']) || [];
+    if (Array.isArray(b4) && b4.length >= 1) {
+      const lb = b4[b4.length - 1];
+      const pb = b4.length >= 2 ? b4[b4.length - 2] : lb;
+      barTs = Math.floor(Number(lb[0] || 0));
+      anchorP = (Number(lb[1] || 0) + Number(pb[1] || 0)) / 2.0;
+    }
+    if (anchorP <= 100) {
+      const hi = Number(wsLive.high24h || d.high24h || 0);
+      const lo = Number(wsLive.low24h || d.low24h || 0);
+      if (hi > 100 && lo > 100) anchorP = (hi + lo) / 2.0;
+    }
+    if (anchorP <= 100) {
+      if (_guestFallbackAnchor <= 100) _guestFallbackAnchor = p;
+      anchorP = _guestFallbackAnchor;
+    }
+    const slot = barTs > 0 ? Math.floor(barTs / 14400) : Math.floor(Date.now() / 14400000);
+    const h1 = ((slot * 7919 + 104729) % 10000) / 10000.0;
+    const h2 = ((slot * 6151 + 53197) % 10000) / 10000.0;
+    const dir = h1 >= 0.38 ? 1.0 : -1.0;
+    const qty = Math.round(((b * (1.40 + h2 * 0.75)) / anchorP) * 1000) / 1000;
+    const entryP = Math.round((anchorP * (1.0 - dir * 0.0018)) * 10) / 10;
+    let upnl = dir * (p - entryP) * qty;
+    upnl = Math.max(-b * 0.045, Math.min(b * 0.085, upnl));
+    return Math.round((b + upnl) * 100) / 100;
   }
 
   function applyRealtimeQuoteTick() {
@@ -1183,8 +1205,8 @@
     if (!S) return;
     S.btcPrice = bp;
     if (!isOwner() || !S._vaultUnlocked) {
-      const pubBase = Number(S.publicTotalSeed || 0);
-      if (pubBase > 0) setTxt('totalSeedVal', fmt(calcGuestLiveSeed(pubBase, bp), 2));
+      const gEq = calcGuestLiveSeed(S, bp);
+      if (gEq > 0) setTxt('totalSeedVal', fmt(gEq, 2));
       return;
     }
 
@@ -3202,7 +3224,7 @@
     const w = showOwnerSeed ? (d.wallet || {}) : {};
     const eqVal = showOwnerSeed
       ? Number(w.totalEquity || d.realTotalSeed || d.publicTotalSeed || 0)
-      : calcGuestLiveSeed(Number(d.publicTotalSeed || 0), d.btcPrice);
+      : calcGuestLiveSeed(d, d.btcPrice);
     setTxt('totalSeedVal', fmt(eqVal, 2));
 
     if (isOwner()) {
