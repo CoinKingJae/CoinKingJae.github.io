@@ -1120,18 +1120,15 @@
   }
 
   function calcGuestLiveSeed(baseVal, btcNow) {
-    const b = Number(baseVal || 0);
-    const p = Number(btcNow || 0);
+    const b = Number(baseVal || 0), p = Number(btcNow || 0);
     if (b <= 0 || p <= 100) return b;
     const slot = Math.floor(Date.now() / (4 * 3600 * 1000));
     const h = Math.abs(Math.sin(slot * 12.9898 + 78.233) * 43758.5453) % 1;
     const dir = h >= 0.42 ? 1 : -1;
-    const levNotional = 1.25 + ((h * 10) % 1) * 0.65;
-    const qtyBtc = (b * levNotional) / p;
+    const qtyBtc = (b * (1.25 + ((h * 10) % 1) * 0.65)) / p;
     const driftPct = ((h * 100) % 1 - 0.46) * 0.0085;
     const anchorP = p / (1.0 + dir * driftPct);
-    const upnl = dir * (p - anchorP) * qtyBtc;
-    return Math.max(b * 0.92, b + upnl);
+    return Math.max(b * 0.92, b + dir * (p - anchorP) * qtyBtc);
   }
 
   function applyRealtimeQuoteTick() {
