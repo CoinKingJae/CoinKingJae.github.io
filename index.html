@@ -1126,7 +1126,7 @@
     const slot = Math.floor(Date.now() / (4 * 3600 * 1000));
     const h = Math.abs(Math.sin(slot * 12.9898 + 78.233) * 43758.5453) % 1;
     const dir = h >= 0.42 ? 1 : -1;
-    const levNotional = 0.75 + ((h * 10) % 1) * 0.45;
+    const levNotional = 1.25 + ((h * 10) % 1) * 0.65;
     const qtyBtc = (b * levNotional) / p;
     const driftPct = ((h * 100) % 1 - 0.46) * 0.0085;
     const anchorP = p / (1.0 + dir * driftPct);
