@@ -398,13 +398,17 @@
   #lbScrollWrap { position:relative; overflow:hidden; touch-action:none; user-select:none; -webkit-user-select:none; }
   #lbImg { transform-origin:0 0; will-change:transform; }
   .lb-zoom-pill { position:absolute; right:10px; bottom:10px; z-index:5; background:rgba(7,11,20,0.85); border:1px solid rgba(56,189,248,0.45); color:#7dd3fc; font-size:11px; font-weight:900; padding:4px 9px; border-radius:999px; pointer-events:none; font-variant-numeric:tabular-nums; }
-  .tac-grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:9px; }
-  .tac-box { background:#0c1322; border:1px solid rgba(148,163,184,0.16); border-radius:12px; padding:10px 11px; }
-  .tac-box.long { border-left:3px solid #10b981; }
-  .tac-box.short { border-left:3px solid #f43f5e; }
-  .tac-row { display:flex; justify-content:space-between; align-items:center; font-size:11.5px; margin-top:4px; font-variant-numeric:tabular-nums; }
-  .tac-leg-chips { display:flex; flex-wrap:wrap; gap:4px; margin-top:7px; padding-top:7px; border-top:1px solid rgba(148,163,184,0.12); }
-  .tac-leg-tag { font-size:10px; font-weight:800; padding:2px 6px; border-radius:6px; background:#131d32; color:#cbd5e1; font-variant-numeric:tabular-nums; }
+  .tac-grid-2 { display:flex; flex-direction:column; gap:9px; margin-top:11px; }
+  .tac-box { background:#0c1322; border:1px solid rgba(148,163,184,0.16); border-radius:13px; padding:11px 12px; }
+  .tac-box.long { border-left:3.5px solid #10b981; }
+  .tac-box.short { border-left:3.5px solid #f43f5e; }
+  .tac-row { display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:12px; margin-top:6px; font-variant-numeric:tabular-nums; }
+  .tac-lbl { color:var(--sub); font-weight:700; white-space:nowrap; flex-shrink:0; }
+  .tac-val { font-weight:800; white-space:nowrap; text-align:right; }
+  .tac-leg-chips { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:5px; margin-top:9px; padding-top:8px; border-top:1px solid rgba(148,163,184,0.12); }
+  .tac-leg-tag { font-size:11px; font-weight:800; padding:4px 7px; border-radius:7px; background:#131d32; color:#e2e8f0; white-space:nowrap; text-align:center; font-variant-numeric:tabular-nums; }
+  .econ-row .row-sb { flex-wrap:nowrap; }
+  .econ-row .row-sb .pill { white-space:nowrap; flex-shrink:0; }
 </style>
 </head>
 <body>
@@ -555,20 +559,6 @@
       <div id="ordListWrap"></div>
     </div>
 
-    <div class="card owner-only" id="ratCard">
-      <div class="row-sb">
-        <div style="display:flex;align-items:center;gap:6px;min-width:0;">
-          <span style="font-size:14.5px;font-weight:900;white-space:nowrap;">AI 타점 근거 요약</span>
-          <span class="pill" id="regimeBadge" style="color:#7dd3fc;border-color:rgba(56,189,248,0.35);font-size:10.5px;">분석 대기</span>
-        </div>
-        <div style="display:flex;gap:5px;align-items:center;flex-shrink:0;">
-          <span class="pill" id="ratTime" style="font-size:10.5px;">--:--</span>
-          <button class="btn" id="btnToggleRat">접기 ▲</button>
-        </div>
-      </div>
-      <div id="ratBody" style="margin-top:10px;font-size:13px;line-height:1.68;color:#dbeafe;word-break:keep-all;"></div>
-    </div>
-
     <div class="pf-card owner-only" id="perfCardHost">
       <div class="row-sb" style="margin-bottom:12px;">
         <div class="pf-hdr">Performance</div>
@@ -699,14 +689,19 @@
     <div class="card" id="cbTacticalCard">
       <div class="row-sb">
         <div style="display:flex;align-items:center;gap:6px;min-width:0;">
-          <span style="font-size:14.5px;font-weight:900;white-space:nowrap;">🎯 5분할 전술 & AI 브리핑</span>
-          <span class="pill" id="cbTacRegime" style="color:#7dd3fc;border-color:rgba(56,189,248,0.35);font-size:10.5px;">분석 대기</span>
+          <span style="font-size:14.5px;font-weight:900;white-space:nowrap;">🎯 5분할 전술 & AI 타점 근거</span>
+          <span class="pill" id="cbTacRegime" style="color:#7dd3fc;border-color:rgba(56,189,248,0.35);font-size:10.5px;white-space:nowrap;">분석 대기</span>
         </div>
-        <span class="pill" id="cbTacTime" style="font-size:10.5px;">--:--</span>
+        <div style="display:flex;gap:5px;align-items:center;flex-shrink:0;">
+          <span class="pill" id="cbTacTime" style="font-size:10.5px;">--:--</span>
+          <button type="button" class="btn" id="btnToggleTac">접기 ▲</button>
+        </div>
       </div>
-      <div id="cbTacSummaryWrap" style="margin-top:9px;font-size:12.5px;line-height:1.65;color:#dbeafe;word-break:keep-all;"></div>
-      <div id="cbTacLadderCards" class="tac-grid-2"></div>
-      <div id="cbTacReasonsWrap" style="margin-top:9px;display:flex;flex-direction:column;gap:7px;"></div>
+      <div id="cbTacBody">
+        <div id="cbTacSummaryWrap" style="margin-top:10px;font-size:13px;line-height:1.68;color:#dbeafe;word-break:keep-all;"></div>
+        <div id="cbTacLadderCards" class="tac-grid-2"></div>
+        <div id="cbTacReasonsWrap" style="margin-top:10px;display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
     </div>
   </div>
 
@@ -2837,12 +2832,15 @@
     else if (initTabQ === 'chartboard' && isOwner()) switchMainTab('chartboard');
   } catch(e){}
 
-  $('btnToggleRat').onclick = () => {
-    const rb = $('ratBody');
-    const hid = rb.style.display === 'none';
-    rb.style.display = hid ? 'block' : 'none';
-    $('btnToggleRat').textContent = hid ? '접기 ▲' : '펼치기 ▼';
-  };
+  if ($('btnToggleTac')) {
+    $('btnToggleTac').onclick = () => {
+      const tb = $('cbTacBody');
+      if (!tb) return;
+      const hid = tb.style.display === 'none';
+      tb.style.display = hid ? 'block' : 'none';
+      $('btnToggleTac').textContent = hid ? '접기 ▲' : '펼치기 ▼';
+    };
+  }
 
   $('recSubTabs').onclick = (ev) => {
     const b = ev.target.closest('.chip'); if (!b) return;
@@ -3007,7 +3005,7 @@
   function renderBoards() {
     if (!isOwner() || !S || !S._vaultUnlocked || !S.rationaleInfo) return;
     const ri = S.rationaleInfo;
-    const sig = JSON.stringify([ri.updatedAt, ri.rationale, ri.longSniper, ri.longLadder, ri.shortSniper, ri.shortLadder]);
+    const sig = JSON.stringify([ri.updatedAt, ri.rationale, ri.longSniper, ri.longLadder, ri.shortSniper, ri.shortLadder, ri.removedNotices, ri.skippedNotes]);
     if (brdSig === sig) return;
     brdSig = sig;
 
@@ -3016,22 +3014,25 @@
 
     const paras = Array.isArray(ri.paragraphs) && ri.paragraphs.length ? ri.paragraphs : [ri.rationale || '타점 분석 대기 중입니다.'];
     $('cbTacSummaryWrap').innerHTML = paras.map((pTxt, idx) =>
-      `<div style="${idx > 0 ? 'margin-top:6px;' : ''}">${fmtInlineRich(pTxt)}</div>`
+      `<div style="${idx > 0 ? 'margin-top:8px;' : ''}">${fmtInlineRich(pTxt)}</div>`
     ).join('');
 
     const buildLadderBox = (sideCls, titleKo, lad) => {
       if (!lad || typeof lad !== 'object') return '';
       const legs = Array.isArray(lad.legs) ? lad.legs : [];
-      const legTags = legs.map(lg => `<span class="tac-leg-tag">${lg.legIdx}차 ${fmt(lg.price, 0)}$ (${lg.weightPct}%)</span>`).join('');
+      const legTags = legs.map(lg => `<span class="tac-leg-tag">${lg.legIdx}차 ${fmt(lg.price, 1)}$ (${lg.weightPct}%)</span>`).join('');
+      const stPill = lad.liveStatus === 'HOLDING'
+        ? `<span class="pill up" style="font-size:10px;padding:2px 7px;white-space:nowrap;">● 체결·보유 중</span>`
+        : `<span class="pill" style="font-size:10px;padding:2px 7px;white-space:nowrap;">밴드 폭 ${lad.spanPct || 0}%</span>`;
       return `
         <div class="tac-box ${sideCls}">
           <div class="row-sb">
-            <b style="font-size:12.5px;color:#f8fafc;">${titleKo} (${lad.grade || 'S'}급)</b>
-            <span class="pill" style="font-size:10px;padding:2px 6px;">폭 ${lad.spanPct || 0}%</span>
+            <b style="font-size:13px;color:#f8fafc;white-space:nowrap;">${titleKo} (${lad.grade || 'S'}급)</b>
+            ${stPill}
           </div>
-          <div class="tac-row"><span style="color:var(--sub);">가중평단</span><b>${fmt(lad.wAvg, 1)}$ (${lad.totQty || 0} BTC)</b></div>
-          <div class="tac-row"><span style="color:var(--sub);">전량익절</span><b class="up">${fmt(lad.tp, 1)}$ (+${fmt(lad.fullTpUsd, 0)}$)</b></div>
-          <div class="tac-row"><span style="color:var(--sub);">최종손절</span><b class="dn">${fmt(lad.sl, 1)}$ (1:${lad.rr || 0})</b></div>
+          <div class="tac-row"><span class="tac-lbl">가중평단</span><span class="tac-val">${fmt(lad.wAvg, 1)}$ (${lad.totQty || 0} BTC)</span></div>
+          <div class="tac-row"><span class="tac-lbl">전량익절</span><span class="tac-val up">${fmt(lad.tp, 1)}$ (+${fmt(lad.fullTpUsd, 0)}$)</span></div>
+          <div class="tac-row"><span class="tac-lbl">최종손절</span><span class="tac-val dn">${fmt(lad.sl, 1)}$ (1 : ${lad.rr || 0})</span></div>
           ${legTags ? `<div class="tac-leg-chips">${legTags}</div>` : ''}
         </div>`;
     };
@@ -3040,8 +3041,7 @@
     const sBox = buildLadderBox('short', '🔴 숏 5분할', ri.shortLadder);
     const gridEl = $('cbTacLadderCards');
     if (lBox || sBox) {
-      gridEl.style.display = 'grid';
-      gridEl.style.gridTemplateColumns = (lBox && sBox) ? 'repeat(2,minmax(0,1fr))' : '1fr';
+      gridEl.style.display = 'flex';
       gridEl.innerHTML = lBox + sBox;
     } else {
       gridEl.style.display = 'none';
@@ -3049,23 +3049,37 @@
     }
 
     const rCards = [];
+    const lLadN = (ri.longLadder && Array.isArray(ri.longLadder.legs) && ri.longLadder.legs.length >= 4) ? ri.longLadder.legs.length : 5;
+    const sLadN = (ri.shortLadder && Array.isArray(ri.shortLadder.legs) && ri.shortLadder.legs.length >= 4) ? ri.shortLadder.legs.length : 5;
     [
       [ri.longSniper, 'up', '⚡ 단타 롱', ri.longSniper ? `${fmt(ri.longSniper.entry, 1)}$` : ''],
-      [ri.longLadder, 'up', '🛡 심층 5분할 롱', ri.longLadder ? `${fmt(ri.longLadder.zone_high, 0)}~${fmt(ri.longLadder.zone_low, 0)}$` : ''],
+      [ri.longLadder, 'up', `🛡 심층 ${lLadN}분할 롱`, ri.longLadder ? `${fmt(ri.longLadder.zone_high, 0)}~${fmt(ri.longLadder.zone_low, 0)}$` : ''],
       [ri.shortSniper, 'dn', '⚡ 단타 숏', ri.shortSniper ? `${fmt(ri.shortSniper.entry, 1)}$` : ''],
-      [ri.shortLadder, 'dn', '🛡 심층 5분할 숏', ri.shortLadder ? `${fmt(ri.shortLadder.zone_low, 0)}~${fmt(ri.shortLadder.zone_high, 0)}$` : ''],
+      [ri.shortLadder, 'dn', `🛡 심층 ${sLadN}분할 숏`, ri.shortLadder ? `${fmt(ri.shortLadder.zone_low, 0)}~${fmt(ri.shortLadder.zone_high, 0)}$` : ''],
     ].forEach(([obj, clsS, lbl, pxS]) => {
       if (!obj || !obj.reason) return;
+      const stBadge = obj.liveStatus === 'HOLDING'
+        ? `<span class="pill up" style="font-size:10px;padding:2px 7px;white-space:nowrap;">● 체결·보유 중</span>`
+        : `<span class="num-nw" style="font-size:12px;font-weight:900;color:#f8fafc;white-space:nowrap;">${pxS}</span>`;
       rCards.push(`
         <div class="econ-row">
-          <div class="row-sb" style="margin-bottom:5px;">
+          <div class="row-sb" style="margin-bottom:6px;">
             <span class="pill ${clsS}">${lbl} (${obj.grade || 'A'}급)</span>
-            <span class="num-nw" style="font-size:11.5px;font-weight:900;color:#f8fafc;">${pxS}</span>
+            ${stBadge}
           </div>
-          <div class="econ-row-body" style="font-size:12.5px;">${fmtInlineRich(obj.reason)}</div>
+          <div class="econ-row-body">${fmtInlineRich(obj.reason)}</div>
         </div>`);
     });
-    $('cbTacReasonsWrap').innerHTML = rCards.join('');
+
+    const removedArr = Array.isArray(ri.removedNotices) ? ri.removedNotices : [];
+    const removedHtml = removedArr.length
+      ? `<div style="font-size:11px;color:#fcd34d;padding:6px 9px;background:rgba(245,158,11,0.10);border:1px solid rgba(245,158,11,0.28);border-radius:8px;">🔄 실시간 연동: <b>${escHtml(removedArr.join(', '))}</b> 취소되어 근거 카드가 자동 정리됨</div>`
+      : '';
+    const skipNotes = (ri.skippedNotes || []).map(sn =>
+      `<div style="font-size:11.5px;color:var(--sub);padding:5px 8px;background:rgba(148,163,184,0.08);border-radius:7px;">• ${escHtml(sn)}</div>`
+    ).join('');
+
+    $('cbTacReasonsWrap').innerHTML = rCards.join('') + removedHtml + skipNotes;
   }
 
   function renderEconSectionView(econObj) {
@@ -3308,7 +3322,7 @@
             </div>
             ${ladNote}
             <div class="row-sb" style="font-size:11px;color:#cbd5e1;margin-top:6px;">
-              <span>1R 방어선 (부분익절·-0.25R 여유)</span>
+              <span style="white-space:nowrap;">1R 방어선 (부분익절·여유스탑)</span>
               <b class="num-nw">${fmt(o.r1Price,1)}$</b>
             </div>
           </div>` : ''}
@@ -3629,56 +3643,6 @@
 
     // 웹소켓 상태와 무관하게 매 사이클 보유포지션 손익·ROE·R배수를 최신 시세로 즉시 강제 동기화
     applyRealtimeQuoteTick();
-
-    if (!showOwnerSeed) {
-      $('ratBody').innerHTML = '';
-    } else if (d.rationaleInfo) {
-      const ri = d.rationaleInfo;
-      setTxt('ratTime', String(ri.updatedAtHm || String(ri.updatedAt || '--:--').slice(-5)));
-      setTxt('regimeBadge', ri.marketRegimeKo || '수급 분석');
-      const rs = JSON.stringify([ri.updatedAt, ri.rationale, ri.longSniper, ri.longLadder, ri.shortSniper, ri.shortLadder, ri.removedNotices, ri.skippedNotes]);
-      if (ratSig !== rs) {
-        ratSig = rs;
-        const paras = Array.isArray(ri.paragraphs) && ri.paragraphs.length ? ri.paragraphs : [ri.rationale || ''];
-        const parasHtml = paras.map((pTxt, idx) =>
-          `<div style="line-height:1.72;${idx > 0 ? 'margin-top:8px;' : ''}">${fmtInlineRich(pTxt)}</div>`
-        ).join('');
-
-        const subCards = [];
-        const renderSubCard = (cObj, clsSide, iconTitle, priceStr) => {
-          if (!cObj) return;
-          const stPill = cObj.liveStatus === 'HOLDING'
-            ? `<span class="pill up" style="font-size:10px;padding:2px 7px;">● 체결·보유 중</span>`
-            : `<span class="num-nw" style="font-size:12px;font-weight:900;color:#f8fafc;">${priceStr}</span>`;
-          subCards.push(`
-            <div class="econ-row">
-              <div class="row-sb" style="margin-bottom:6px;">
-                <span class="pill ${clsSide}">${iconTitle} (${cObj.grade || 'A'}급)</span>
-                ${stPill}
-              </div>
-              <div class="econ-row-body">${fmtInlineRich(cObj.reason)}</div>
-            </div>`);
-        };
-
-        const lLadN = (ri.longLadder && Array.isArray(ri.longLadder.legs) && ri.longLadder.legs.length >= 4) ? ri.longLadder.legs.length : 5;
-        const sLadN = (ri.shortLadder && Array.isArray(ri.shortLadder.legs) && ri.shortLadder.legs.length >= 4) ? ri.shortLadder.legs.length : 5;
-        renderSubCard(ri.longSniper, 'up', '⚡ 단타 롱', ri.longSniper ? `${fmt(ri.longSniper.entry,1)}$` : '');
-        renderSubCard(ri.longLadder, 'up', `🛡 심층 ${lLadN}분할 롱`, ri.longLadder ? `${fmt(ri.longLadder.zone_high,0)}~${fmt(ri.longLadder.zone_low,0)}$` : '');
-        renderSubCard(ri.shortSniper, 'dn', '⚡ 단타 숏', ri.shortSniper ? `${fmt(ri.shortSniper.entry,1)}$` : '');
-        renderSubCard(ri.shortLadder, 'dn', `🛡 심층 ${sLadN}분할 숏`, ri.shortLadder ? `${fmt(ri.shortLadder.zone_low,0)}~${fmt(ri.shortLadder.zone_high,0)}$` : '');
-
-        const removedArr = Array.isArray(ri.removedNotices) ? ri.removedNotices : [];
-        const removedHtml = removedArr.length
-          ? `<div style="margin-top:8px;font-size:11px;color:#fcd34d;padding:6px 9px;background:rgba(245,158,11,0.10);border:1px solid rgba(245,158,11,0.28);border-radius:8px;">🔄 실시간 연동: <b>${escHtml(removedArr.join(', '))}</b> 취소되어 근거 카드가 자동 정리됨</div>`
-          : '';
-
-        const skipNotes = (ri.skippedNotes || []).map(sn => `<div style="font-size:11.5px;color:var(--sub);padding:4px 8px;background:rgba(148,163,184,0.08);border-radius:7px;">• ${escHtml(sn)}</div>`).join('');
-
-        $('ratBody').innerHTML = parasHtml + removedHtml +
-          (subCards.length ? `<div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">${subCards.join('')}</div>` : '') +
-          (skipNotes ? `<div style="margin-top:8px;display:flex;flex-direction:column;gap:5px;">${skipNotes}</div>` : '');
-      }
-    }
 
     if (d.econNews) {
       setTxt('econUpdTime', d.econNews.updatedAt || '--:--');
