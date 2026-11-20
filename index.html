@@ -519,7 +519,7 @@
       <div class="seed-meta-rows owner-only">
         <div class="row-sb">
           <span>1회 리스크 한도</span>
-          <b style="color:#e2e8f0;" id="riskAllowanceTxt">단타 --$ · 심층 --$</b>
+          <b style="color:#e2e8f0;" id="riskAllowanceTxt">단기 --$ · 분할 --$</b>
         </div>
         <div class="row-sb">
           <span>누적 확정손익</span>
@@ -781,7 +781,7 @@
           <div class="tabs-scroll" id="logFilterTabs">
             <button class="chip active" data-lflt="ALL">전체</button>
             <button class="chip" data-lflt="order">타점·주문</button>
-            <button class="chip" data-lflt="guard">수비·순환매</button>
+            <button class="chip" data-lflt="guard">수비·동적 리밸런싱</button>
             <button class="chip" data-lflt="news">경제·시스템</button>
           </div>
           <button class="btn danger" id="btnClearLogs" style="padding:5px 8px;font-size:11px;">🗑 비우기</button>
@@ -1063,7 +1063,7 @@
     const fullNow = k.toISOString().replace('T', ' ').slice(0, 19);
     setTxt('kstClock', fullNow.slice(11, 19));
     const nxt = next01Or31Info();
-    setTxt('nextRunLabel', (window.__kjRadarRightTxt ? window.__kjRadarRightTxt() : '2초 레이더 감시'));
+    setTxt('nextRunLabel', (window.__kjRadarRightTxt ? window.__kjRadarRightTxt() : '0.2초 틱 레이더'));
     if (isOwner()) setTxt('pfEndTs', fullNow);
     updateTopHeartbeatBadge();
     updateFundingAndRangeBar(getLiveBtcPrice());
@@ -2029,10 +2029,10 @@
       if (showOwner) {
         (S.positions || []).forEach(p => {
           lineSpecs.push({ price:p.entry, color:'#38bdf8', lineWidth:2, lineStyle:0, title:`${p.side==='LONG'?'롱':'숏'} 진입` });
-          const rtpM = String(p.stageNote || '').match(/순환익절\s*([\d,]+(?:\.\d+)?)\$/);
+          const rtpM = String(p.stageNote || '').match(/부분익절\s*([\d,]+(?:\.\d+)?)\$/);
           if (rtpM) {
             const rtpPx = Number(rtpM[1].replace(/,/g, ''));
-            if (rtpPx > 0) lineSpecs.push({ price:rtpPx, color:'#22d3ee', lineWidth:1, lineStyle:2, title:'🎯 순환익절' });
+            if (rtpPx > 0) lineSpecs.push({ price:rtpPx, color:'#22d3ee', lineWidth:1, lineStyle:2, title:'🎯 부분익절' });
           }
           if (p.r1Price > 0 && p.stage === 0) lineSpecs.push({ price:p.r1Price, color:'#f59e0b', lineWidth:1, lineStyle:3, title:'1R(여유방어)' });
           if (p.sl > 0) lineSpecs.push({ price:p.sl, color:'#f43f5e', lineWidth:1, lineStyle:2, title:'보유 손절' });
@@ -2766,7 +2766,7 @@
       const sg = dp >= 0 ? '+' : '';
       return hm ? `최근 ${hm} · ${sg}${dp.toFixed(2)}%` : `기준 ${Math.round(m.anchor).toLocaleString()}$ · ${sg}${dp.toFixed(2)}%`;
     }
-    return hm ? `최근 분석 ${hm}` : '2초 레이더 감시';
+    return hm ? `최근 분석 ${hm}` : '0.2초 틱 레이더';
   };
 
   const ECON_SEEN_KEY = 'kj_v40_seen_econ_ts';
@@ -3085,10 +3085,10 @@
     const lLadN = (ri.longLadder && Array.isArray(ri.longLadder.legs) && ri.longLadder.legs.length >= 4) ? ri.longLadder.legs.length : 5;
     const sLadN = (ri.shortLadder && Array.isArray(ri.shortLadder.legs) && ri.shortLadder.legs.length >= 4) ? ri.shortLadder.legs.length : 5;
     [
-      [ri.longSniper, 'up', '⚡ 단타 롱', ri.longSniper ? `${fmt(ri.longSniper.entry, 1)}$` : ''],
-      [ri.longLadder, 'up', `🛡 심층 ${lLadN}분할 롱`, ri.longLadder ? `${fmt(ri.longLadder.zone_high, 0)}~${fmt(ri.longLadder.zone_low, 0)}$` : ''],
-      [ri.shortSniper, 'dn', '⚡ 단타 숏', ri.shortSniper ? `${fmt(ri.shortSniper.entry, 1)}$` : ''],
-      [ri.shortLadder, 'dn', `🛡 심층 ${sLadN}분할 숏`, ri.shortLadder ? `${fmt(ri.shortLadder.zone_low, 0)}~${fmt(ri.shortLadder.zone_high, 0)}$` : ''],
+      [ri.longSniper, 'up', '⚡ 단기 롱', ri.longSniper ? `${fmt(ri.longSniper.entry, 1)}$` : ''],
+      [ri.longLadder, 'up', `🛡 분할 ${lLadN}분할 롱`, ri.longLadder ? `${fmt(ri.longLadder.zone_high, 0)}~${fmt(ri.longLadder.zone_low, 0)}$` : ''],
+      [ri.shortSniper, 'dn', '⚡ 단기 숏', ri.shortSniper ? `${fmt(ri.shortSniper.entry, 1)}$` : ''],
+      [ri.shortLadder, 'dn', `🛡 분할 ${sLadN}분할 숏`, ri.shortLadder ? `${fmt(ri.shortLadder.zone_low, 0)}~${fmt(ri.shortLadder.zone_high, 0)}$` : ''],
     ].forEach(([obj, clsS, lbl, pxS]) => {
       if (!obj || !obj.reason) return;
       const stBadge = obj.liveStatus === 'HOLDING'
@@ -3225,7 +3225,7 @@
         <div style="min-width:0;flex:1;">
           <div style="font-size:12px;font-weight:900;white-space:nowrap;letter-spacing:-0.25px;"><span class="${r.side==='LONG'?'up':'dn'}">${escHtml(r.side)}</span> · ${r.qty} BTC <span style="color:var(--sub);font-size:10.5px;font-weight:700;">(${escHtml(dtShow)})</span></div>
           <div style="font-size:11.5px;color:var(--sub);margin-top:3px;white-space:nowrap;">진입 ${fmt(r.entry,1)}$ → 청산 ${fmt(r.exit,1)}$</div>
-          ${Number(r.recycleCount || 0) > 0 ? `<div style="margin-top:4px;"><span class="pill" style="font-size:10px;padding:1.5px 6.5px;color:#38bdf8;border-color:rgba(56,189,248,0.38);background:rgba(56,189,248,0.10);">♻️ 순환매 ${r.recycleCount}회</span></div>` : ''}
+          ${Number(r.recycleCount || 0) > 0 ? `<div style="margin-top:4px;"><span class="pill" style="font-size:10px;padding:1.5px 6.5px;color:#38bdf8;border-color:rgba(56,189,248,0.38);background:rgba(56,189,248,0.10);">♻️ 동적 리밸런싱 ${r.recycleCount}회</span></div>` : ''}
         </div>
         <div class="${r.pnl>=0?'up':'dn'} num-nw" style="font-size:13.5px;font-weight:900;flex-shrink:0;">${r.pnl>=0?'+':''}${fmt(r.pnl,2)}$</div>
       </div>`;
@@ -3316,7 +3316,7 @@
         const dispBadge = showOwnerDetails ? o.badge : (o.guestBadge || o.badge);
         const edgeCls = o.side === 'LONG' ? 'edge-long' : 'edge-short';
         const ladNote = (showOwnerDetails && o.track === 'LADDER' && o.ladderFullTpUsd > 0)
-          ? `<div class="row-sb" style="font-size:11px;color:#7dd3fc;margin-top:6px;"><span>🛡 심층 ${o.ladderLegCount || 5}분할 합산 익절 시</span><b class="num-nw">+${fmt(o.ladderFullTpPct, 2)}% (+${fmt(o.ladderFullTpUsd, 0)}$)</b></div>`
+          ? `<div class="row-sb" style="font-size:11px;color:#7dd3fc;margin-top:6px;"><span>🛡 분할 ${o.ladderLegCount || 5}분할 합산 익절 시</span><b class="num-nw">+${fmt(o.ladderFullTpPct, 2)}% (+${fmt(o.ladderFullTpUsd, 0)}$)</b></div>`
           : '';
         return `
         <div class="ord-card ${edgeCls}">
@@ -3468,7 +3468,7 @@
           nsBox.style.display = 'block';
           $('shieldLine1').style.color = '#fb7185';
           setTxt('shieldLine1', `🛡️ [지표 방어막 가동] ${ns.event.timeStr} · ${ns.event.title}`);
-          setTxt('shieldLine2', `${ns.phase} · 원거리 심층 분할만 유지 중`);
+          setTxt('shieldLine2', `${ns.phase} · 원거리 구조적 분할만 유지 중`);
         } else if (ns.enabled && ns.nextEvent && Number(ns.nextEvent.diffMin) <= 240 && Number(ns.nextEvent.diffMin) > 0) {
           const dm = Math.max(1, Math.round(Number(ns.nextEvent.diffMin)));
           const shieldIn = Math.max(0, dm - 15);
@@ -3529,7 +3529,7 @@
         const ladPct = Number(rg.ladderPct || 3.0);
         const snpUsd = Math.round(eqVal * (snpPct / 100.0));
         const ladUsd = Math.round(eqVal * (ladPct / 100.0));
-        setTxt('riskAllowanceTxt', `단타 ${snpUsd.toLocaleString()}$ (${snpPct}%) · 심층 ${ladUsd.toLocaleString()}$ (${ladPct}%)`);
+        setTxt('riskAllowanceTxt', `단기 ${snpUsd.toLocaleString()}$ (${snpPct}%) · 분할 ${ladUsd.toLocaleString()}$ (${ladPct}%)`);
 
         const gbEl = $('guardBrakeBanner');
         const pfObj = d.performance || {};
@@ -3538,13 +3538,13 @@
           setTxt('guardBrakeBanner', '🛑 [일일 손실 브레이크(-6%) 작동] 당일 TWR 손실 방어를 위해 신규 물량 50% 축소 중');
         } else if (pfObj.lossStreakCooldownActive) {
           gbEl.style.display = 'block';
-          setTxt('guardBrakeBanner', `❄️ [단기 3연패 휩소 브레이크] 연속 손실 방어를 위해 근거리 단타 ${pfObj.lossStreakRemMin || 30}분 휴식 중 (심층 유지)`);
+          setTxt('guardBrakeBanner', `❄️ [단기 3연패 휩소 브레이크] 연속 손실 방어를 위해 근거리 단기 ${pfObj.lossStreakRemMin || 30}분 휴식 중 (분할 유지)`);
         } else if (rg.profitLockApplied) {
           gbEl.style.display = 'block';
           setTxt('guardBrakeBanner', '🔒 [Profit Lock 작동] 고점 수익 보존을 위해 리스크 기어 1단계 자동 감속 중');
         } else if (rg.weekendThinApplied) {
           gbEl.style.display = 'block';
-          setTxt('guardBrakeBanner', '🌙 [주말 박장 모드] 휴장 유동성 보호를 위해 AI자동 단타 비중 15% 자동 감량 적용 중');
+          setTxt('guardBrakeBanner', '🌙 [주말 박장 모드] 휴장 유동성 보호를 위해 AI자동 단기 비중 15% 자동 감량 적용 중');
         } else {
           gbEl.style.display = 'none';
         }
@@ -3640,10 +3640,10 @@
             <div class="prox-track">
               <div class="ms-tick" style="left:37.5%;" title="0.75R 손실압축"></div>
               <div class="ms-tick" style="left:50%;" title="1.0R 부분익절·-0.25R 여유방어"></div>
-              <div class="ms-tick" style="left:75%;" title="1.5R +0.55R 무패잠금"></div>
+              <div class="ms-tick" style="left:75%;" title="1.5R +0.55R 수익잠금"></div>
               <div class="prox-fill" id="posRbar-${p.side}" style="width:${p.milestonePct || 0}%;background:#38bdf8;"></div>
             </div>
-            <div class="ms-labels"><span>진입</span><span>0.75R 압축</span><span>1R 여유방어</span><span>1.5R 무패잠금</span><span>2R+</span></div>
+            <div class="ms-labels"><span>진입</span><span>0.75R 압축</span><span>1R 여유방어</span><span>1.5R 수익잠금</span><span>2R+</span></div>
             <div style="font-size:11.5px;color:#7dd3fc;margin-top:6px;">상태: ${escHtml(p.stageNote)}</div>
             <div style="display:flex;gap:6px;margin-top:9px;padding-top:9px;border-top:1px solid var(--line);">
               <button class="btn acc" data-pact="half_tp" data-pside="${p.side}" style="flex:1;">⚡ 50% 익절</button>
