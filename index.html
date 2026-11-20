@@ -416,6 +416,49 @@
   .tac-ob-qty { color:var(--sub); font-weight:700; font-size:10.5px; }
   .econ-row .row-sb { flex-wrap:nowrap; }
   .econ-row .row-sb .pill { white-space:nowrap; flex-shrink:0; }
+
+  /* [V40-DESKTOP-COMMAND-CENTER] */
+  @media (min-width: 1080px) {
+    html.kj-desktop body {
+      background: radial-gradient(circle at 18% 0%, #111b2e 0%, #070b14 55%, #05080f 100%) !important;
+      padding: 0 24px 28px !important;
+    }
+    html.kj-desktop .wrap, html.kj-desktop .container, html.kj-desktop main {
+      max-width: 1380px !important;
+      width: 100% !important;
+      margin: 0 auto !important;
+    }
+    html.kj-desktop #tab-dash {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 16px !important;
+      align-items: start !important;
+    }
+    html.kj-desktop #tab-dash > *:first-child {
+      grid-column: 1 / -1 !important;
+    }
+    html.kj-desktop .card, html.kj-desktop [class*="card"] {
+      backdrop-filter: blur(14px);
+      border-color: rgba(245, 185, 66, 0.16) !important;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.42) !important;
+    }
+  }
+  #kjDesktopDeskBar {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    margin: 10px auto 12px;
+    max-width: 1380px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, rgba(16,24,40,0.95), rgba(11,16,28,0.95));
+    border: 1px solid rgba(245,185,66,0.28);
+    color: #e2e8f0;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  html.kj-desktop #kjDesktopDeskBar { display: flex; }
+
 </style>
 </head>
 <body>
@@ -3728,5 +3771,26 @@
   setInterval(fetchStateTick, 3000);
 })();
 </script>
+
+<script>
+(function(){
+  if (location.search.indexOf('desktop=1') !== -1 || window.innerWidth >= 1080) {
+    document.documentElement.classList.add('kj-desktop');
+    window.addEventListener('DOMContentLoaded', function(){
+      if (!document.getElementById('kjDesktopDeskBar')) {
+        var bar = document.createElement('div');
+        bar.id = 'kjDesktopDeskBar';
+        bar.innerHTML = '<div>👑 <span style="color:#f5b942;font-weight:800;">KINGJAE V40 PRO</span> · 기관급 멀티 전략 커맨드 데스크</div>'
+          + '<div style="display:flex;gap:12px;align-items:center;">'
+          + '<span style="color:#34d399;">● 0.2초 WebSocket 틱 엔진 직결</span>'
+          + '<span style="color:#94a3b8;">트레이 상주 · 무중단 워치독 가동</span>'
+          + '</div>';
+        document.body.insertBefore(bar, document.body.firstChild);
+      }
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
