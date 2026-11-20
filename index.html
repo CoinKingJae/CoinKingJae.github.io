@@ -1063,7 +1063,7 @@
     const fullNow = k.toISOString().replace('T', ' ').slice(0, 19);
     setTxt('kstClock', fullNow.slice(11, 19));
     const nxt = next01Or31Info();
-    setTxt('nextRunLabel', `분석 ${nxt.timeStr} · ${nxt.cdStr}`);
+    setTxt('nextRunLabel', (window.__kjRadarRightTxt ? window.__kjRadarRightTxt() : '2초 레이더 감시'));
     if (isOwner()) setTxt('pfEndTs', fullNow);
     updateTopHeartbeatBadge();
     updateFundingAndRangeBar(getLiveBtcPrice());
@@ -2755,6 +2755,20 @@
     $('recNavBadge').style.display = 'none';
   }
 
+  window.__kjRadarMeta = { run: false, btc: 0, anchor: 0, hm: '' };
+  window.__kjRadarRightTxt = function() {
+    if (document.documentElement.getAttribute('data-auth') !== 'owner') return '실시간 시세 레이더';
+    const m = window.__kjRadarMeta || {};
+    const hm = (m.hm && m.hm !== '--:--') ? m.hm : '';
+    if (m.run) return hm ? `직전 ${hm} · 갱신 중` : '실시간 분석 가동';
+    if (m.anchor > 0 && m.btc > 0) {
+      const dp = ((m.btc - m.anchor) / m.anchor) * 100.0;
+      const sg = dp >= 0 ? '+' : '';
+      return hm ? `최근 ${hm} · ${sg}${dp.toFixed(2)}%` : `기준 ${Math.round(m.anchor).toLocaleString()}$ · ${sg}${dp.toFixed(2)}%`;
+    }
+    return hm ? `최근 분석 ${hm}` : '2초 레이더 감시';
+  };
+
   const ECON_SEEN_KEY = 'kj_v40_seen_econ_ts';
   let _latestEconStamp = '';
 
@@ -3509,6 +3523,7 @@
           upEl.style.display = 'none';
         }
 
+        window.__kjRadarMeta = { run: !!d.cycleRunning, btc: Number(d.btcPrice || 0), anchor: Number(d.radarAnchor || 0), hm: String((d.rationaleInfo && d.rationaleInfo.updatedAtHm) || '') };
         const rg = d.riskGear || {};
         const snpPct = Number(rg.sniperPct || 1.8);
         const ladPct = Number(rg.ladderPct || 3.0);
