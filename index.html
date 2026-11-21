@@ -5,17 +5,17 @@
 <meta id="vpMeta" name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="KingJae">
+<meta name="apple-mobile-web-app-title" content="KingJae V77 PRO">
 <meta name="theme-color" content="#070b14">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%230d1629'/%3E%3Cstop offset='100%25' stop-color='%23070b14'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='url(%23g)'/%3E%3Crect x='6' y='6' width='168' height='168' rx='35' fill='none' stroke='%2338bdf8' stroke-opacity='0.45' stroke-width='3'/%3E%3Ctext x='90' y='112' text-anchor='middle' font-family='system-ui,-apple-system,sans-serif' font-weight='900' font-size='74' fill='%23f8fafc' letter-spacing='-3'%3EKJ%3C/text%3E%3Ccircle cx='138' cy='46' r='8' fill='%2310b981'/%3E%3C/svg%3E">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230d1629'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='28' fill='%2338bdf8'%3EKJ%3C/text%3E%3C/svg%3E">
-<title>KingJae · AI ORDERFLOW</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%230d1629'/%3E%3Cstop offset='100%25' stop-color='%23070b14'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='url(%23g)'/%3E%3Crect x='6' y='6' width='168' height='168' rx='35' fill='none' stroke='%2338bdf8' stroke-opacity='0.5' stroke-width='3'/%3E%3Ctext x='90' y='102' text-anchor='middle' font-family='system-ui,-apple-system,sans-serif' font-weight='900' font-size='64' fill='%23f8fafc' letter-spacing='-2'%3EV77%3C/text%3E%3Ctext x='90' y='138' text-anchor='middle' font-family='system-ui,-apple-system,sans-serif' font-weight='900' font-size='26' fill='%2338bdf8' letter-spacing='2'%3EPRO%3C/text%3E%3Ccircle cx='142' cy='42' r='8' fill='%2310b981'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230d1629'/%3E%3Ctext x='32' y='41' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='25' fill='%2338bdf8'%3EV77%3C/text%3E%3C/svg%3E">
+<title>KingJae V77 PRO · AI AUTONOMOUS</title>
 <script>
   (function(){
     var vTok = '';
     try {
       localStorage.removeItem('kj_v40_raw_pin');
-      vTok = localStorage.getItem('kj_v40_verify_hash') || '';
+      vTok = localStorage.getItem('kj_v77_verify_hash') || localStorage.getItem('kj_v40_verify_hash') || '';
     } catch(e){}
     document.documentElement.setAttribute('data-auth', vTok === '61ba211110b37c4a169e71d3c0719a1a98c01a981cc6aa1ee4631ef434b7fe75' ? 'owner' : 'guest');
   })();
@@ -80,7 +80,8 @@
 
   .top-hdr { display:flex; align-items:center; justify-content:space-between; gap:5px; margin-bottom:11px; flex-wrap:nowrap; }
   .brand-wrap { display:flex; align-items:center; gap:5px; min-width:0; flex:1 1 auto; overflow:hidden; }
-  .brand-name { font-size:17px; font-weight:900; letter-spacing:-0.4px; user-select:none; cursor:default; white-space:nowrap; flex-shrink:0; }
+  .brand-name { font-size:16.5px; font-weight:900; letter-spacing:-0.4px; user-select:none; cursor:default; white-space:nowrap; flex-shrink:0; display:flex; align-items:baseline; gap:4px; }
+  .brand-v77 { font-size:12px; font-weight:900; color:#38bdf8; background:rgba(56,189,248,0.14); border:1px solid rgba(56,189,248,0.38); padding:1px 6px; border-radius:6px; letter-spacing:0.2px; }
   .status-pill-slim {
     font-size:10.5px; font-weight:800; padding:3.5px 7.5px; border-radius:999px;
     background:var(--card2); border:1px solid var(--line); color:#10b981;
@@ -125,6 +126,25 @@
     box-shadow:0 0 9px rgba(56,189,248,0.95); transition:left 0.3s ease;
   }
 
+  .trig-reason-bar {
+    margin-top:8px; padding:7px 10px; border-radius:10px;
+    background:linear-gradient(90deg, rgba(56,189,248,0.12) 0%, rgba(11,19,34,0.95) 100%);
+    border:1px solid rgba(56,189,248,0.28);
+    display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:11px;
+  }
+  .trig-reason-tag { font-weight:900; color:#7dd3fc; white-space:nowrap; flex-shrink:0; }
+  .trig-reason-val { font-weight:800; color:#f8fafc; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; text-align:right; }
+
+  .ws4-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; margin-top:8px; }
+  .ws4-cell {
+    background:#0a1120; border:1px solid rgba(148,163,184,0.15);
+    border-radius:11px; padding:7.5px 9.5px; min-width:0;
+  }
+  .ws4-top { display:flex; align-items:center; justify-content:space-between; gap:4px; font-size:10px; font-weight:900; color:#7dd3fc; letter-spacing:0.1px; }
+  .ws4-st { font-size:9.5px; font-weight:900; color:#34d399; white-space:nowrap; }
+  .ws4-val { font-size:11.5px; font-weight:900; color:#f8fafc; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-variant-numeric:tabular-nums; }
+  .ws4-sub { font-size:10px; font-weight:700; color:#8b9bb4; margin-top:1.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-variant-numeric:tabular-nums; }
+
   .shield-banner-box {
     display:none; margin-top:8px; padding-top:8px; border-top:1px solid var(--line);
     font-size:11.5px; line-height:1.45;
@@ -155,14 +175,7 @@
   }
   .upnl-pill.pos { background:rgba(16,185,129,0.16); color:#34d399; border:1px solid rgba(16,185,129,0.35); }
   .upnl-pill.neg { background:rgba(244,63,94,0.16); color:#fb7185; border:1px solid rgba(244,63,94,0.35); }
-  .gear-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:5px; margin-top:10px; }
-  .gear-btn {
-    background:#111a2d; border:1px solid var(--line); color:var(--sub);
-    font-size:11px; font-weight:800; padding:6.5px 4px; border-radius:9px;
-    cursor:pointer; text-align:center; white-space:nowrap;
-  }
-  .gear-btn.active { background:rgba(56,189,248,0.2); border-color:var(--acc); color:#fff; box-shadow:0 2px 8px rgba(56,189,248,0.15); }
-  .seed-meta-rows { display:flex; flex-direction:column; gap:5px; margin-top:9px; font-size:11.5px; color:var(--sub); }
+  .seed-meta-rows { display:flex; flex-direction:column; gap:6px; margin-top:11px; padding-top:10px; border-top:1px solid rgba(148,163,184,0.12); font-size:11.5px; color:var(--sub); }
   .sub-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:10px; padding-top:10px; border-top:1px solid var(--line); }
   .sm-lbl { font-size:10.5px; color:var(--sub); }
   .sm-val { font-size:12.5px; font-weight:800; margin-top:2px; font-variant-numeric:tabular-nums; }
@@ -179,8 +192,6 @@
 
   .ord-filter-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:5px; margin-top:9px; }
   .ord-filter-grid .chip { padding:5.5px 3px; font-size:10.5px; text-align:center; overflow:hidden; text-overflow:ellipsis; }
-  .board-tabs-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:4px; }
-  .board-tabs-grid .chip { padding:5px 2px; font-size:10.2px; text-align:center; overflow:hidden; text-overflow:ellipsis; }
   .econ-jump-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:4px; margin-bottom:10px; }
   .econ-jump-grid .chip { padding:5.5px 1px; font-size:10.2px; text-align:center; overflow:hidden; text-overflow:ellipsis; }
 
@@ -235,17 +246,6 @@
   .ord-price-btn { font-size:19px; font-weight:900; cursor:pointer; border-bottom:1px dashed rgba(148,163,184,0.35); font-variant-numeric:tabular-nums; }
   .prox-track { position:relative; width:100%; height:5px; background:#080d19; border-radius:999px; overflow:hidden; margin-top:8px; }
   .prox-fill { height:100%; border-radius:999px; transition:width 0.25s ease; }
-
-  .ms-tick { position:absolute; top:0; bottom:0; width:1.5px; background:rgba(248,250,252,0.45); z-index:2; }
-  .ms-labels { display:flex; justify-content:space-between; font-size:9.5px; color:#64748b; margin-top:3px; font-weight:700; }
-
-  .b-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:9px; }
-  .b-card { background:#111a2c; border:1px solid var(--line); border-radius:12px; overflow:hidden; cursor:pointer; }
-  .b-thumb { position:relative; aspect-ratio:16/10; background:#050811; }
-  .b-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
-  .b-num { position:absolute; top:6px; left:6px; background:rgba(7,11,20,0.88); border:1px solid rgba(56,189,248,0.4); color:#7dd3fc; font-size:10px; font-weight:900; padding:2px 6px; border-radius:5px; }
-  .b-title { font-size:12px; font-weight:800; color:#f1f5f9; line-height:1.35; word-break:keep-all; }
-  .b-desc { font-size:10.5px; color:var(--sub); margin-top:3px; line-height:1.35; word-break:keep-all; }
 
   .pf-card {
     background:#0b111e; border:1px solid rgba(148,163,184,0.18);
@@ -397,7 +397,6 @@
   .cm-sym-grid .chip { padding:6px 2px; font-size:11px; text-align:center; font-weight:900; }
   #lbScrollWrap { position:relative; overflow:hidden; touch-action:none; user-select:none; -webkit-user-select:none; }
   #lbImg { transform-origin:0 0; will-change:transform; }
-  .lb-zoom-pill { position:absolute; right:10px; bottom:10px; z-index:5; background:rgba(7,11,20,0.85); border:1px solid rgba(56,189,248,0.45); color:#7dd3fc; font-size:11px; font-weight:900; padding:4px 9px; border-radius:999px; pointer-events:none; font-variant-numeric:tabular-nums; }
   .tac-grid-2 { display:flex; flex-direction:column; gap:9px; margin-top:11px; }
   .tac-box { background:#0c1322; border:1px solid rgba(148,163,184,0.16); border-radius:13px; padding:11px 12px; }
   .tac-box.long { border-left:3.5px solid #10b981; }
@@ -407,7 +406,7 @@
   .tac-val { font-weight:800; white-space:nowrap; text-align:right; }
   .tac-ob-list { display:flex; flex-direction:column; gap:5px; margin-top:9px; padding-top:8px; border-top:1px solid rgba(148,163,184,0.12); }
   .tac-ob-row { display:flex; align-items:center; gap:8px; padding:4px 7px; border-radius:7px; background:#11192b; font-size:11.5px; font-variant-numeric:tabular-nums; }
-  .tac-ob-idx { font-weight:800; color:#cbd5e1; white-space:nowrap; min-width:56px; flex-shrink:0; }
+  .tac-ob-idx { font-weight:800; color:#cbd5e1; white-space:nowrap; min-width:62px; flex-shrink:0; }
   .tac-ob-bar-bg { flex:1; height:6px; border-radius:999px; background:rgba(148,163,184,0.12); overflow:hidden; min-width:34px; }
   .tac-ob-bar-fill { height:100%; border-radius:999px; }
   .tac-ob-bar-fill.long { background:linear-gradient(90deg, rgba(16,185,129,0.45), #10b981); }
@@ -417,7 +416,6 @@
   .econ-row .row-sb { flex-wrap:nowrap; }
   .econ-row .row-sb .pill { white-space:nowrap; flex-shrink:0; }
 
-  /* [V40-DESKTOP-COMMAND-CENTER] */
   @media (min-width: 1080px) {
     html.kj-desktop body {
       background: radial-gradient(circle at 18% 0%, #111b2e 0%, #070b14 55%, #05080f 100%) !important;
@@ -428,18 +426,9 @@
       width: 100% !important;
       margin: 0 auto !important;
     }
-    html.kj-desktop #tab-dash {
-      display: grid !important;
-      grid-template-columns: 1fr 1fr !important;
-      gap: 16px !important;
-      align-items: start !important;
-    }
-    html.kj-desktop #tab-dash > *:first-child {
-      grid-column: 1 / -1 !important;
-    }
     html.kj-desktop .card, html.kj-desktop [class*="card"] {
       backdrop-filter: blur(14px);
-      border-color: rgba(245, 185, 66, 0.16) !important;
+      border-color: rgba(56, 189, 248, 0.18) !important;
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.42) !important;
     }
   }
@@ -452,13 +441,12 @@
     max-width: 1380px;
     border-radius: 12px;
     background: linear-gradient(90deg, rgba(16,24,40,0.95), rgba(11,16,28,0.95));
-    border: 1px solid rgba(245,185,66,0.28);
+    border: 1px solid rgba(56,189,248,0.32);
     color: #e2e8f0;
     font-size: 12px;
     font-weight: 600;
   }
   html.kj-desktop #kjDesktopDeskBar { display: flex; }
-
 </style>
 </head>
 <body>
@@ -468,14 +456,14 @@
   <!-- 최상단 헤더 -->
   <div class="top-hdr">
     <div class="brand-wrap">
-      <div class="brand-name" id="brandLogo">KingJae</div>
+      <div class="brand-name" id="brandLogo">KingJae <span class="brand-v77">V77 PRO</span></div>
       <span class="status-pill-slim" id="liveDot" title="터치 시 즉시 동기화">● 가동중</span>
       <span class="sess-pill owner-only" id="sessTimerBadge" title="터치 시 연속 조작 세션 즉시 잠금">🔓 03:00</span>
     </div>
     <div class="hdr-actions owner-only">
-      <button class="btn acc" id="btnShieldToggle" title="지표 발표 15분 전 자동 방어막">🛡️ 방어 ON</button>
+      <button class="btn acc" id="btnShieldToggle" title="거시 일정 변동성 실시간 추적">🛡️ 일정 ON</button>
       <button class="btn" id="btnPauseToggle">⏸ 정지</button>
-      <button class="btn acc" id="btnForceRun">⚡ 분석</button>
+      <button class="btn acc" id="btnForceRun">⚡ 자율분석</button>
     </div>
   </div>
 
@@ -505,10 +493,37 @@
       <div class="range-track"><div class="range-pin" id="btcRangePin" style="left:50%;"></div></div>
     </div>
 
-    <div class="card owner-only" id="ownerStatusCard" style="padding:10px 13px;">
+    <!-- 오너 전용 실시간 상태 + 최근 AI 가동 사유 + 4인 웹소켓 계기판 -->
+    <div class="card owner-only" id="ownerStatusCard" style="padding:11px 13px;">
       <div class="row-sb" style="align-items:center;gap:8px;">
-        <span id="statusHeadline" style="font-size:12px;font-weight:800;color:#f1f5f9;line-height:1.4;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">데이터 동기화 중...</span>
-        <span id="nextRunLabel" style="font-size:11px;font-weight:800;color:var(--acc);white-space:nowrap;flex-shrink:0;font-variant-numeric:tabular-nums;">분석 --:--</span>
+        <span id="statusHeadline" style="font-size:12px;font-weight:800;color:#f1f5f9;line-height:1.4;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">4인 웹소켓 데이터 동기화 중...</span>
+        <span id="nextRunLabel" style="font-size:11px;font-weight:800;color:var(--acc);white-space:nowrap;flex-shrink:0;font-variant-numeric:tabular-nums;">4인 WS 직결</span>
+      </div>
+      <div class="trig-reason-bar">
+        <span class="trig-reason-tag">⚡ 최근 AI 가동사유</span>
+        <span class="trig-reason-val" id="lastTriggerReasonTxt">실시간 수급 · 호가벽 감시 중</span>
+      </div>
+      <div class="ws4-grid" id="ws4Board">
+        <div class="ws4-cell">
+          <div class="ws4-top"><span>0.05s 체결</span><span class="ws4-st" id="ws4-t05-st">● LIVE</span></div>
+          <div class="ws4-val" id="ws4-t05-v">CVD 0.0 · RVOL 1.00x</div>
+          <div class="ws4-sub" id="ws4-t05-s">매수비중 50.0% · 수급 집계</div>
+        </div>
+        <div class="ws4-cell">
+          <div class="ws4-top"><span>0.1s 호가벽</span><span class="ws4-st" id="ws4-b01-st">● LIVE</span></div>
+          <div class="ws4-val" id="ws4-b01-v">OBI 0.0% · 호가 균형</div>
+          <div class="ws4-sub" id="ws4-b01-s">매수벽 -- / 매도벽 --</div>
+        </div>
+        <div class="ws4-cell">
+          <div class="ws4-top"><span>0.2s 수비</span><span class="ws4-st" id="ws4-g02-st">● LIVE</span></div>
+          <div class="ws4-val" id="ws4-g02-v">실시간 자율 수비</div>
+          <div class="ws4-sub" id="ws4-g02-s">호가벽 익절 · 무제한 재장전</div>
+        </div>
+        <div class="ws4-cell">
+          <div class="ws4-top"><span>2s 총괄</span><span class="ws4-st" id="ws4-m20-st">● LIVE</span></div>
+          <div class="ws4-val" id="ws4-m20-v">0~N건 백지 자율</div>
+          <div class="ws4-sub" id="ws4-m20-s">고정한도 없음 · 데이터 배분</div>
+        </div>
       </div>
       <div id="newsShieldBanner" class="shield-banner-box">
         <div class="shield-l1" id="shieldLine1"></div>
@@ -535,7 +550,7 @@
       </div>
     </div>
 
-    <!-- 시드(AUM) 카드 -->
+    <!-- 시드(AUM) 카드 (고정 기어·고정 손실한도 완전 삭제) -->
     <div class="card">
       <div class="row-sb">
         <div style="font-size:12px;color:var(--sub);font-weight:700;">전체 시드 (AUM)</div>
@@ -552,24 +567,20 @@
         <span class="upnl-pill pos owner-only" id="liveUpnlPill" style="display:none;">미실현 +0.00</span>
       </div>
 
-      <div class="gear-grid owner-only" id="riskGearBar">
-        <button class="gear-btn" data-rmode="SAFE">🛡 안정+</button>
-        <button class="gear-btn active" data-rmode="BALANCE">⚖️ 밸런스+</button>
-        <button class="gear-btn" data-rmode="AGGRESSIVE">🔥 공격+</button>
-        <button class="gear-btn" data-rmode="AUTO">🤖 AI자동</button>
-      </div>
-
       <div class="seed-meta-rows owner-only">
         <div class="row-sb">
-          <span>1회 리스크 한도</span>
-          <b style="color:#e2e8f0;" id="riskAllowanceTxt">단기 --$ · 분할 --$</b>
+          <span>AI 데이터 자율 리스크</span>
+          <b style="color:#7dd3fc;" id="riskAllowanceTxt">🧠 고정한도 폐지 · 실시간 수급 산출</b>
+        </div>
+        <div class="row-sb">
+          <span>보유 포지션 보호손절 기준</span>
+          <b style="color:#e2e8f0;" id="activeSlCapTxt">무포지션 (진입 시 AI 자율 설정)</b>
         </div>
         <div class="row-sb">
           <span>누적 확정손익</span>
           <b id="totalRealizedBadge">--</b>
         </div>
       </div>
-      <div id="guardBrakeBanner" class="owner-only" style="display:none;margin-top:7px;font-size:11px;font-weight:800;color:#fde68a;line-height:1.4;"></div>
 
       <div class="sub-metrics owner-only">
         <div><div class="sm-lbl">확정원금</div><div class="sm-val" id="wbVal">--</div></div>
@@ -579,13 +590,13 @@
     </div>
 
     <div class="card owner-only" id="posSection" style="display:none;">
-      <div class="row-sb"><span style="font-size:14.5px;font-weight:900;">보유 포지션 <span style="font-size:11px;color:var(--sub);font-weight:700;">(터치 시 차트)</span></span><span class="pill" id="posCountBadge">0건</span></div>
+      <div class="row-sb"><span style="font-size:14.5px;font-weight:900;">보유 포지션 <span style="font-size:11px;color:var(--sub);font-weight:700;">(AI 자율 운용 · 터치 시 차트)</span></span><span class="pill" id="posCountBadge">0건</span></div>
       <div id="posListWrap"></div>
     </div>
 
     <div class="card owner-only" id="ordSectionCard">
       <div class="row-sb">
-        <span style="font-size:14.5px;font-weight:900;">대기주문</span>
+        <span style="font-size:14.5px;font-weight:900;">AI 자율 대기타점</span>
         <div style="display:flex;align-items:center;gap:5px;">
           <span class="pill" id="ordCountBadge">0건 대기 중</span>
           <button class="btn danger owner-only" id="btnCancelAll">전체취소</button>
@@ -649,7 +660,7 @@
           <button class="pf-seg-btn active" data-pmode="roi">ROI</button>
           <button class="pf-seg-btn" data-pmode="pnl">PnL</button>
         </div>
-        <span id="pfHoverVal" style="font-size:11.5px;font-weight:800;color:var(--sub);">실시간 웹소켓 연동 중</span>
+        <span id="pfHoverVal" style="font-size:11.5px;font-weight:800;color:var(--sub);">4인 웹소켓 실시간 연동</span>
       </div>
 
       <div id="perfChartBox" style="width:100%;height:195px;"></div>
@@ -660,34 +671,34 @@
 
       <div class="pf-proj-box">
         <div class="row-sb">
-          <span style="font-size:12px;font-weight:900;color:#7dd3fc;" id="pfProjTitle">📈 예상 월수익 시뮬레이션</span>
-          <span class="pill" id="pfProjModeTag" style="font-size:10px;">⚖️ 밸런스+</span>
+          <span style="font-size:12px;font-weight:900;color:#7dd3fc;" id="pfProjTitle">📈 자율 운용 예상 월수익 시뮬레이션</span>
+          <span class="pill" id="pfProjModeTag" style="font-size:10px;color:#7dd3fc;">🧠 데이터 자율</span>
         </div>
         <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:7px;">
-          <span style="font-size:18px;font-weight:900;color:#34d399;font-variant-numeric:tabular-nums;" id="pfProjMonthlyPct">+20% ~ +26%</span>
-          <span class="pill up" style="font-size:11px;" id="pfProjMonthlyUsd">월 +2,000$ ~ +2,600$</span>
+          <span style="font-size:18px;font-weight:900;color:#34d399;font-variant-numeric:tabular-nums;" id="pfProjMonthlyPct">+24% ~ +48%</span>
+          <span class="pill up" style="font-size:11px;" id="pfProjMonthlyUsd">월 +2,400$ ~ +4,800$</span>
         </div>
         <div class="row-sb" style="margin-top:8px;padding-top:7px;border-top:1px solid rgba(148,163,184,0.12);font-size:11.5px;">
           <span style="color:var(--sub);">3개월 복리 추정 시드</span>
           <b style="color:#f8fafc;font-variant-numeric:tabular-nums;" id="pfProj3mTxt">-- USDT</b>
         </div>
-        <div style="font-size:10.5px;color:#64748b;margin-top:4px;" id="pfProjNoteTxt">체결 3건 누적 시 실전 페이스로 자동 전환</div>
+        <div style="font-size:10.5px;color:#64748b;margin-top:4px;" id="pfProjNoteTxt">포지션 3건 마감 누적 시 TWR 실전 페이스로 자동 전환</div>
       </div>
 
       <div class="pf-nav-bar" id="pfLastTradeBar">
         <span style="font-size:13px;font-weight:700;color:#7f8ea8;">Last Trade</span>
-        <span style="font-size:13.5px;font-weight:800;color:#f8fafc;" id="pfLastTradeTxt">체결 대기 중  ›</span>
+        <span style="font-size:13.5px;font-weight:800;color:#f8fafc;" id="pfLastTradeTxt">체결 대기 중  ›</span>
       </div>
 
       <div class="pf-nav-bar" id="pfDaysTradingBar">
         <span style="font-size:13px;font-weight:700;color:#7f8ea8;">Days Trading</span>
-        <span style="font-size:13.5px;font-weight:800;color:#f8fafc;" id="pfDaysTradingTxt">1일차  ›</span>
+        <span style="font-size:13.5px;font-weight:800;color:#f8fafc;" id="pfDaysTradingTxt">1일차  ›</span>
       </div>
     </div>
 
   </div>
 
-    <!-- [탭: 차트·보드 (오너 인증 전용)] -->
+  <!-- [탭 2: 차트 · AI 자율 전술] -->
   <div class="tab-pane owner-only" id="pane-chartboard">
     <div class="card" style="padding:12px 13px;overflow:hidden;">
       <div class="row-sb" style="padding-bottom:9px;border-bottom:1px solid var(--line);">
@@ -720,7 +731,7 @@
           <button type="button" class="chip" data-tf="1D">일봉</button>
         </div>
         <div class="tabs-line" id="cmBtcTools">
-          <button type="button" class="chip active" id="btnToggleLines">🎯 타점선 ON</button>
+          <button type="button" class="chip active" id="btnToggleLines">🎯 자율 타점선 ON</button>
           <button type="button" class="chip active owner-only" id="btnToggleMarks">📍 체결기록 ON</button>
         </div>
       </div>
@@ -732,21 +743,26 @@
 
       <div id="cmCanvas" style="width:100%;height:340px;background:#070b14;border-radius:11px;border:1px solid rgba(148,163,184,0.14);overflow:hidden;"></div>
       <div id="cmCrossBar" style="margin-top:8px;padding:8px 11px;border-radius:9px;background:#0b1222;border:1px solid var(--line);font-size:11.5px;font-weight:800;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-        <span style="color:var(--sub);">📅 차트 캔들을 터치하면 날짜와 현재가 대비(%)가 표시됩니다</span>
+        <span style="color:var(--sub);">📅 차트 캔들을 터치하면 시각과 현재가 대비(%)가 표시됩니다</span>
       </div>
     </div>
 
     <div class="card" id="cbTacticalCard">
       <div class="row-sb" style="flex-wrap:nowrap;">
-        <span style="font-size:14.5px;font-weight:900;white-space:nowrap;">🎯 전술 & AI 근거</span>
+        <span style="font-size:14.5px;font-weight:900;white-space:nowrap;">🧠 AI 백지 자율 전술 & 근거</span>
         <div style="display:flex;gap:5px;align-items:center;flex-shrink:0;">
           <span class="pill" id="cbTacTime" style="font-size:10.5px;">--:--</span>
           <button type="button" class="btn" id="btnToggleTac">접기 ▲</button>
         </div>
       </div>
       <div id="cbTacBody">
-        <div style="margin-top:7px;">
+        <div style="margin-top:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
           <span class="pill" id="cbTacRegime" style="color:#7dd3fc;border-color:rgba(56,189,248,0.35);font-size:11px;white-space:nowrap;">분석 대기</span>
+          <span class="pill" id="cbTacRiskBadge" style="color:#34d399;border-color:rgba(16,185,129,0.35);font-size:11px;white-space:nowrap;">데이터 자율 배분</span>
+        </div>
+        <div class="trig-reason-bar" style="margin-top:8px;">
+          <span class="trig-reason-tag">⚡ 가동사유</span>
+          <span class="trig-reason-val" id="cbTacTriggerTxt">실시간 수급 감시 중</span>
         </div>
         <div id="cbTacSummaryWrap" style="margin-top:10px;font-size:13px;line-height:1.68;color:#dbeafe;word-break:keep-all;"></div>
         <div id="cbTacLadderCards" class="tac-grid-2"></div>
@@ -755,7 +771,7 @@
     </div>
   </div>
 
-  <!-- [탭 2] 경제소식 -->
+  <!-- [탭 3] 경제소식 -->
   <div class="tab-pane" id="pane-econ">
     <div class="card">
       <div class="row-sb" style="margin-bottom:10px;">
@@ -772,14 +788,14 @@
     </div>
   </div>
 
-  <!-- [탭 3] 기록 -->
+  <!-- [탭 4] 기록 -->
   <div class="tab-pane owner-only" id="pane-rec">
     <div class="card">
       <div class="row-sb" style="margin-bottom:11px;">
         <span style="font-size:15.5px;font-weight:900;">운용 기록 & 실현손익</span>
         <div class="tabs-line" id="recSubTabs">
           <button class="chip active" data-rsub="pnl">실현손익</button>
-          <button class="chip" data-rsub="logs">사이클 (6/6)</button>
+          <button class="chip" data-rsub="logs">AI 자율 로그</button>
         </div>
       </div>
 
@@ -800,7 +816,7 @@
         </div>
 
         <div class="row-sb" style="background:#111a2e;border:1px solid var(--line);border-radius:11px;padding:9px 11px;margin-bottom:10px;gap:6px;">
-          <span style="font-size:11px;color:var(--sub);font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="recEpochStatusTxt">전체 누적 집계 중</span>
+          <span style="font-size:11px;color:var(--sub);font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="recEpochStatusTxt">전체 누적 집계 중 (TWR)</span>
           <div style="display:flex;gap:5px;flex-shrink:0;">
             <button class="btn" id="btnRestorePnl" style="display:none;padding:5px 7px;font-size:11px;">↩ 복원</button>
             <button class="btn danger" id="btnResetPnl" style="padding:5px 7px;font-size:11px;">🔄 지금부터 재집계</button>
@@ -823,9 +839,9 @@
         <div class="row-sb" style="margin-bottom:9px;gap:6px;">
           <div class="tabs-scroll" id="logFilterTabs">
             <button class="chip active" data-lflt="ALL">전체</button>
-            <button class="chip" data-lflt="order">타점·주문</button>
-            <button class="chip" data-lflt="guard">수비·동적 리밸런싱</button>
-            <button class="chip" data-lflt="news">경제·시스템</button>
+            <button class="chip" data-lflt="order">전술·타점</button>
+            <button class="chip" data-lflt="guard">자율수비·순환</button>
+            <button class="chip" data-lflt="news">시황·시스템</button>
           </div>
           <button class="btn danger" id="btnClearLogs" style="padding:5px 8px;font-size:11px;">🗑 비우기</button>
         </div>
@@ -844,10 +860,7 @@
     </div>
   </div>
 
-  <!-- [차트 인라인 전환 완료] -->
   <div class="modal-bg" id="candleModal" style="display:none!important;"><button id="cmCloseBtn" style="display:none;"></button></div>
-
-  <!-- [보드 모달 제거됨] -->
   <div class="modal-bg" id="lbModal" style="display:none!important;"><button id="lbClose" style="display:none;"></button><button id="lbPrev" style="display:none;"></button><button id="lbNext" style="display:none;"></button><div id="lbScrollWrap"></div></div>
 
   <!-- [모달 3] Days Trading 바텀시트 -->
@@ -879,7 +892,7 @@
     <div class="sheet-card" id="keypadSheetCard">
       <div class="sheet-handle"></div>
       <div class="row-sb">
-        <span style="font-size:15.5px;font-weight:900;color:#f8fafc;" id="kpModalTitle">🔐 원격 조작 보안 승인</span>
+        <span style="font-size:15.5px;font-weight:900;color:#f8fafc;" id="kpModalTitle">🔐 KingJae V77 PRO 보안 승인</span>
         <button class="btn" id="kpCloseBtn" style="padding:5px 10px;">✕ 닫기</button>
       </div>
       <div id="kpSummaryBox" style="margin-top:9px;padding:8px 11px;border-radius:10px;background:#0b1322;border:1px solid rgba(56,189,248,0.35);font-size:12.5px;font-weight:800;color:#7dd3fc;line-height:1.4;word-break:keep-all;">
@@ -918,8 +931,8 @@
   'use strict';
   const VERIFY_HASH = '61ba211110b37c4a169e71d3c0719a1a98c01a981cc6aa1ee4631ef434b7fe75';
   let S = null, lastRawPayload = null, directApi = '', activeTab = 'dash', logFilter = 'ALL', ordFilter = 'ALL', pnlFilter = 'ALL', ordFolded = false;
-  let perfPeriod = 'd7', perfMode = 'roi', boardGrp = 'ALL', pingDone = false;
-  let ordSig = '', ordExpSig = '', posSig = '', brdSig = '', ratSig = '', econSig = '', pnlSig = '', scSig = '', calSig = '', logSig = '', perfSig = '';
+  let perfPeriod = 'd7', perfMode = 'roi', pingDone = false;
+  let ordSig = '', ordExpSig = '', posSig = '', brdSig = '', econSig = '', pnlSig = '', scSig = '', calSig = '', logSig = '', perfSig = '';
   let perfChart = null, perfSeries = null, perfNativeRedraw = null, perfLastPointTime = 0, perfPeakEq = 0, perfPeakRelNav = 1.0, perfBaseStartEq = 10000;
   let cmChart = null, cmSeries = null, cmNativeCtrl = null, cmSym = 'BTC', cmTf = '15m', showLines = true, showMarks = true, cmPriceLines = [], lastTradeTs = 0, cmLastCandle = null;
   let cmMacroPollTmr = null, cmReqSeq = 0, chartLibPromise = null;
@@ -927,7 +940,7 @@
 
   let kpMode = 'cmd', kpPinBuf = '', pendingCmd = null, cmdInFlight = false, vaultAutoPrompted = false;
   let savedVaultKeyHex = '';
-  try { savedVaultKeyHex = localStorage.getItem('kj_v40_vault_key') || ''; } catch(e){}
+  try { savedVaultKeyHex = localStorage.getItem('kj_v77_vault_key') || localStorage.getItem('kj_v40_vault_key') || ''; } catch(e){}
   let memSessionToken = '', memSessionExp = 0;
 
   const wsLive = {
@@ -977,22 +990,6 @@
     if (wsLive.btcPrice > 0 && (Date.now() - wsLive.lastBtcTs) < 12000) return wsLive.btcPrice;
     if (S && Number(S.btcPrice) > 0) return Number(S.btcPrice);
     return wsLive.btcPrice > 0 ? wsLive.btcPrice : 0;
-  }
-
-  function next01Or31Info() {
-    const nowMs = Date.now();
-    const k = new Date(nowMs + 9 * 3600000);
-    const h = k.getUTCHours(), m = k.getUTCMinutes(), s = k.getUTCSeconds();
-    let targetM = 1, addH = 0;
-    if (m < 1 || (m === 1 && s < 3)) targetM = 1;
-    else if (m < 31 || (m === 31 && s < 3)) targetM = 31;
-    else { targetM = 1; addH = 1; }
-    const dispH = (h + addH) % 24;
-    const remSec = Math.max(0, (addH * 3600 + targetM * 60 + 3) - (m * 60 + s));
-    return {
-      timeStr: `${String(dispH).padStart(2,'0')}:${String(targetM).padStart(2,'0')}`,
-      cdStr: `${String(Math.floor(remSec / 60)).padStart(2, '0')}:${String(remSec % 60).padStart(2, '0')}`
-    };
   }
 
   function fmtKstTs(secKst) {
@@ -1050,7 +1047,8 @@
 
   function updateTopHeartbeatBadge() {
     const wsAlive = (Date.now() - wsLive.lastBtcTs) < 10000;
-    $('wsStreamDot').style.background = wsAlive ? '#10b981' : '#f59e0b';
+    const wsDot = $('wsStreamDot');
+    if (wsDot) wsDot.style.background = wsAlive ? '#10b981' : '#f59e0b';
 
     const sessEl = $('sessTimerBadge');
     if (sessEl) {
@@ -1065,12 +1063,13 @@
 
     if (!S) return;
     const dotEl = $('liveDot');
+    if (!dotEl) return;
     if (isEngineOffline()) {
       dotEl.style.color = '#f59e0b';
       setTxt('liveDot', '🔌 오프라인');
     } else if (S.cycleRunning) {
       dotEl.style.color = '#38bdf8';
-      setTxt('liveDot', '⚡ 분석중');
+      setTxt('liveDot', '⚡ 자율추론중');
     } else if (S.orderPaused) {
       dotEl.style.color = '#f59e0b';
       setTxt('liveDot', '⏸ 정지중');
@@ -1090,7 +1089,8 @@
       setTxt('btcLow24Txt', `24h 저 ${fmt(lo, 0)}`);
       setTxt('btcHigh24Txt', `24h 고 ${fmt(hi, 0)}`);
       const pctPos = Math.max(2, Math.min(98, ((bp - lo) / (hi - lo)) * 100.0));
-      $('btcRangePin').style.left = `${pctPos.toFixed(1)}%`;
+      const pinEl = $('btcRangePin');
+      if (pinEl) pinEl.style.left = `${pctPos.toFixed(1)}%`;
     }
     const fSign = fd >= 0 ? '+' : '';
     const tInfo = getFundingTimerInfo(nfMs);
@@ -1105,8 +1105,7 @@
     const k = new Date(Date.now() + 9 * 3600000);
     const fullNow = k.toISOString().replace('T', ' ').slice(0, 19);
     setTxt('kstClock', fullNow.slice(11, 19));
-    const nxt = next01Or31Info();
-    setTxt('nextRunLabel', (window.__kjRadarRightTxt ? window.__kjRadarRightTxt() : '0.2초 틱 레이더'));
+    setTxt('nextRunLabel', (window.__kjRadarRightTxt ? window.__kjRadarRightTxt() : '4인 WS 직결'));
     if (isOwner()) setTxt('pfEndTs', fullNow);
     updateTopHeartbeatBadge();
     updateFundingAndRangeBar(getLiveBtcPrice());
@@ -1168,7 +1167,10 @@
   function renderOwnerStatusHeadlineHtml(badgeTxt, sideKo, priceVal, distPctVal) {
     const sg = distPctVal >= 0 ? '+' : '';
     const dCls = distPctVal >= 0 ? 'up' : 'dn';
-    $('statusHeadline').innerHTML = `${escHtml(badgeTxt)} ${escHtml(sideKo)} <span class="num-nw">${fmt(priceVal, 1)}</span> <span class="${dCls} num-nw">(${sg}${distPctVal.toFixed(2)}%)</span>`;
+    const hlEl = $('statusHeadline');
+    if (hlEl) {
+      hlEl.innerHTML = `${escHtml(badgeTxt)} ${escHtml(sideKo)} <span class="num-nw">${fmt(priceVal, 1)}</span> <span class="${dCls} num-nw">(${sg}${distPctVal.toFixed(2)}%)</span>`;
+    }
   }
 
   function scheduleLiveTickRender() {
@@ -1218,7 +1220,7 @@
     const bp = getLiveBtcPrice();
     if (bp <= 0) return;
 
-    document.title = `${fmt(bp, 1)} · KingJae`;
+    document.title = `${fmt(bp, 1)} · KingJae V77 PRO`;
 
     const heroEl = $('btcLivePrice');
     setTxt('btcLivePrice', fmt(bp, 1));
@@ -1232,7 +1234,8 @@
 
     if (wsLive.btcChg24h !== null) {
       const bc = Number(wsLive.btcChg24h);
-      $('btcChg24').className = 'pill ' + (bc >= 0 ? 'up' : 'dn');
+      const chgEl = $('btcChg24');
+      if (chgEl) chgEl.className = 'pill ' + (bc >= 0 ? 'up' : 'dn');
       setTxt('btcChg24', `${bc >= 0 ? '+' : ''}${bc.toFixed(2)}%`);
       const hCard = $('btcHeroCard');
       if (hCard) hCard.className = 'card hero-card ' + (bc >= 0 ? 'glow-up' : 'glow-dn');
@@ -1243,7 +1246,8 @@
     const fx = Number(wsLive.fxKrw || (S && S.fxKrw) || 1380);
     if (wsLive.upBtcKrw > 0 && fx > 0) {
       const kp = ((wsLive.upBtcKrw / (bp * fx)) - 1.0) * 100.0;
-      $('kimpBadge').className = 'pill ' + (kp >= 0 ? 'up' : 'dn');
+      const kb = $('kimpBadge');
+      if (kb) kb.className = 'pill ' + (kp >= 0 ? 'up' : 'dn');
       setTxt('kimpBadge', `김프 ${kp >= 0 ? '+' : ''}${kp.toFixed(2)}%`);
     }
 
@@ -1251,7 +1255,8 @@
       setTxt('cmPrice', fmt(bp, 1));
       if (wsLive.btcChg24h !== null) {
         const c = Number(wsLive.btcChg24h);
-        $('cmChg').className = c >= 0 ? 'up' : 'dn';
+        const cmc = $('cmChg');
+        if (cmc) cmc.className = c >= 0 ? 'up' : 'dn';
         setTxt('cmChg', `${c >= 0 ? '+' : ''}${c.toFixed(2)}%`);
       }
       if (cmLastCandle) {
@@ -1282,14 +1287,9 @@
           const upnl = diffP * sz;
           const margin = (ep * sz) / lv;
           const roe = (upnl / Math.max(margin, 1)) * 100.0;
-          const rDist = Math.max(Number(p.rDist || ep * 0.008), 1);
-          const rMult = diffP / rDist;
-          const msProg = Math.max(0, Math.min(100, Math.round(Math.max(0, rMult / 2.0) * 100)));
 
           p.pnlUsd = Number(upnl.toFixed(2));
           p.roePct = Number(roe.toFixed(2));
-          p.rMultiple = Number(rMult.toFixed(2));
-          p.milestonePct = msProg;
           liveTotalUpnl += upnl;
 
           const el = $('posPnl-' + p.side);
@@ -1297,24 +1297,26 @@
             el.className = 'owner-only ' + (upnl >= 0 ? 'up' : 'dn');
             setTxt('posPnl-' + p.side, `${upnl >= 0 ? '+' : ''}${fmt(upnl, 2)}$ (${roe >= 0 ? '+' : ''}${roe.toFixed(2)}%)`);
           }
-          setTxt('posRmult-' + p.side, `수비 진행: ${rMult >= 0 ? '+' : ''}${rMult.toFixed(2)}R / +1R (${fmt(p.r1Price, 1)}$)`);
-          const rbEl = $('posRbar-' + p.side);
-          if (rbEl) rbEl.style.width = `${msProg}%`;
+          setTxt('posRmult-' + p.side, `탄력 순환: ${p.recycleCount || 0}회 완료 · 0.05s 체결 · 0.1s 호가벽 실시간 자율 수비`);
         }
       });
 
-      // 상단 전체시드·미실현 배지와 보유포지션 카드의 미실현 손익을 동일 실시간 값으로 일치시켜 숫자 괴리 원천 차단
       const wb = Number((S.wallet && S.wallet.walletBalance) || S.realTotalSeed || 10000);
       const liveEq = wb + liveTotalUpnl;
       setTxt('totalSeedVal', fmt(liveEq, 2));
       const upEl = $('liveUpnlPill');
-      upEl.style.display = 'inline-flex';
-      upEl.className = 'upnl-pill owner-only ' + (liveTotalUpnl >= 0 ? 'pos' : 'neg');
-      setTxt('liveUpnlPill', `미실현 ${liveTotalUpnl >= 0 ? '+' : ''}${fmt(liveTotalUpnl, 2)}`);
+      if (upEl) {
+        upEl.style.display = 'inline-flex';
+        upEl.className = 'upnl-pill owner-only ' + (liveTotalUpnl >= 0 ? 'pos' : 'neg');
+        setTxt('liveUpnlPill', `미실현 ${liveTotalUpnl >= 0 ? '+' : ''}${fmt(liveTotalUpnl, 2)}`);
+      }
 
       if (!S.cycleRunning || offline) {
         const p0 = posArr[0];
-        $('statusHeadline').innerHTML = `${p0.side === 'LONG' ? '🟢 롱' : '🔴 숏'} ${p0.size.toFixed(3)} BTC <span class="${p0.pnlUsd>=0?'up':'dn'} num-nw">(${p0.pnlUsd >= 0 ? '+' : ''}${Math.round(p0.pnlUsd).toLocaleString()}$ · ${p0.rMultiple >= 0 ? '+' : ''}${p0.rMultiple.toFixed(2)}R)</span>`;
+        const hlEl = $('statusHeadline');
+        if (hlEl) {
+          hlEl.innerHTML = `${p0.side === 'LONG' ? '🟢 롱' : '🔴 숏'} ${p0.size.toFixed(3)} BTC <span class="${p0.pnlUsd>=0?'up':'dn'} num-nw">(${p0.pnlUsd >= 0 ? '+' : ''}${Math.round(p0.pnlUsd).toLocaleString()}$ · ROE ${p0.roePct >= 0 ? '+' : ''}${p0.roePct.toFixed(1)}%)</span>`;
+        }
       }
 
       const pf = S.performance;
@@ -1339,8 +1341,8 @@
         }
 
         const roiEl = $('pfRoiVal'), pnlEl = $('pfPnlVal');
-        roiEl.className = 'pf-m-val ' + (roiPct > 0 ? 'up' : (roiPct < 0 ? 'dn' : ''));
-        pnlEl.className = 'pf-m-val ' + (netPnl > 0 ? 'up' : (netPnl < 0 ? 'dn' : ''));
+        if (roiEl) roiEl.className = 'pf-m-val ' + (roiPct > 0 ? 'up' : (roiPct < 0 ? 'dn' : ''));
+        if (pnlEl) pnlEl.className = 'pf-m-val ' + (netPnl > 0 ? 'up' : (netPnl < 0 ? 'dn' : ''));
         setTxt('pfRoiVal', `${roiPct.toFixed(2)}%`);
         setTxt('pfPnlVal', `${netPnl >= 0 ? '+' : ''}${fmt(netPnl, 2)}`);
         setTxt('pfMddVal', `${mddShow.toFixed(2)}%`);
@@ -1372,9 +1374,11 @@
         if (o.side === 'LONG' && o.price > maxLongP) maxLongP = o.price;
         if (o.side === 'SHORT' && (minShortP === 0 || o.price < minShortP)) minShortP = o.price;
       });
-      if (maxLongP > 0 && minShortP > maxLongP && $('ordSpectrumBox').style.display !== 'none') {
+      const specBox = $('ordSpectrumBox');
+      if (maxLongP > 0 && minShortP > maxLongP && specBox && specBox.style.display !== 'none') {
         const posPct = Math.max(4, Math.min(96, ((bp - maxLongP) / (minShortP - maxLongP)) * 100.0));
-        $('specBtcPin').style.left = `${posPct.toFixed(1)}%`;
+        const spPin = $('specBtcPin');
+        if (spPin) spPin.style.left = `${posPct.toFixed(1)}%`;
         const lgGap = ((maxLongP - bp) / bp) * 100.0;
         const shGap = ((minShortP - bp) / bp) * 100.0;
         setTxt('specLongTxt', `🟢 ${fmt(maxLongP, 0)} (${lgGap.toFixed(2)}%)`);
@@ -1394,8 +1398,9 @@
       bybitWs = new WebSocket('wss://stream.bybit.com/v5/public/linear');
       bybitWs.onopen = () => {
         wsLive.lastBybitTs = Date.now();
-        $('wsStreamDot').style.background = '#10b981';
-        bybitWs.send(JSON.stringify({ op:'subscribe', args:['tickers.BTCUSDT'] }));
+        const wsDot = $('wsStreamDot');
+        if (wsDot) wsDot.style.background = '#10b981';
+        bybitWs.send(JSON.stringify({ op:'subscribe', args:['tickers.BTCUSDT', 'publicTrade.BTCUSDT'] }));
         clearInterval(bybitPingTmr);
         bybitPingTmr = setInterval(() => {
           if ((Date.now() - wsLive.lastBybitTs) > 7500) { connectBybitPublicWs(true); return; }
@@ -1405,7 +1410,16 @@
       bybitWs.onmessage = (ev) => {
         try {
           const msg = JSON.parse(ev.data);
-          if (msg.topic === 'tickers.BTCUSDT' && msg.data) {
+          if (msg.topic === 'publicTrade.BTCUSDT' && Array.isArray(msg.data) && msg.data.length) {
+            const lastTr = msg.data[msg.data.length - 1];
+            const px = Number(lastTr.p || 0);
+            if (px > 0) {
+              wsLive.btcPrice = px;
+              wsLive.lastBtcTs = Date.now();
+              wsLive.lastBybitTs = Date.now();
+              scheduleLiveTickRender();
+            }
+          } else if (msg.topic === 'tickers.BTCUSDT' && msg.data) {
             const d = msg.data;
             const px = d.lastPrice !== undefined ? Number(d.lastPrice) : (d.markPrice !== undefined ? Number(d.markPrice) : 0);
             if (px > 0) {
@@ -1428,7 +1442,6 @@
     } catch(e) { setTimeout(() => connectBybitPublicWs(false), 4000); }
   }
 
-  // 5G 통신사에서 바이비트 웹소켓이 지연·차단될 때 즉시 보조 가동되는 바이낸스 선물 실시간 틱 스트림
   function connectBinanceBackupWs() {
     try {
       if (binanceWs && (binanceWs.readyState === 0 || binanceWs.readyState === 1)) return;
@@ -1459,7 +1472,7 @@
       upbitWs.binaryType = 'arraybuffer';
       upbitWs.onopen = () => {
         wsLive.lastUpTs = Date.now();
-        upbitWs.send(JSON.stringify([{ ticket:'kj-v40-live' }, { type:'ticker', codes:['KRW-BTC','KRW-USDT'] }]));
+        upbitWs.send(JSON.stringify([{ ticket:'kj-v77-live' }, { type:'ticker', codes:['KRW-BTC','KRW-USDT'] }]));
       };
       upbitWs.onmessage = async (ev) => {
         try {
@@ -1534,7 +1547,6 @@
   connectBinanceBackupWs();
   connectUpbitPublicWs(true);
 
-  // 다중 CDN + 로컬 PC 서버 동시 경주 로더 (1.8초 초과 시 내장 HTML5 캔들엔진 즉시 가동)
   function ensureChartLib() {
     if (window.LightweightCharts) return Promise.resolve(true);
     if (chartLibPromise) return chartLibPromise;
@@ -1568,7 +1580,6 @@
     return chartLibPromise;
   }
 
-  // 외부 차트 CDN이 모두 차단된 5G/방화벽 환경에서도 100% 작동하는 자체 내장 고해상도 캔들차트 엔진
   function mountNativeCandleCanvas(wrap, candles, priceLines, dec, tf, onInspect) {
     wrap.innerHTML = '';
     const cv = document.createElement('canvas');
@@ -1802,11 +1813,14 @@
     };
 
     const cfCnt = Number(pf.cashFlowCount || 0);
-    $('pfEpochBadge').style.display = 'inline-flex';
-    if (pf.resetAt) {
-      setTxt('pfEpochBadge', cfCnt > 0 ? `${pf.resetAt.slice(5, 16)} · 입출금 ${cfCnt}건 TWR` : `${pf.resetAt.slice(5, 16)} 이후 · TWR`);
-    } else {
-      setTxt('pfEpochBadge', cfCnt > 0 ? `입출금 ${cfCnt}건 TWR 보정` : 'TWR 수익률 보정');
+    const epBadge = $('pfEpochBadge');
+    if (epBadge) {
+      epBadge.style.display = 'inline-flex';
+      if (pf.resetAt) {
+        setTxt('pfEpochBadge', cfCnt > 0 ? `${pf.resetAt.slice(5, 16)} · 입출금 ${cfCnt}건 TWR` : `${pf.resetAt.slice(5, 16)} 이후 · TWR`);
+      } else {
+        setTxt('pfEpochBadge', cfCnt > 0 ? `입출금 ${cfCnt}건 TWR 보정` : 'TWR 수익률 보정');
+      }
     }
 
     const eqNow = Number((S.wallet && S.wallet.totalEquity) || S.realTotalSeed || 10000);
@@ -1816,8 +1830,9 @@
 
     const netVal = cleanZero(pObj.pnlUsd);
     const roiVal = cleanZero(pObj.pnlPct);
-    $('pfRoiVal').className = 'pf-m-val ' + (roiVal > 0 ? 'up' : (roiVal < 0 ? 'dn' : ''));
-    $('pfPnlVal').className = 'pf-m-val ' + (netVal > 0 ? 'up' : (netVal < 0 ? 'dn' : ''));
+    const rEl = $('pfRoiVal'), pEl = $('pfPnlVal');
+    if (rEl) rEl.className = 'pf-m-val ' + (roiVal > 0 ? 'up' : (roiVal < 0 ? 'dn' : ''));
+    if (pEl) pEl.className = 'pf-m-val ' + (netVal > 0 ? 'up' : (netVal < 0 ? 'dn' : ''));
 
     setTxt('pfRoiVal', `${roiVal.toFixed(2)}%`);
     setTxt('pfPnlVal', `${netVal >= 0 ? '+' : ''}${fmt(netVal, 2)}`);
@@ -1831,7 +1846,7 @@
     setTxt('pfEndTs', pObj.endTimeStr || '--');
 
     const mp = pf.monthlyProjection || {};
-    setTxt('pfProjModeTag', mp.modeLabel || '⚖️ 밸런스+');
+    setTxt('pfProjModeTag', '🧠 데이터 자율');
     if (mp.livePaceAvailable) {
       const pPct = Number(mp.paceMonthlyPct || 0), pUsd = Number(mp.paceMonthlyUsd || 0);
       $('pfProjMonthlyPct').style.color = pPct >= 0 ? '#34d399' : '#fb7185';
@@ -1844,10 +1859,10 @@
     } else {
       $('pfProjMonthlyPct').style.color = '#34d399';
       $('pfProjMonthlyUsd').className = 'pill up';
-      setTxt('pfProjTitle', '📈 기어별 표준 예상 월수익 시뮬레이션');
-      setTxt('pfProjMonthlyPct', mp.modelRangePct || '+20% ~ +26%');
+      setTxt('pfProjTitle', '📈 V77 PRO 자율 운용 예상 월수익 시뮬레이션');
+      setTxt('pfProjMonthlyPct', mp.modelRangePct || '+24% ~ +48%');
       setTxt('pfProjMonthlyUsd', `월 ${mp.modelUsdRange || ''}`);
-      setTxt('pfProjNoteTxt', '체결 3건 누적 시 TWR 실전 페이스로 자동 전환');
+      setTxt('pfProjNoteTxt', '포지션 3건 마감 누적 시 TWR 실전 페이스로 자동 전환');
       setTxt('pfProj3mTxt', `${Number(mp.model3mEquity || eqNow).toLocaleString()} USDT`);
     }
 
@@ -1926,7 +1941,7 @@
       });
       perfChart.subscribeCrosshairMove((param) => {
         if (!param || !param.time || !param.seriesData || !param.seriesData.get(perfSeries)) {
-          setTxt('pfHoverVal', '실시간 웹소켓 연동 중');
+          setTxt('pfHoverVal', '4인 웹소켓 실시간 연동');
           return;
         }
         const val = cleanZero(param.seriesData.get(perfSeries).value);
@@ -2002,7 +2017,6 @@
     return null;
   }
 
-  // 어떤 통신 조건에서도 터치 즉시(0.01초) 팝업을 먼저 열고 차트를 렌더링합니다.
   async function openCandleModal(sym, tf='15m', focusKstSec=0, focusPrice=0) {
     if (!isOwner()) return;
     const mySeq = ++cmReqSeq;
@@ -2066,27 +2080,22 @@
     }
     if (candles.length) cmLastCandle = { ...candles[candles.length - 1] };
 
+    // 구버전 1R 고정선 전면 삭제 — 보유 포지션 진입/자율SL/자율TP 및 AI 자율 대기타점(실비중%)만 렌더링
     const lineSpecs = [];
     if (sym === 'BTC' && S && showLines) {
       const showOwner = isOwner() && Boolean(S._vaultUnlocked);
       if (showOwner) {
         (S.positions || []).forEach(p => {
-          lineSpecs.push({ price:p.entry, color:'#38bdf8', lineWidth:2, lineStyle:0, title:`${p.side==='LONG'?'롱':'숏'} 진입` });
-          const rtpM = String(p.stageNote || '').match(/부분익절\s*([\d,]+(?:\.\d+)?)\$/);
-          if (rtpM) {
-            const rtpPx = Number(rtpM[1].replace(/,/g, ''));
-            if (rtpPx > 0) lineSpecs.push({ price:rtpPx, color:'#22d3ee', lineWidth:1, lineStyle:2, title:'🎯 부분익절' });
-          }
-          if (p.r1Price > 0 && p.stage === 0) lineSpecs.push({ price:p.r1Price, color:'#f59e0b', lineWidth:1, lineStyle:3, title:'1R(여유방어)' });
-          if (p.sl > 0) lineSpecs.push({ price:p.sl, color:'#f43f5e', lineWidth:1, lineStyle:2, title:'보유 손절' });
-          if (p.tp > 0) lineSpecs.push({ price:p.tp, color:'#10b981', lineWidth:1, lineStyle:2, title:'보유 익절' });
+          lineSpecs.push({ price:p.entry, color:'#38bdf8', lineWidth:2, lineStyle:0, title:`${p.side==='LONG'?'롱':'숏'} 진입평단` });
+          if (p.sl > 0) lineSpecs.push({ price:p.sl, color:'#f43f5e', lineWidth:1, lineStyle:2, title:'AI 자율 SL' });
+          if (p.tp > 0) lineSpecs.push({ price:p.tp, color:'#10b981', lineWidth:1, lineStyle:2, title:'AI 자율 TP' });
         });
       }
       (S.openOrders || []).forEach(o => {
         const clr = o.side === 'LONG' ? '#10b981' : '#f43f5e';
-        const isSnp = o.track === 'SNIPER';
+        const isPrimary = Number(o.sharePct || 0) >= 40;
         const bLbl = showOwner ? o.badge : (o.guestBadge || o.badge);
-        lineSpecs.push({ price:o.price, color:clr, lineWidth:isSnp ? 2 : 1, lineStyle:isSnp ? 0 : 2, title:`${bLbl} ${o.sideKo}` });
+        lineSpecs.push({ price:o.price, color:clr, lineWidth:isPrimary ? 2 : 1, lineStyle:isPrimary ? 0 : 2, title:`${bLbl} ${o.sideKo}` });
       });
     }
 
@@ -2298,7 +2307,7 @@
     if (isEngineOffline()) {
       showToast(`🔌 오프라인 (${ageMin}분 전 · ${kstS}) — 시세 즉시 동기화`, true);
     } else {
-      showToast(`● 가동중 · 실시간 소켓 및 상태 동기화 완료 (${kstS} KST)`);
+      showToast(`● V77 PRO 가동중 · 4인 웹소켓 동기화 완료 (${kstS} KST)`);
     }
   };
 
@@ -2439,16 +2448,18 @@
       if (vHash === VERIFY_HASH) {
         savedVaultKeyHex = await sha256Hex('KJ_V40_VAULT_KEY:' + pinVal);
         try {
+          localStorage.setItem('kj_v77_verify_hash', vHash);
           localStorage.setItem('kj_v40_verify_hash', vHash);
+          localStorage.setItem('kj_v77_vault_key', savedVaultKeyHex);
           localStorage.setItem('kj_v40_vault_key', savedVaultKeyHex);
           localStorage.setItem('kj_owner_mark', '1');
         } catch(e){}
         document.documentElement.setAttribute('data-auth', 'owner');
         closeModalById('keypadModal');
-        ordSig = ''; ordExpSig = ''; posSig = ''; perfSig = ''; brdSig = ''; ratSig = '';
+        ordSig = ''; ordExpSig = ''; posSig = ''; perfSig = ''; brdSig = '';
         if (lastRawPayload) await applyState(lastRawPayload);
         else fetchStateTick();
-        showToast('✅ 관리자 인증 완료 — 실계좌 시드가 표시됩니다.');
+        showToast('✅ V77 PRO 오너 인증 완료 — 실시간 수급 계기판이 활성화됩니다.');
       } else {
         kpPinBuf = '';
         renderKpDots(true);
@@ -2504,22 +2515,24 @@
     if (taps >= 5) {
       taps = 0;
       if (isOwner()) {
-        if (confirm('관리자 화면을 잠그고 미인증 게스트 화면(메모장 고정 시드)으로 전환하시겠습니까?')) {
+        if (confirm('오너 화면을 잠그고 미인증 게스트 화면으로 전환하시겠습니까?')) {
           try {
+            localStorage.removeItem('kj_v77_verify_hash');
             localStorage.removeItem('kj_v40_verify_hash');
+            localStorage.removeItem('kj_v77_vault_key');
             localStorage.removeItem('kj_v40_vault_key');
           } catch(e){}
           savedVaultKeyHex = '';
           memSessionToken = '';
           memSessionExp = 0;
           document.documentElement.setAttribute('data-auth', 'guest');
-          ordSig = ''; ordExpSig = ''; posSig = ''; ratSig = '';
+          ordSig = ''; ordExpSig = ''; posSig = '';
           if (lastRawPayload) applyState(lastRawPayload);
           switchMainTab('dash');
-          showToast('🔒 게스트 모드 전환 완료 (메모장 고정 시드 표시)');
+          showToast('🔒 게스트 모드 전환 완료');
         }
       } else {
-        openKeypadModal('unlock', '🔓 관리자 화면 잠금 해제', '6자리 관리자 PIN을 입력하면 실계좌 시드와 전용 보드가 열립니다.');
+        openKeypadModal('unlock', '🔓 KingJae V77 PRO 잠금 해제', '6자리 오너 PIN을 입력하면 실계좌 및 4인 웹소켓 계기판이 열립니다.');
       }
     } else tapTmr = setTimeout(() => { taps = 0; }, 2200);
   });
@@ -2581,7 +2594,7 @@
       const kst = new Date(Date.now() + 9 * 3600000).toISOString().replace('T', ' ').slice(0, 19);
 
       const msg =
-        `👀 <b>KingJae 웹 외부 접속 감지 · ${visitBadge}</b>\n` +
+        `👀 <b>KingJae V77 PRO 외부 접속 감지 · ${visitBadge}</b>\n` +
         `<blockquote>` +
         `<b>시각</b>  ${kst} KST\n` +
         `<b>위치</b>  ${locStr} (${ispStr})\n` +
@@ -2634,7 +2647,7 @@
       executeApprovedCmd('', memSessionToken);
       return;
     }
-    openKeypadModal('cmd', '🔐 원격 조작 보안 승인', actionLabel);
+    openKeypadModal('cmd', '🔐 V77 PRO 원격 제어 승인', actionLabel);
   }
 
   async function executeApprovedCmd(pinVal, sessTok='') {
@@ -2679,7 +2692,7 @@
           memSessionToken = '';
           memSessionExp = 0;
           cmdInFlight = false;
-          openKeypadModal('cmd', '🔐 원격 조작 보안 승인', actionLabel);
+          openKeypadModal('cmd', '🔐 V77 PRO 원격 제어 승인', actionLabel);
           return;
         }
         kpPinBuf = '';
@@ -2692,7 +2705,10 @@
       } else {
         if (pinVal && !savedVaultKeyHex) {
           savedVaultKeyHex = await sha256Hex('KJ_V40_VAULT_KEY:' + pinVal);
-          try { localStorage.setItem('kj_v40_vault_key', savedVaultKeyHex); } catch(e){}
+          try {
+            localStorage.setItem('kj_v77_vault_key', savedVaultKeyHex);
+            localStorage.setItem('kj_v40_vault_key', savedVaultKeyHex);
+          } catch(e){}
         }
         if (res.body.tempSessionToken) {
           memSessionToken = String(res.body.tempSessionToken);
@@ -2701,7 +2717,7 @@
         pendingCmd = null;
         closeModalById('keypadModal');
         showToast('✅ ' + (res.body.msg || '명령 반영 완료'));
-        perfSig = ''; pnlSig = ''; scSig = ''; calSig = ''; logSig = ''; ordSig = ''; posSig = ''; ratSig = '';
+        perfSig = ''; pnlSig = ''; scSig = ''; calSig = ''; logSig = ''; ordSig = ''; posSig = ''; brdSig = '';
         fetchStateTick();
       }
     } catch(e) {
@@ -2713,7 +2729,10 @@
             if (res2.body.ok) {
               if (pinVal && !savedVaultKeyHex) {
                 savedVaultKeyHex = await sha256Hex('KJ_V40_VAULT_KEY:' + pinVal);
-                try { localStorage.setItem('kj_v40_vault_key', savedVaultKeyHex); } catch(e){}
+                try {
+                  localStorage.setItem('kj_v77_vault_key', savedVaultKeyHex);
+                  localStorage.setItem('kj_v40_vault_key', savedVaultKeyHex);
+                } catch(e){}
               }
               if (res2.body.tempSessionToken) {
                 memSessionToken = String(res2.body.tempSessionToken);
@@ -2731,20 +2750,20 @@
       }
       kpPinBuf = '';
       renderKpDots(true);
-      showToast('⚠️ PC 봇 응답 지연 — 가동 상태를 확인해 주세요.', true);
+      showToast('⚠️ PC 엔진 응답 지연 — 가동 상태를 확인해 주세요.', true);
     }
     cmdInFlight = false;
   }
 
-  $('btnForceRun').onclick = () => requestPinAndSendCmd('⚡ [타점 분석] 즉시 AI 마스터 보드 분석 실행', 'force_run');
-  $('btnForceNews').onclick = () => requestPinAndSendCmd('🌐 [경제 브리핑] 즉시 실시간 검색 실행', 'force_news');
+  $('btnForceRun').onclick = () => requestPinAndSendCmd('⚡ [V77 PRO 자율 분석] 즉시 멀티팩터 보드 & 백지 자율 타점 설계 실행', 'force_run');
+  $('btnForceNews').onclick = () => requestPinAndSendCmd('🌐 [경제·시황 브리핑] 즉시 실시간 검색 실행', 'force_news');
   $('btnPauseToggle').onclick = () => {
-    const nxt = (S && S.orderPaused) ? '정상 자동 발주 재개' : '신규 발주 일시정지 (브리핑 전용)';
+    const nxt = (S && S.orderPaused) ? '정상 자율 발주 재개' : '신규 발주 일시정지 (브리핑 전용)';
     requestPinAndSendCmd(`⏸ [발주 모드 전환] ${nxt}`, 'toggle_pause');
   };
   $('btnShieldToggle').onclick = () => {
     const curOn = !(S && S.newsShield === false);
-    requestPinAndSendCmd(`🛡️ [지표 방어막] ${curOn ? 'OFF 해제' : 'ON 활성화 (발표 15분 전 단타철수)'}`, 'toggle_news_shield');
+    requestPinAndSendCmd(`🛡️ [거시 일정 감시] ${curOn ? 'OFF 해제' : 'ON 활성화'}`, 'toggle_news_shield');
   };
   $('btnCancelAll').onclick = () => requestPinAndSendCmd('🚨 [대기주문 전체취소] 미체결 지정가 일괄 취소', 'cancel_all');
 
@@ -2759,20 +2778,9 @@
     };
   });
 
-  document.querySelectorAll('[data-rmode]').forEach(b => {
-    b.onclick = () => {
-      const rm = b.dataset.rmode;
-      if (S && S._vaultUnlocked && String(S.riskMode || '') === rm) {
-        showToast(`이미 [${b.textContent}] 기어가 적용 중입니다.`);
-        return;
-      }
-      requestPinAndSendCmd(`🎯 [리스크 기어 전환] ${b.textContent} 적용`, 'set_risk_mode', { riskMode: rm });
-    };
-  });
-
   $('btnResetPnl').onclick = () => requestPinAndSendCmd('🔄 [실현손익 초기화] 지금 이 시각부터 0.00$ 재집계', 'reset_pnl_epoch');
   $('btnRestorePnl').onclick = () => requestPinAndSendCmd('↩ [실현손익 복원] 직전 집계 기준점으로 되돌리기', 'restore_pnl_epoch');
-  $('btnClearLogs').onclick = () => requestPinAndSendCmd('🗑 [사이클 기록] 운용 로그 전체 비우기', 'clear_logs');
+  $('btnClearLogs').onclick = () => requestPinAndSendCmd('🗑 [운용 기록] AI 자율 로그 전체 비우기', 'clear_logs');
 
   $('btnToggleOrdFold').onclick = () => {
     ordFolded = !ordFolded;
@@ -2800,19 +2808,19 @@
 
   window.__kjRadarMeta = { run: false, btc: 0, anchor: 0, hm: '' };
   window.__kjRadarRightTxt = function() {
-    if (document.documentElement.getAttribute('data-auth') !== 'owner') return '실시간 시세 레이더';
+    if (document.documentElement.getAttribute('data-auth') !== 'owner') return '실시간 웹소켓';
     const m = window.__kjRadarMeta || {};
     const hm = (m.hm && m.hm !== '--:--') ? m.hm : '';
-    if (m.run) return hm ? `직전 ${hm} · 갱신 중` : '실시간 분석 가동';
+    if (m.run) return hm ? `직전 ${hm} · 추론 중` : 'AI 자율 추론 중';
     if (m.anchor > 0 && m.btc > 0) {
       const dp = ((m.btc - m.anchor) / m.anchor) * 100.0;
       const sg = dp >= 0 ? '+' : '';
       return hm ? `최근 ${hm} · ${sg}${dp.toFixed(2)}%` : `기준 ${Math.round(m.anchor).toLocaleString()}$ · ${sg}${dp.toFixed(2)}%`;
     }
-    return hm ? `최근 분석 ${hm}` : '0.2초 틱 레이더';
+    return hm ? `최근 분석 ${hm}` : '4인 WS 직결';
   };
 
-  const ECON_SEEN_KEY = 'kj_v40_seen_econ_ts';
+  const ECON_SEEN_KEY = 'kj_v77_seen_econ_ts';
   let _latestEconStamp = '';
 
   function syncEconNewBadge(stampStr) {
@@ -2924,16 +2932,16 @@
   $('btnExportCsv').onclick = () => {
     const tDesc = ((S && S.performance && S.performance.tradesDesc) || []);
     if (!tDesc.length) { showToast('내보낼 체결 내역이 없습니다.', true); return; }
-    const header = 'Time(KST),Side,Gear,Qty(BTC),Entry($),Exit($),ClosedPnL(USDT)\n';
-    const body = tDesc.map(r => `${r.fullTime || r.dateStr || r.timeStr || ''},${r.side},${String(r.gear || '').replace(/\+/g, '')},${r.qty},${r.entry},${r.exit},${r.pnl}`).join('\n');
+    const header = 'Time(KST),Side,Mode,Qty(BTC),Entry($),Exit($),ClosedPnL(USDT)\n';
+    const body = tDesc.map(r => `${r.fullTime || r.dateStr || r.timeStr || ''},${r.side},V77_AUTO,${r.qty},${r.entry},${r.exit},${r.pnl}`).join('\n');
     const blob = new Blob(['\uFEFF' + header + body], { type:'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `KingJae_PnL_${new Date().toISOString().slice(0,10)}.csv`;
+    a.download = `KingJae_V77_PRO_PnL_${new Date().toISOString().slice(0,10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-    showToast('📥 실현손익 CSV 파일 다운로드 완료');
+    showToast('📥 V77 PRO 실현손익 CSV 다운로드 완료');
   };
 
   $('logFilterTabs').onclick = (ev) => {
@@ -2944,177 +2952,62 @@
     if (S) renderLogsList(S.logs || []);
   };
 
-  let lbScale = 1, lbTx = 0, lbTy = 0;
-  let lbPinchDist0 = 0, lbPinchScale0 = 1, lbPinchMid0 = { x:0, y:0 }, lbPinchT0 = { x:0, y:0 };
-  let lbPanStart = { x:0, y:0 }, lbPanT0 = { x:0, y:0 }, lbIsPanning = false, lbLastTapTs = 0;
-  let touchStartX = 0, touchStartY = 0;
-
-  function applyLbTransform() {
-    const wrap = $('lbScrollWrap'), im = $('lbImg');
-    if (!wrap || !im) return;
-    const w = wrap.clientWidth || 340, h = im.offsetHeight || wrap.clientHeight || 220;
-    lbScale = Math.max(1, Math.min(4.5, lbScale));
-    if (lbScale <= 1.01) {
-      lbScale = 1; lbTx = 0; lbTy = 0;
-    } else {
-      const minX = w - w * lbScale;
-      const minY = Math.min(0, (wrap.clientHeight || h) - h * lbScale);
-      lbTx = Math.min(0, Math.max(minX, lbTx));
-      lbTy = Math.min(0, Math.max(minY, lbTy));
-    }
-    im.style.transform = `translate3d(${lbTx.toFixed(1)}px, ${lbTy.toFixed(1)}px, 0) scale(${lbScale.toFixed(3)})`;
-    setTxt('lbZoomPill', lbScale > 1.01 ? `${lbScale.toFixed(1)}x · 드래그 이동 / 더블탭 복귀` : '1.0x · 두 손가락 확대 / 더블탭');
-  }
-
-  function resetLbZoom() {
-    lbScale = 1; lbTx = 0; lbTy = 0;
-    applyLbTransform();
-  }
-
-  function openLb(idx) {
-    if (!curLbArr.length) return;
-    curLbIdx = (idx + curLbArr.length) % curLbArr.length;
-    const b = curLbArr[curLbIdx];
-    setTxt('lbTitle', b.title);
-    resetLbZoom();
-    const im = $('lbImg');
-    im.onload = () => resetLbZoom();
-    im.onerror = () => { if (b.inlineThumb && im.src !== b.inlineThumb) im.src = b.inlineThumb; };
-    im.src = b.full || b.inlineThumb;
-    openModalById('lbModal');
-  }
-  $('lbPrev').onclick = () => openLb(curLbIdx - 1);
-  $('lbNext').onclick = () => openLb(curLbIdx + 1);
-
-  $('lbScrollWrap').addEventListener('touchstart', (e) => {
-    const wrap = $('lbScrollWrap');
-    const rect = wrap.getBoundingClientRect();
-    if (e.touches.length === 2) {
-      e.preventDefault();
-      lbIsPanning = false;
-      const t1 = e.touches[0], t2 = e.touches[1];
-      lbPinchDist0 = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY) || 1;
-      lbPinchScale0 = lbScale;
-      lbPinchMid0 = { x: (t1.clientX + t2.clientX) / 2 - rect.left, y: (t1.clientY + t2.clientY) / 2 - rect.top };
-      lbPinchT0 = { x: lbTx, y: lbTy };
-    } else if (e.touches.length === 1) {
-      const t = e.touches[0];
-      touchStartX = t.clientX; touchStartY = t.clientY;
-      if (lbScale > 1.01) {
-        lbIsPanning = true;
-        lbPanStart = { x: t.clientX, y: t.clientY };
-        lbPanT0 = { x: lbTx, y: lbTy };
-      }
-    }
-  }, { passive:false });
-
-  $('lbScrollWrap').addEventListener('touchmove', (e) => {
-    const wrap = $('lbScrollWrap');
-    const rect = wrap.getBoundingClientRect();
-    if (e.touches.length === 2 && lbPinchDist0 > 0) {
-      e.preventDefault();
-      const t1 = e.touches[0], t2 = e.touches[1];
-      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
-      const nextScale = Math.max(1, Math.min(4.5, lbPinchScale0 * (dist / lbPinchDist0)));
-      const midX = (t1.clientX + t2.clientX) / 2 - rect.left;
-      const midY = (t1.clientY + t2.clientY) / 2 - rect.top;
-      const ratio = nextScale / lbPinchScale0;
-      lbScale = nextScale;
-      lbTx = midX - (lbPinchMid0.x - lbPinchT0.x) * ratio;
-      lbTy = midY - (lbPinchMid0.y - lbPinchT0.y) * ratio;
-      applyLbTransform();
-    } else if (e.touches.length === 1 && lbIsPanning && lbScale > 1.01) {
-      e.preventDefault();
-      const t = e.touches[0];
-      lbTx = lbPanT0.x + (t.clientX - lbPanStart.x);
-      lbTy = lbPanT0.y + (t.clientY - lbPanStart.y);
-      applyLbTransform();
-    }
-  }, { passive:false });
-
-  $('lbScrollWrap').addEventListener('touchend', (e) => {
-    if (e.touches.length < 2) lbPinchDist0 = 0;
-    if (e.touches.length === 0) {
-      lbIsPanning = false;
-      if (e.changedTouches.length === 1) {
-        const t = e.changedTouches[0];
-        const dx = t.clientX - touchStartX;
-        const dy = t.clientY - touchStartY;
-        const nowTap = Date.now();
-        if (Math.abs(dx) < 12 && Math.abs(dy) < 12) {
-          if (nowTap - lbLastTapTs < 280) {
-            lbLastTapTs = 0;
-            const rect = $('lbScrollWrap').getBoundingClientRect();
-            const tapX = t.clientX - rect.left, tapY = t.clientY - rect.top;
-            if (lbScale > 1.05) {
-              resetLbZoom();
-            } else {
-              lbScale = 2.4;
-              lbTx = tapX - tapX * lbScale;
-              lbTy = tapY - tapY * lbScale;
-              applyLbTransform();
-            }
-            return;
-          }
-          lbLastTapTs = nowTap;
-        }
-        if (lbScale <= 1.02 && Math.abs(dx) > 65 && Math.abs(dy) < 50) {
-          if (dx < 0) openLb(curLbIdx + 1);
-          else openLb(curLbIdx - 1);
-        }
-      }
-    }
-  }, { passive:true });
-
   function renderBoards() {
     if (!isOwner() || !S || !S._vaultUnlocked || !S.rationaleInfo) return;
     const ri = S.rationaleInfo;
-    const sig = JSON.stringify([ri.updatedAt, ri.rationale, ri.longSniper, ri.longLadder, ri.shortSniper, ri.shortLadder, ri.removedNotices, ri.skippedNotes]);
+    const lPlan = ri.longPlan || ri.longLadder;
+    const sPlan = ri.shortPlan || ri.shortLadder;
+    const trigS = ri.triggerReason || (S.orderSummary && S.orderSummary.lastTriggerReason) || '4인 웹소켓 실시간 수급 추적 중';
+    const aiRiskP = Number(ri.aiTotalRiskPct || 0);
+
+    const sig = JSON.stringify([ri.updatedAt, ri.rationale, trigS, aiRiskP, lPlan, sPlan, ri.activePositionManage, ri.removedNotices, ri.skippedNotes]);
     if (brdSig === sig) return;
     brdSig = sig;
 
     setTxt('cbTacRegime', ri.marketRegimeKo || '수급 분석');
     setTxt('cbTacTime', String(ri.updatedAtHm || String(ri.updatedAt || '--:--').slice(-5)));
+    setTxt('cbTacRiskBadge', aiRiskP > 0 ? `🧠 데이터 자율 배분 ${aiRiskP.toFixed(2)}%` : '🧠 0건 관망 (배분 0%)');
+    setTxt('cbTacTriggerTxt', trigS);
 
-    const paras = Array.isArray(ri.paragraphs) && ri.paragraphs.length ? ri.paragraphs : [ri.rationale || '타점 분석 대기 중입니다.'];
+    const paras = Array.isArray(ri.paragraphs) && ri.paragraphs.length ? ri.paragraphs : [ri.rationale || '실시간 데이터 분석 대기 중입니다.'];
     $('cbTacSummaryWrap').innerHTML = paras.map((pTxt, idx) =>
       `<div style="${idx > 0 ? 'margin-top:8px;' : ''}">${fmtInlineRich(pTxt)}</div>`
     ).join('');
 
-    const buildLadderBox = (sideCls, titleKo, lad) => {
-      if (!lad || typeof lad !== 'object') return '';
-      const legs = Array.isArray(lad.legs) ? lad.legs : [];
-      const totQ = Number(lad.totQty || 0);
+    const buildAutonomousPlanBox = (sideCls, titleKo, planObj) => {
+      if (!planObj || typeof planObj !== 'object') return '';
+      const legs = Array.isArray(planObj.legs) ? planObj.legs : [];
+      const totQ = Number(planObj.totQty || 0);
       const obRows = legs.map(lg => {
         const wPct = Number(lg.weightPct || 0);
-        const barW = Math.max(18, Math.min(100, Math.round((wPct / 28) * 100)));
+        const barW = Math.max(12, Math.min(100, Math.round(wPct)));
         const legQ = lg.qty !== undefined ? Number(lg.qty) : (totQ > 0 ? Math.round(totQ * (wPct / 100) * 1000) / 1000 : 0);
         const qtyTxt = legQ > 0 ? `<span class="tac-ob-qty"> · ${legQ.toFixed(3)} BTC</span>` : '';
         return `
           <div class="tac-ob-row">
-            <span class="tac-ob-idx">${lg.legIdx}차 ${wPct}%</span>
+            <span class="tac-ob-idx">#${lg.legIdx} (${wPct.toFixed(0)}%)</span>
             <div class="tac-ob-bar-bg"><div class="tac-ob-bar-fill ${sideCls}" style="width:${barW}%;"></div></div>
             <span class="tac-ob-px">${fmt(lg.price, 1)}$${qtyTxt}</span>
           </div>`;
       }).join('');
-      const stPill = lad.liveStatus === 'HOLDING'
-        ? `<span class="pill up" style="font-size:10px;padding:2px 7px;white-space:nowrap;">● 체결·보유 중</span>`
-        : `<span class="pill" style="font-size:10px;padding:2px 7px;white-space:nowrap;">밴드 폭 ${lad.spanPct || 0}%</span>`;
+      const stPill = planObj.liveStatus === 'HOLDING'
+        ? `<span class="pill up" style="font-size:10px;padding:2px 7px;white-space:nowrap;">● 체결·자율 운용 중</span>`
+        : `<span class="pill" style="font-size:10px;padding:2px 7px;white-space:nowrap;">리스크 ${Number(planObj.riskPct || 0).toFixed(2)}%</span>`;
       return `
         <div class="tac-box ${sideCls}">
           <div class="row-sb" style="flex-wrap:nowrap;">
-            <b style="font-size:13px;color:#f8fafc;white-space:nowrap;">${titleKo} (${lad.grade || 'S'}급)</b>
+            <b style="font-size:13px;color:#f8fafc;white-space:nowrap;">${titleKo} (${legs.length}건 · ${planObj.grade || 'S'}급)</b>
             ${stPill}
           </div>
-          <div class="tac-row"><span class="tac-lbl">가중평단</span><span class="tac-val">${fmt(lad.wAvg, 1)}$ (${totQ} BTC)</span></div>
-          <div class="tac-row"><span class="tac-lbl">전량익절</span><span class="tac-val up">${fmt(lad.tp, 1)}$ (+${fmt(lad.fullTpUsd, 0)}$)</span></div>
-          <div class="tac-row"><span class="tac-lbl">최종손절</span><span class="tac-val dn">${fmt(lad.sl, 1)}$ (1 : ${lad.rr || 0})</span></div>
+          <div class="tac-row"><span class="tac-lbl">가중평단</span><span class="tac-val">${fmt(planObj.wAvg, 1)}$ (${totQ} BTC)</span></div>
+          <div class="tac-row"><span class="tac-lbl">목표익절</span><span class="tac-val up">${fmt(planObj.tp, 1)}$ (+${fmt(planObj.fullTpUsd, 0)}$)</span></div>
+          <div class="tac-row"><span class="tac-lbl">보호손절</span><span class="tac-val dn">${fmt(planObj.sl, 1)}$ (1 : ${planObj.rr || 0})</span></div>
           ${obRows ? `<div class="tac-ob-list">${obRows}</div>` : ''}
         </div>`;
     };
 
-    const lBox = buildLadderBox('long', '🟢 롱 5분할', ri.longLadder);
-    const sBox = buildLadderBox('short', '🔴 숏 5분할', ri.shortLadder);
+    const lBox = buildAutonomousPlanBox('long', '🟢 롱 AI 자율 타점', lPlan);
+    const sBox = buildAutonomousPlanBox('short', '🔴 숏 AI 자율 타점', sPlan);
     const gridEl = $('cbTacLadderCards');
     if (lBox || sBox) {
       gridEl.style.display = 'flex';
@@ -3125,22 +3018,36 @@
     }
 
     const rCards = [];
-    const lLadN = (ri.longLadder && Array.isArray(ri.longLadder.legs) && ri.longLadder.legs.length >= 4) ? ri.longLadder.legs.length : 5;
-    const sLadN = (ri.shortLadder && Array.isArray(ri.shortLadder.legs) && ri.shortLadder.legs.length >= 4) ? ri.shortLadder.legs.length : 5;
+    const actMgr = ri.activePositionManage || {};
+    [['long', 'up', '⚙️ 보유 롱 AI 자율 제어'], ['short', 'dn', '⚙️ 보유 숏 AI 자율 제어']].forEach(([mk, clsS, mTitle]) => {
+      const mObj = actMgr[mk];
+      if (mObj && mObj.note) {
+        const slTpBadge = (mObj.new_sl || mObj.new_tp)
+          ? `<span class="num-nw" style="font-size:11.5px;font-weight:900;color:#7dd3fc;">SL ${fmt(mObj.new_sl||0,1)}$ · TP ${fmt(mObj.new_tp||0,1)}$</span>`
+          : '';
+        rCards.push(`
+          <div class="econ-row">
+            <div class="row-sb" style="margin-bottom:6px;">
+              <span class="pill ${clsS}">${mTitle}</span>
+              ${slTpBadge}
+            </div>
+            <div class="econ-row-body">${fmtInlineRich(mObj.note)}</div>
+          </div>`);
+      }
+    });
+
     [
-      [ri.longSniper, 'up', '⚡ 단기 롱', ri.longSniper ? `${fmt(ri.longSniper.entry, 1)}$` : ''],
-      [ri.longLadder, 'up', `🛡 분할 ${lLadN}분할 롱`, ri.longLadder ? `${fmt(ri.longLadder.zone_high, 0)}~${fmt(ri.longLadder.zone_low, 0)}$` : ''],
-      [ri.shortSniper, 'dn', '⚡ 단기 숏', ri.shortSniper ? `${fmt(ri.shortSniper.entry, 1)}$` : ''],
-      [ri.shortLadder, 'dn', `🛡 분할 ${sLadN}분할 숏`, ri.shortLadder ? `${fmt(ri.shortLadder.zone_low, 0)}~${fmt(ri.shortLadder.zone_high, 0)}$` : ''],
+      [lPlan, 'up', lPlan ? `🧠 롱 AI 자율 (${(lPlan.legs||[]).length || 1}건)` : '', lPlan ? `평단 ${fmt(lPlan.wAvg, 1)}$` : ''],
+      [sPlan, 'dn', sPlan ? `🧠 숏 AI 자율 (${(sPlan.legs||[]).length || 1}건)` : '', sPlan ? `평단 ${fmt(sPlan.wAvg, 1)}$` : ''],
     ].forEach(([obj, clsS, lbl, pxS]) => {
       if (!obj || !obj.reason) return;
       const stBadge = obj.liveStatus === 'HOLDING'
-        ? `<span class="pill up" style="font-size:10px;padding:2px 7px;white-space:nowrap;">● 체결·보유 중</span>`
+        ? `<span class="pill up" style="font-size:10px;padding:2px 7px;white-space:nowrap;">● 체결·자율 운용 중</span>`
         : `<span class="num-nw" style="font-size:12px;font-weight:900;color:#f8fafc;white-space:nowrap;">${pxS}</span>`;
       rCards.push(`
         <div class="econ-row">
           <div class="row-sb" style="margin-bottom:6px;">
-            <span class="pill ${clsS}">${lbl} (${obj.grade || 'A'}급)</span>
+            <span class="pill ${clsS}">${lbl} (${obj.grade || 'S'}급)</span>
             ${stBadge}
           </div>
           <div class="econ-row-body">${fmtInlineRich(obj.reason)}</div>
@@ -3149,7 +3056,7 @@
 
     const removedArr = Array.isArray(ri.removedNotices) ? ri.removedNotices : [];
     const removedHtml = removedArr.length
-      ? `<div style="font-size:11px;color:#fcd34d;padding:6px 9px;background:rgba(245,158,11,0.10);border:1px solid rgba(245,158,11,0.28);border-radius:8px;">🔄 실시간 연동: <b>${escHtml(removedArr.join(', '))}</b> 취소되어 근거 카드가 자동 정리됨</div>`
+      ? `<div style="font-size:11px;color:#fcd34d;padding:6px 9px;background:rgba(245,158,11,0.10);border:1px solid rgba(245,158,11,0.28);border-radius:8px;">🔄 실시간 연동: <b>${escHtml(removedArr.join(', '))}</b> 정리 완료</div>`
       : '';
     const skipNotes = (ri.skippedNotes || []).map(sn =>
       `<div style="font-size:11.5px;color:var(--sub);padding:5px 8px;background:rgba(148,163,184,0.08);border-radius:7px;">• ${escHtml(sn)}</div>`
@@ -3224,7 +3131,7 @@
         <div class="row-sb"><b style="font-size:12.5px;">${escHtml(cleanTitle)}</b><span style="font-size:11px;color:var(--sub);">${escHtml(l.time || '')}</span></div>
         <div style="font-size:11.5px;color:var(--sub);margin-top:4px;line-height:1.5;">${escHtml(cleanDesc)}</div>
       </div>`;
-    }).join('') : '<div style="color:var(--sub);font-size:12.5px;padding:12px 0;">표시할 운용 기록이 없습니다.</div>';
+    }).join('') : '<div style="color:var(--sub);font-size:12.5px;padding:12px 0;">표시할 자율 운용 기록이 없습니다.</div>';
   }
 
   function renderPnlCalendar(calArr) {
@@ -3253,22 +3160,20 @@
       return true;
     });
     const firstItem = tDesc[0] || {};
-    const nPnlSig = (pf.resetAt || '') + ':' + pnlFilter + ':' + tDesc.length + ':' + (firstItem.id || '') + ':' + (firstItem.dateStr || firstItem.timeStr || '') + ':' + (firstItem.gear || '');
+    const nPnlSig = (pf.resetAt || '') + ':' + pnlFilter + ':' + tDesc.length + ':' + (firstItem.id || '') + ':' + (firstItem.dateStr || firstItem.timeStr || '');
     if (pnlSig === nPnlSig) return;
     pnlSig = nPnlSig;
     $('recPnlWrap').innerHTML = tDesc.length ? tDesc.map(r => {
       let baseDt = String(r.dateStr || r.timeStr || '').trim();
       if (!baseDt && r.fullTime) baseDt = String(r.fullTime).slice(5, 16).replace('-', '/');
       if (!baseDt && r.ts) baseDt = fmtKstTs(Math.floor(Number(r.ts) / 1000) + 9 * 3600).full;
-      baseDt = baseDt.replace(/\s*·\s*/g, '·').replace(/\+/g, '');
-      const gClean = String(r.gear || '').replace(/\+/g, '').trim();
-      const dtShow = (baseDt && gClean && !baseDt.includes(gClean)) ? `${baseDt}·${gClean}` : (baseDt || gClean || '--');
+      baseDt = baseDt.replace(/·?(?:공격|밸런스|안정|AI자동)\+?/g, '').replace(/\s*·\s*$/, '').trim();
       return `
       <div class="ord-card ${r.pnl >= 0 ? 'edge-long' : 'edge-short'}" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
         <div style="min-width:0;flex:1;">
-          <div style="font-size:12px;font-weight:900;white-space:nowrap;letter-spacing:-0.25px;"><span class="${r.side==='LONG'?'up':'dn'}">${escHtml(r.side)}</span> · ${r.qty} BTC <span style="color:var(--sub);font-size:10.5px;font-weight:700;">(${escHtml(dtShow)})</span></div>
+          <div style="font-size:12px;font-weight:900;white-space:nowrap;letter-spacing:-0.25px;"><span class="${r.side==='LONG'?'up':'dn'}">${escHtml(r.side)}</span> · ${r.qty} BTC <span style="color:var(--sub);font-size:10.5px;font-weight:700;">(${escHtml(baseDt || '--')} · 자율)</span></div>
           <div style="font-size:11.5px;color:var(--sub);margin-top:3px;white-space:nowrap;">진입 ${fmt(r.entry,1)}$ → 청산 ${fmt(r.exit,1)}$</div>
-          ${Number(r.recycleCount || 0) > 0 ? `<div style="margin-top:4px;"><span class="pill" style="font-size:10px;padding:1.5px 6.5px;color:#38bdf8;border-color:rgba(56,189,248,0.38);background:rgba(56,189,248,0.10);">♻️ 동적 리밸런싱 ${r.recycleCount}회</span></div>` : ''}
+          ${Number(r.recycleCount || 0) > 0 ? `<div style="margin-top:4px;"><span class="pill" style="font-size:10px;padding:1.5px 6.5px;color:#38bdf8;border-color:rgba(56,189,248,0.38);background:rgba(56,189,248,0.10);">♻️ 탄력 순환 ${r.recycleCount}회</span></div>` : ''}
         </div>
         <div class="${r.pnl>=0?'up':'dn'} num-nw" style="font-size:13.5px;font-weight:900;flex-shrink:0;">${r.pnl>=0?'+':''}${fmt(r.pnl,2)}$</div>
       </div>`;
@@ -3308,8 +3213,8 @@
         expCards.push(`
           <div class="exp-dir-card">
             <div class="row-sb" style="font-size:11.5px;">
-              <span>🟢 <b>롱 ${le.count}건 합산</b></span>
-              <span class="num-nw" style="color:#cbd5e1;">평단 <b>${fmt(le.wAvg,1)}$</b> · ${le.totQty} BTC</span>
+              <span>🟢 <b>롱 AI 자율 ${le.count}건 합산</b></span>
+              <span class="num-nw" style="color:#cbd5e1;">가중평단 <b>${fmt(le.wAvg,1)}$</b> · ${le.totQty} BTC</span>
             </div>
             <div class="exp-pair-grid">
               <div class="exp-cell">
@@ -3317,7 +3222,7 @@
                 <div class="exp-cell-val up">+${fmt(le.fullTpPct, 2)}% (+${fmt(le.fullTpUsd, 0)}$)</div>
               </div>
               <div class="exp-cell">
-                <div class="exp-cell-lbl">최대 손실 시</div>
+                <div class="exp-cell-lbl">보호손절 도달 시</div>
                 <div class="exp-cell-val dn">${fmt(le.maxLossPct, 2)}% (${fmt(le.maxLossUsd, 0)}$)</div>
               </div>
             </div>
@@ -3327,8 +3232,8 @@
         expCards.push(`
           <div class="exp-dir-card">
             <div class="row-sb" style="font-size:11.5px;">
-              <span>🔴 <b>숏 ${se.count}건 합산</b></span>
-              <span class="num-nw" style="color:#cbd5e1;">평단 <b>${fmt(se.wAvg,1)}$</b> · ${se.totQty} BTC</span>
+              <span>🔴 <b>숏 AI 자율 ${se.count}건 합산</b></span>
+              <span class="num-nw" style="color:#cbd5e1;">가중평단 <b>${fmt(se.wAvg,1)}$</b> · ${se.totQty} BTC</span>
             </div>
             <div class="exp-pair-grid">
               <div class="exp-cell">
@@ -3336,7 +3241,7 @@
                 <div class="exp-cell-val up">+${fmt(se.fullTpPct, 2)}% (+${fmt(se.fullTpUsd, 0)}$)</div>
               </div>
               <div class="exp-cell">
-                <div class="exp-cell-lbl">최대 손실 시</div>
+                <div class="exp-cell-lbl">보호손절 도달 시</div>
                 <div class="exp-cell-val dn">${fmt(se.maxLossPct, 2)}% (${fmt(se.maxLossUsd, 0)}$)</div>
               </div>
             </div>
@@ -3352,22 +3257,19 @@
     }
 
     const ords = ordFilter === 'ALL' ? allOrds : allOrds.filter(o => o.side === ordFilter);
-    const nOrdSig = showOwnerDetails + ':' + ordFilter + ':' + JSON.stringify(ords.map(o => [o.orderId, o.price, o.qty, o.sl, o.tp, o.badge, o.guestBadge, o.slSeedPct]));
+    const nOrdSig = showOwnerDetails + ':' + ordFilter + ':' + JSON.stringify(ords.map(o => [o.orderId, o.price, o.qty, o.sl, o.tp, o.badge, o.sharePct]));
     if (ordSig !== nOrdSig) {
       ordSig = nOrdSig;
       $('ordListWrap').innerHTML = ords.length ? ords.map(o => {
         const dispBadge = showOwnerDetails ? o.badge : (o.guestBadge || o.badge);
         const edgeCls = o.side === 'LONG' ? 'edge-long' : 'edge-short';
-        const ladNote = (showOwnerDetails && o.track === 'LADDER' && o.ladderFullTpUsd > 0)
-          ? `<div class="row-sb" style="font-size:11px;color:#7dd3fc;margin-top:6px;"><span>🛡 분할 ${o.ladderLegCount || 5}분할 합산 익절 시</span><b class="num-nw">+${fmt(o.ladderFullTpPct, 2)}% (+${fmt(o.ladderFullTpUsd, 0)}$)</b></div>`
-          : '';
         return `
         <div class="ord-card ${edgeCls}">
           <div class="row-sb">
             <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
               <span class="pill ${o.side==='LONG'?'up':'dn'}">${o.sideKo}</span>
               <span style="font-size:12px;color:var(--sub);font-weight:800;">지정가 · ${o.leverage}x</span>
-              <span class="pill" style="color:#c4b5fd;border-color:rgba(167,139,250,0.35);">${escHtml(dispBadge)}</span>
+              <span class="pill" style="color:#7dd3fc;border-color:rgba(56,189,248,0.38);">${escHtml(dispBadge)}</span>
             </div>
             <div style="display:flex;align-items:center;gap:7px;">
               <span class="ord-price-btn" data-oprice="${o.price}" title="차트에서 보기">${fmt(o.price,1)}</span>
@@ -3376,8 +3278,8 @@
           </div>
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:9px;font-size:12px;">
             <div><div class="sm-lbl">수량</div><b>${o.qty}</b></div>
-            <div><div class="sm-lbl">익절</div><b class="up">${fmt(o.tp,1)}</b></div>
-            <div><div class="sm-lbl">손절</div><b class="dn">${fmt(o.sl,1)}</b></div>
+            <div><div class="sm-lbl">목표익절</div><b class="up">${fmt(o.tp,1)}</b></div>
+            <div><div class="sm-lbl">보호손절</div><b class="dn">${fmt(o.sl,1)}</b></div>
             <div><div class="sm-lbl">손익비</div><b>1 : ${o.rr}</b></div>
           </div>
           ${showOwnerDetails ? `
@@ -3397,14 +3299,13 @@
                 <div class="exp-cell-val dn">${fmt(o.slSeedPct, 2)}% (${fmt(o.slUsd, 0)}$)</div>
               </div>
             </div>
-            ${ladNote}
-            <div class="row-sb" style="font-size:11px;color:#cbd5e1;margin-top:6px;">
-              <span style="white-space:nowrap;">1R 방어선 (부분익절·여유스탑)</span>
-              <b class="num-nw">${fmt(o.r1Price,1)}$</b>
+            <div class="row-sb" style="font-size:11px;color:#7dd3fc;margin-top:6px;">
+              <span style="white-space:nowrap;">AI 자율 타점 실비중</span>
+              <b class="num-nw">${Number(o.sharePct || 100).toFixed(1)}% (${o.qty} BTC)</b>
             </div>
           </div>` : ''}
         </div>`;
-      }).join('') : '<div style="color:var(--sub);font-size:12.5px;margin-top:10px;">해당 조건에 대기 중인 지정가 주문이 없습니다.</div>';
+      }).join('') : '<div style="color:var(--sub);font-size:12.5px;margin-top:10px;">현재 대기 중인 지정가 타점이 없습니다 (0건 관망 또는 포지션 운용 중).</div>';
 
       $('ordListWrap').querySelectorAll('[data-coid]').forEach(b => {
         b.onclick = () => requestPinAndSendCmd(`🗑 [개별 주문 취소] ${b.dataset.cdesc}`, 'cancel_order', { orderId: b.dataset.coid });
@@ -3420,7 +3321,7 @@
     let d = { ...rawObj, _vaultUnlocked: false };
     if (isOwner() && d.ownerVault) {
       if (!savedVaultKeyHex) {
-        try { savedVaultKeyHex = localStorage.getItem('kj_v40_vault_key') || ''; } catch(e){}
+        try { savedVaultKeyHex = localStorage.getItem('kj_v77_vault_key') || localStorage.getItem('kj_v40_vault_key') || ''; } catch(e){}
       }
       if (savedVaultKeyHex) {
         const dec = await decryptOwnerVault(d.ownerVault, savedVaultKeyHex);
@@ -3432,7 +3333,7 @@
         vaultAutoPrompted = true;
         setTimeout(() => {
           if (isOwner() && (!S || !S._vaultUnlocked)) {
-            openKeypadModal('unlock', '🔐 사파리 보안 볼트 동기화', '6자리 PIN을 1회 입력하시면 실계좌 시드와 전용 기록이 복원됩니다.');
+            openKeypadModal('unlock', '🔐 KingJae V77 PRO 볼트 동기화', '6자리 PIN을 1회 입력하시면 실계좌 시드와 4인 웹소켓 계기판이 활성화됩니다.');
           }
         }, 250);
       }
@@ -3469,14 +3370,11 @@
     const shBtn = $('btnShieldToggle');
     if (shBtn) {
       shBtn.className = shOn ? 'btn acc' : 'btn';
-      setTxt('btnShieldToggle', shOn ? '🛡️ 방어 ON' : '🛡️ 방어 OFF');
+      setTxt('btnShieldToggle', shOn ? '🛡️ 일정 ON' : '🛡️ 일정 OFF');
     }
 
     const curLev = d._vaultUnlocked ? Number(d.leverage || 100) : 0;
     document.querySelectorAll('[data-lev]').forEach(b => b.classList.toggle('acc', curLev > 0 && Number(b.dataset.lev) === curLev));
-
-    const curRmode = d._vaultUnlocked ? String(d.riskMode || 'BALANCE').toUpperCase() : '';
-    document.querySelectorAll('[data-rmode]').forEach(b => b.classList.toggle('active', Boolean(curRmode) && b.dataset.rmode === curRmode));
 
     setTxt('btcLivePrice', fmt(d.btcPrice, 1));
     const bc = Number(d.btcChg24h || 0);
@@ -3499,27 +3397,53 @@
         nsBox.style.display = 'none';
       } else {
         if (d.cycleRunning && !offline) {
-          setTxt('statusHeadline', d.phaseNote || '오더플로우 마스터 보드 6/6장 분석 중');
+          setTxt('statusHeadline', d.phaseNote || '⚡ V77 PRO 멀티팩터 보드 & 백지 자율 타점 추론 중');
         } else if (sumInfo.ownerHeadline) {
           setTxt('statusHeadline', sumInfo.ownerHeadline);
         } else {
-          setTxt('statusHeadline', '양방향 지정가 감시 중');
+          setTxt('statusHeadline', '🧠 4인 웹소켓 실시간 수급 추적 중');
+        }
+
+        const trigTxt = sumInfo.lastTriggerReason || (d.rationaleInfo && d.rationaleInfo.triggerReason) || '실시간 오더플로우 · 호가벽 감시 중';
+        setTxt('lastTriggerReasonTxt', trigTxt);
+
+        const ws4 = sumInfo.ws4 || {};
+        if (ws4.trade005) {
+          const t5 = ws4.trade005;
+          setTxt('ws4-t05-st', t5.alive ? '🟢 LIVE' : '🟡 대기');
+          setTxt('ws4-t05-v', `CVD ${Number(t5.cvd5m||0)>=0?'+':''}${Number(t5.cvd5m||0).toFixed(1)} · RVOL ${Number(t5.rvol5m||1).toFixed(2)}x`);
+          setTxt('ws4-t05-s', `매수비중 ${Number(t5.buyRatio5m||50).toFixed(1)}% · ${t5.sweepSignal || '수급 집계'}`);
+        }
+        if (ws4.book010) {
+          const b1 = ws4.book010;
+          setTxt('ws4-b01-st', b1.alive ? '🟢 LIVE' : '🟡 대기');
+          setTxt('ws4-b01-v', `OBI ${Number(b1.obiPct||0)>=0?'+':''}${Number(b1.obiPct||0).toFixed(1)}% · ${b1.wallBias || '균형'}`);
+          setTxt('ws4-b01-s', `매수벽 ${b1.bidWallPrice ? Math.round(b1.bidWallPrice).toLocaleString() : '--'} / 매도벽 ${b1.askWallPrice ? Math.round(b1.askWallPrice).toLocaleString() : '--'}`);
+        }
+        if (ws4.guard020) {
+          setTxt('ws4-g02-st', ws4.guard020.alive ? '🟢 LIVE' : '🟡 대기');
+          setTxt('ws4-g02-v', ws4.guard020.status || '실시간 자율 수비');
+          setTxt('ws4-g02-s', ws4.guard020.lastAction || '실물 호가벽 · 무제한 탄력 재장전');
+        }
+        if (ws4.master200) {
+          const aiAlloc = Number((d.rationaleInfo && d.rationaleInfo.aiTotalRiskPct) || 0);
+          setTxt('ws4-m20-st', offline ? '🟡 오프라인' : '🟢 LIVE');
+          setTxt('ws4-m20-v', ws4.master200.status || '0~N건 백지 자율');
+          setTxt('ws4-m20-s', aiAlloc > 0 ? `현재 데이터 배분 ${aiAlloc.toFixed(2)}%` : '고정한도 없음 · 실시간 탐색');
         }
 
         const ns = sumInfo.newsShield || {};
         if (ns.active && ns.event) {
           nsBox.style.display = 'block';
           $('shieldLine1').style.color = '#fb7185';
-          setTxt('shieldLine1', `🛡️ [지표 방어막 가동] ${ns.event.timeStr} · ${ns.event.title}`);
-          setTxt('shieldLine2', `${ns.phase} · 원거리 구조적 분할만 유지 중`);
+          setTxt('shieldLine1', `🛡️ [거시 변동성 구간] ${ns.event.timeStr} · ${ns.event.title}`);
+          setTxt('shieldLine2', `${ns.phase} · 4인 웹소켓 초고속 호가벽 추적 중`);
         } else if (ns.enabled && ns.nextEvent && Number(ns.nextEvent.diffMin) <= 240 && Number(ns.nextEvent.diffMin) > 0) {
           const dm = Math.max(1, Math.round(Number(ns.nextEvent.diffMin)));
-          const shieldIn = Math.max(0, dm - 15);
-          const l2Txt = shieldIn > 0 ? `발표 ${dm}분 전 · 🛡️ 방어막 가동 ${shieldIn}분 전` : `발표 ${dm}분 전 · 🛡️ 방어막 가동 임박`;
           nsBox.style.display = 'block';
           $('shieldLine1').style.color = '#fde68a';
           setTxt('shieldLine1', `🕒 ${ns.nextEvent.timeStr} · ${ns.nextEvent.title}`);
-          setTxt('shieldLine2', l2Txt);
+          setTxt('shieldLine2', `발표 ${dm}분 전 · 실시간 수급 변동성 감시 연동`);
         } else {
           nsBox.style.display = 'none';
         }
@@ -3548,17 +3472,18 @@
       : calcGuestLiveSeed(d, d.btcPrice);
     setTxt('totalSeedVal', fmt(eqVal, 2));
 
+    const posArr = d.positions || [];
     if (isOwner()) {
       if (!d._vaultUnlocked) {
         $('liveUpnlPill').style.display = 'none';
         setTxt('riskAllowanceTxt', '보안 볼트 동기화 후 표시');
+        setTxt('activeSlCapTxt', '--');
         setTxt('totalRealizedBadge', '--');
-        $('guardBrakeBanner').style.display = 'none';
         setTxt('wbVal', '--'); setTxt('avVal', '--'); setTxt('omVal', '--');
       } else {
         const upnl = Number(w.unrealisedPnl || 0);
         const upEl = $('liveUpnlPill');
-        if (Math.abs(upnl) >= 0.01 || (d.positions || []).length > 0) {
+        if (Math.abs(upnl) >= 0.01 || posArr.length > 0) {
           upEl.style.display = 'inline-flex';
           upEl.className = 'upnl-pill owner-only ' + (upnl >= 0 ? 'pos' : 'neg');
           setTxt('liveUpnlPill', `미실현 ${upnl >= 0 ? '+' : ''}${fmt(upnl, 2)}`);
@@ -3567,29 +3492,28 @@
         }
 
         window.__kjRadarMeta = { run: !!d.cycleRunning, btc: Number(d.btcPrice || 0), anchor: Number(d.radarAnchor || 0), hm: String((d.rationaleInfo && d.rationaleInfo.updatedAtHm) || '') };
-        const rg = d.riskGear || {};
-        const snpPct = Number(rg.sniperPct || 1.8);
-        const ladPct = Number(rg.ladderPct || 3.0);
-        const snpUsd = Math.round(eqVal * (snpPct / 100.0));
-        const ladUsd = Math.round(eqVal * (ladPct / 100.0));
-        setTxt('riskAllowanceTxt', `단기 ${snpUsd.toLocaleString()}$ (${snpPct}%) · 분할 ${ladUsd.toLocaleString()}$ (${ladPct}%)`);
 
-        const gbEl = $('guardBrakeBanner');
-        const pfObj = d.performance || {};
-        if (rg.dailyBrakeApplied) {
-          gbEl.style.display = 'block';
-          setTxt('guardBrakeBanner', '🛑 [일일 손실 브레이크(-6%) 작동] 당일 TWR 손실 방어를 위해 신규 물량 50% 축소 중');
-        } else if (pfObj.lossStreakCooldownActive) {
-          gbEl.style.display = 'block';
-          setTxt('guardBrakeBanner', `❄️ [단기 3연패 휩소 브레이크] 연속 손실 방어를 위해 근거리 단기 ${pfObj.lossStreakRemMin || 30}분 휴식 중 (분할 유지)`);
-        } else if (rg.profitLockApplied) {
-          gbEl.style.display = 'block';
-          setTxt('guardBrakeBanner', '🔒 [Profit Lock 작동] 고점 수익 보존을 위해 리스크 기어 1단계 자동 감속 중');
-        } else if (rg.weekendThinApplied) {
-          gbEl.style.display = 'block';
-          setTxt('guardBrakeBanner', '🌙 [주말 박장 모드] 휴장 유동성 보호를 위해 AI자동 단기 비중 15% 자동 감량 적용 중');
+        const aiAllocPct = Number((d.rationaleInfo && d.rationaleInfo.aiTotalRiskPct) || 0);
+        const aiAllocUsd = Math.round(eqVal * (aiAllocPct / 100.0));
+        setTxt(
+          'riskAllowanceTxt',
+          aiAllocPct > 0
+            ? `🧠 AI 산출 ${aiAllocPct.toFixed(2)}% (${aiAllocUsd.toLocaleString()}$ · 고정상한 없음)`
+            : '🧠 고정한도 없음 · 실시간 데이터 자율 산출'
+        );
+
+        if (posArr.length > 0) {
+          const slSummary = posArr.map(p => {
+            const sKo = p.side === 'LONG' ? '롱' : '숏';
+            if (p.sl > 0 && p.lockedPnlUsd !== null && p.lockedPnlUsd !== undefined) {
+              const lU = Number(p.lockedPnlUsd);
+              return `${sKo} ${fmt(p.sl, 1)}$ (${lU >= 0 ? '+' : ''}${Math.round(lU).toLocaleString()}$ / ${p.lockedPnlPct >= 0 ? '+' : ''}${p.lockedPnlPct}%)`;
+            }
+            return `${sKo} AI 자율 SL 감시`;
+          }).join(' · ');
+          setTxt('activeSlCapTxt', slSummary);
         } else {
-          gbEl.style.display = 'none';
+          setTxt('activeSlCapTxt', '무포지션 (진입 시 AI 데이터 자율 설정)');
         }
 
         setTxt('wbVal', fmt(w.walletBalance || 0, 2) + '$');
@@ -3641,14 +3565,13 @@
       }
     }
 
-    const posArr = d.positions || [];
     if (!showOwnerSeed || !posArr.length) {
       $('posSection').style.display = 'none';
       if (!showOwnerSeed) $('posListWrap').innerHTML = '';
     } else {
       $('posSection').style.display = 'block';
-      setTxt('posCountBadge', `${posArr.length}건 보유`);
-      const nPosSig = JSON.stringify(posArr.map(p => [p.side, p.size, p.entry, p.sl, p.tp, p.stageNote, p.liqSafe, p.lockedPnlUsd]));
+      setTxt('posCountBadge', `${posArr.length}건 자율 운용`);
+      const nPosSig = JSON.stringify(posArr.map(p => [p.side, p.size, p.entry, p.sl, p.tp, p.stageNote, p.liqSafe, p.lockedPnlUsd, p.recycleCount]));
       if (posSig !== nPosSig) {
         posSig = nPosSig;
         $('posListWrap').innerHTML = posArr.map((p, idx) => {
@@ -3660,34 +3583,27 @@
           if (p.lockedPnlUsd !== null && p.lockedPnlUsd !== undefined) {
             const lUsd = Number(p.lockedPnlUsd);
             const lCls = lUsd >= 0 ? 'up' : 'dn';
-            const lLbl = lUsd >= 0 ? '🛡 현재 스탑 보장 최소 수익' : '🛡 현재 스탑 최대 제한 손실';
+            const lLbl = lUsd >= 0 ? '🛡 현재 AI 스탑 보장 수익' : '🛡 현재 AI 보호손절 기준 (동적 재설계)';
             lockBanner = `<div class="row-sb" style="font-size:11px;margin-top:7px;padding:6px 9px;border-radius:8px;background:rgba(7,11,20,0.45);border:1px solid rgba(148,163,184,0.12);"><span>${lLbl}</span><b class="${lCls} num-nw">${lUsd >= 0 ? '+' : ''}${fmt(lUsd, 2)}$ (${p.lockedPnlPct >= 0 ? '+' : ''}${p.lockedPnlPct}%)</b></div>`;
           }
           return `
-          <div class="ord-card pos-clickable ${edgeCls}" data-posidx="${idx}" title="터치 시 진입·손절·익절 라인 차트 열기">
+          <div class="ord-card pos-clickable ${edgeCls}" data-posidx="${idx}" title="터치 시 진입·AI 자율 SL·TP 차트 열기">
             <div class="row-sb">
               <span style="font-weight:900;font-size:13.5px;" class="${p.side==='LONG'?'up':'dn'}">${p.side==='LONG'?'🟢 롱':'🔴 숏'} ${p.leverage}x · ${p.size} BTC</span>
               <span style="font-weight:900;font-size:14px;" id="posPnl-${p.side}" class="owner-only ${p.pnlUsd>=0?'up':'dn'}">${p.pnlUsd>=0?'+':''}${fmt(p.pnlUsd,2)}$ (${p.roePct>=0?'+':''}${p.roePct}%)</span>
             </div>
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;font-size:12px;">
               <div><div class="sm-lbl">진입평단</div><b style="border-bottom:1px dashed rgba(148,163,184,0.4);">${fmt(p.entry,1)}</b></div>
-              <div><div class="sm-lbl">목표익절</div><b class="up">${fmt(p.tp,1)}</b></div>
-              <div><div class="sm-lbl">보호손절</div><b class="dn">${fmt(p.sl,1)}</b></div>
+              <div><div class="sm-lbl">AI 목표익절</div><b class="up">${fmt(p.tp,1)}</b></div>
+              <div><div class="sm-lbl">AI 보호손절</div><b class="dn">${fmt(p.sl,1)}</b></div>
             </div>
             <div class="row-sb" style="margin-top:7px;font-size:11px;color:var(--sub);">
               <span>증거금 <b style="color:#e2e8f0;">${p.marginUsd}$</b></span>
               ${liqBadge}
             </div>
             ${lockBanner}
-            <div style="font-size:11px;color:#cbd5e1;margin-top:7px;" id="posRmult-${p.side}">수비 진행: ${p.rMultiple>=0?'+':''}${p.rMultiple}R / +1R (${fmt(p.r1Price,1)}$)</div>
-            <div class="prox-track">
-              <div class="ms-tick" style="left:37.5%;" title="0.75R 손실압축"></div>
-              <div class="ms-tick" style="left:50%;" title="1.0R 부분익절·-0.25R 여유방어"></div>
-              <div class="ms-tick" style="left:75%;" title="1.5R +0.55R 수익잠금"></div>
-              <div class="prox-fill" id="posRbar-${p.side}" style="width:${p.milestonePct || 0}%;background:#38bdf8;"></div>
-            </div>
-            <div class="ms-labels"><span>진입</span><span>0.75R 압축</span><span>1R 여유방어</span><span>1.5R 수익잠금</span><span>2R+</span></div>
-            <div style="font-size:11.5px;color:#7dd3fc;margin-top:6px;">상태: ${escHtml(p.stageNote)}</div>
+            <div style="font-size:11px;color:#cbd5e1;margin-top:7px;" id="posRmult-${p.side}">탄력 순환: ${p.recycleCount || 0}회 완료 · 0.05s 체결 · 0.1s 호가벽 실시간 자율 수비</div>
+            <div style="font-size:11.5px;color:#7dd3fc;margin-top:5px;">${escHtml(p.stageNote)}</div>
             <div style="display:flex;gap:6px;margin-top:9px;padding-top:9px;border-top:1px solid var(--line);">
               <button class="btn acc" data-pact="half_tp" data-pside="${p.side}" style="flex:1;">⚡ 50% 익절</button>
               <button class="btn" data-pact="lock_be" data-pside="${p.side}" style="flex:1;">🛡 본절 잠금</button>
@@ -3719,7 +3635,6 @@
     if (ordCardEl) ordCardEl.style.display = showOwnerSeed ? 'block' : 'none';
     if (showOwnerSeed) renderOpenOrdersSection(d);
 
-    // 웹소켓 상태와 무관하게 매 사이클 보유포지션 손익·ROE·R배수를 최신 시세로 즉시 강제 동기화
     applyRealtimeQuoteTick();
 
     if (d.econNews) {
@@ -3780,10 +3695,10 @@
       if (!document.getElementById('kjDesktopDeskBar')) {
         var bar = document.createElement('div');
         bar.id = 'kjDesktopDeskBar';
-        bar.innerHTML = '<div>👑 <span style="color:#f5b942;font-weight:800;">KINGJAE V40 PRO</span> · 기관급 멀티 전략 커맨드 데스크</div>'
+        bar.innerHTML = '<div>👑 <span style="color:#38bdf8;font-weight:900;">KINGJAE V77 PRO</span> · 무고정 데이터 자율 오더플로우 커맨드 데스크</div>'
           + '<div style="display:flex;gap:12px;align-items:center;">'
-          + '<span style="color:#34d399;">● 0.2초 WebSocket 틱 엔진 직결</span>'
-          + '<span style="color:#94a3b8;">트레이 상주 · 무중단 워치독 가동</span>'
+          + '<span style="color:#34d399;">● 4인 WebSocket (0.05s 체결 · 0.1s 호가벽 · 0.2s 수비 · 2s 총괄)</span>'
+          + '<span style="color:#94a3b8;">0~N건 백지 자율 엔진 가동</span>'
           + '</div>';
         document.body.insertBefore(bar, document.body.firstChild);
       }
