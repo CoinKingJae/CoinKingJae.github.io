@@ -185,6 +185,8 @@
   .seed-meta-item { display:flex; align-items:flex-start; justify-content:space-between; gap:4px 10px; flex-wrap:wrap; line-height:1.42; }
   .seed-meta-item > span { white-space:nowrap; flex-shrink:0; }
   .seed-meta-item > b { text-align:right; word-break:keep-all; overflow-wrap:anywhere; margin-left:auto; font-variant-numeric:tabular-nums; }
+  .sl-cap-stack { display:flex; flex-direction:column; align-items:flex-end; gap:3.5px; margin-left:auto; font-variant-numeric:tabular-nums; }
+  .sl-cap-row { display:inline-flex; align-items:center; gap:4px; white-space:nowrap; font-size:11.2px; font-weight:800; line-height:1.32; }
 
   .sub-metrics { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; margin-top:10px; padding-top:10px; border-top:1px solid var(--line); }
   .sm-lbl { font-size:10.5px; color:var(--sub); }
@@ -242,8 +244,8 @@
     padding:12px 13px; margin-top:9px; border-left:3.5px solid rgba(148,163,184,0.3);
   }
   .ord-card.pos-clickable { cursor:pointer; }
-  .pos-top-row { display:flex; align-items:center; justify-content:space-between; gap:6px 8px; flex-wrap:wrap; }
-  [id^="posPnl-"] { font-variant-numeric:tabular-nums; letter-spacing:-0.3px; font-size:13.5px; margin-left:auto; }
+  .pos-top-row { display:flex; align-items:center; justify-content:space-between; gap:4px; flex-wrap:nowrap; }
+  [id^="posPnl-"] { font-variant-numeric:tabular-nums; letter-spacing:-0.35px; font-size:clamp(11.2px, 3.1vw, 12.8px); white-space:nowrap; margin-left:auto; }
   [id^="posRmult-"], [id^="odist-"] { white-space:normal; word-break:keep-all; line-height:1.42; font-variant-numeric:tabular-nums; }
   .ord-card.edge-long { border-left-color:#10b981; background:linear-gradient(90deg, rgba(16,185,129,0.06) 0%, #111a2c 35%); }
   .ord-card.edge-short { border-left-color:#f43f5e; background:linear-gradient(90deg, rgba(244,63,94,0.06) 0%, #111a2c 35%); }
@@ -588,9 +590,9 @@
           <span>AI 데이터 자율 리스크</span>
           <b style="color:#7dd3fc;" id="riskAllowanceTxt">🧠 고정한도 없음 · 실시간 수급 산출</b>
         </div>
-        <div class="seed-meta-item">
-          <span>보유 포지션 보호손절 기준</span>
-          <b style="color:#e2e8f0;" id="activeSlCapTxt">무포지션 (진입 시 AI 자율 설정)</b>
+        <div class="seed-meta-item" style="align-items:flex-start;">
+          <span>보호손절 기준</span>
+          <div class="sl-cap-stack" id="activeSlCapTxt"><div class="sl-cap-row" style="color:#cbd5e1;">무포지션 (AI 자율 설정)</div></div>
         </div>
         <div class="seed-meta-item">
           <span>누적 확정손익</span>
@@ -3697,7 +3699,7 @@
       if (!d._vaultUnlocked) {
         $('liveUpnlPill').style.display = 'none';
         setTxt('riskAllowanceTxt', '세션 동기화 후 표시');
-        setTxt('activeSlCapTxt', '--');
+        if ($('activeSlCapTxt')) { $('activeSlCapTxt').dataset.sig = '--'; setTxt('activeSlCapTxt', '--'); }
         setTxt('totalRealizedBadge', '--');
         setTxt('wbVal', '--'); setTxt('avVal', '--'); setTxt('omVal', '--');
       } else {
@@ -3722,18 +3724,28 @@
             : '🧠 고정한도 없음 · 실시간 수급 산출'
         );
 
-        if (posArr.length > 0) {
-          const slSummary = posArr.map(p => {
-            const sKo = p.side === 'LONG' ? '롱' : '숏';
-            if (p.sl > 0 && p.lockedPnlUsd !== null && p.lockedPnlUsd !== undefined) {
-              const lU = Number(p.lockedPnlUsd);
-              return `${sKo} ${fmt(p.sl, 1)}$ (${lU >= 0 ? '+' : ''}${Math.round(lU).toLocaleString()}$ / ${p.lockedPnlPct >= 0 ? '+' : ''}${p.lockedPnlPct}%)`;
-            }
-            return `${sKo} AI 자율 SL 감시`;
-          }).join(' · ');
-          setTxt('activeSlCapTxt', slSummary);
-        } else {
-          setTxt('activeSlCapTxt', '무포지션 (진입 시 AI 데이터 자율 설정)');
+        const slHost = $('activeSlCapTxt');
+        if (slHost) {
+          let slHtml = '';
+          if (posArr.length > 0) {
+            slHtml = posArr.map(p => {
+              const sTag = p.side === 'LONG' ? '<span class="up">🟢롱</span>' : '<span class="dn">🔴숏</span>';
+              if (p.sl > 0 && p.lockedPnlUsd !== null && p.lockedPnlUsd !== undefined) {
+                const lU = Number(p.lockedPnlUsd);
+                const pCls = lU >= 0 ? 'up' : 'dn';
+                const sg = lU >= 0 ? '+' : '';
+                const pctSg = Number(p.lockedPnlPct) >= 0 ? '+' : '';
+                return `<div class="sl-cap-row">${sTag} <span style="color:#f8fafc;">${fmt(p.sl, 1)}$</span> <span class="${pCls}">(${sg}${Math.round(lU).toLocaleString()}$ / ${pctSg}${p.lockedPnlPct}%)</span></div>`;
+              }
+              return `<div class="sl-cap-row">${sTag} <span style="color:#cbd5e1;">AI 자율 SL 감시</span></div>`;
+            }).join('');
+          } else {
+            slHtml = '<div class="sl-cap-row" style="color:#cbd5e1;">무포지션 (AI 자율 설정)</div>';
+          }
+          if (slHost.dataset.sig !== slHtml) {
+            slHost.dataset.sig = slHtml;
+            slHost.innerHTML = slHtml;
+          }
         }
 
         setTxt('wbVal', fmt(w.walletBalance || 0, 2) + '$');
@@ -3809,7 +3821,7 @@
           return `
           <div class="ord-card pos-clickable ${edgeCls}" data-posidx="${idx}" title="터치 시 진입·AI 자율 SL·TP 차트 열기">
             <div class="pos-top-row">
-              <span style="font-weight:900;font-size:13.5px;" class="${p.side==='LONG'?'up':'dn'}">${p.side==='LONG'?'🟢 롱':'🔴 숏'} ${p.leverage}x · ${p.size} BTC</span>
+              <span style="font-weight:900;font-size:clamp(11.2px,3.1vw,12.8px);letter-spacing:-0.35px;white-space:nowrap;" class="${p.side==='LONG'?'up':'dn'}">${p.side==='LONG'?'🟢 롱':'🔴 숏'} ${p.leverage}x · ${p.size} BTC</span>
               <span style="font-weight:900;" id="posPnl-${p.side}" class="ctrl-only num-nw ${p.pnlUsd>=0?'up':'dn'}">${p.pnlUsd>=0?'+':''}${fmt(p.pnlUsd,2)}$ (${p.roePct>=0?'+':''}${p.roePct}%)</span>
             </div>
             <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:8px;font-size:12px;">
