@@ -78,22 +78,22 @@
   .btn.warn { background:rgba(245,158,11,0.18); border-color:rgba(245,158,11,0.5); color:#fde68a; }
   .btn.danger { background:rgba(244,63,94,0.15); border-color:rgba(244,63,94,0.45); color:#fda4af; }
 
-  .top-hdr { display:flex; align-items:center; justify-content:space-between; gap:5px; margin-bottom:11px; flex-wrap:nowrap; }
-  .brand-wrap { display:flex; align-items:center; gap:5px; min-width:0; flex:1 1 auto; overflow:hidden; }
-  .brand-name { font-size:16.5px; font-weight:900; letter-spacing:-0.4px; user-select:none; cursor:default; white-space:nowrap; flex-shrink:0; display:flex; align-items:baseline; gap:4px; }
-  .brand-v77 { font-size:12px; font-weight:900; color:#38bdf8; background:rgba(56,189,248,0.14); border:1px solid rgba(56,189,248,0.38); padding:1px 6px; border-radius:6px; letter-spacing:0.2px; }
+  .top-hdr { display:flex; align-items:center; justify-content:space-between; gap:4px; margin-bottom:11px; flex-wrap:nowrap; }
+  .brand-wrap { display:flex; align-items:center; gap:4px; min-width:0; flex:1 1 auto; }
+  .brand-name { font-size:15.5px; font-weight:900; letter-spacing:-0.4px; user-select:none; cursor:default; white-space:nowrap; flex-shrink:0; display:flex; align-items:center; gap:4px; }
+  .brand-v77 { font-size:10.5px; font-weight:900; color:#38bdf8; background:rgba(56,189,248,0.14); border:1px solid rgba(56,189,248,0.38); padding:1.5px 5px; border-radius:6px; letter-spacing:0.1px; }
   .status-pill-slim {
-    font-size:10.5px; font-weight:800; padding:3.5px 7.5px; border-radius:999px;
+    font-size:10px; font-weight:800; padding:3.5px 7px; border-radius:999px;
     background:var(--card2); border:1px solid var(--line); color:#10b981;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer;
+    white-space:nowrap; flex-shrink:0; cursor:pointer; line-height:1.1;
   }
   .sess-pill {
-    font-size:10px; font-weight:900; padding:3px 6.5px; border-radius:999px;
+    font-size:9.5px; font-weight:900; padding:3px 5.5px; border-radius:999px;
     background:rgba(56,189,248,0.16); border:1px solid rgba(56,189,248,0.45); color:#7dd3fc;
     white-space:nowrap; cursor:pointer; flex-shrink:0; display:none; font-variant-numeric:tabular-nums;
   }
-  .hdr-actions { display:flex; align-items:center; gap:4px; flex-wrap:nowrap; flex-shrink:0; }
-  .hdr-actions .btn { padding:5.5px 7.5px; font-size:11px; }
+  .hdr-actions { display:flex; align-items:center; gap:3.5px; flex-wrap:nowrap; flex-shrink:0; }
+  .hdr-actions .btn { padding:5px 6.5px; font-size:10.5px; }
 
   .hero-card {
     position:relative; overflow:hidden; cursor:pointer;
@@ -127,13 +127,13 @@
   }
 
   .trig-reason-bar {
-    margin-top:8px; padding:7px 10px; border-radius:10px;
+    margin-top:8px; padding:8px 10.5px; border-radius:10px;
     background:linear-gradient(90deg, rgba(56,189,248,0.12) 0%, rgba(11,19,34,0.95) 100%);
     border:1px solid rgba(56,189,248,0.28);
-    display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:11px;
+    display:flex; flex-direction:column; align-items:flex-start; gap:3.5px; font-size:11.5px;
   }
-  .trig-reason-tag { font-weight:900; color:#7dd3fc; white-space:nowrap; flex-shrink:0; }
-  .trig-reason-val { font-weight:800; color:#f8fafc; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; text-align:right; }
+  .trig-reason-tag { font-size:10.5px; font-weight:900; color:#7dd3fc; white-space:nowrap; }
+  .trig-reason-val { font-weight:800; color:#f8fafc; white-space:normal; word-break:keep-all; overflow-wrap:anywhere; line-height:1.45; text-align:left; width:100%; }
 
   .ws4-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; margin-top:8px; }
   .ws4-cell {
@@ -142,7 +142,7 @@
   }
   .ws4-top { display:flex; align-items:center; justify-content:space-between; gap:4px; font-size:10px; font-weight:900; color:#7dd3fc; letter-spacing:0.1px; }
   .ws4-st { font-size:9.5px; font-weight:900; color:#34d399; white-space:nowrap; }
-  .ws4-val { font-size:11.5px; font-weight:900; color:#f8fafc; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-variant-numeric:tabular-nums; }
+  .ws4-val { font-size:10.8px; letter-spacing:-0.3px; font-weight:900; color:#f8fafc; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-variant-numeric:tabular-nums; }
   .ws4-sub { font-size:10px; font-weight:700; color:#8b9bb4; margin-top:1.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-variant-numeric:tabular-nums; }
 
   .shield-banner-box {
@@ -463,7 +463,7 @@
     <div class="hdr-actions owner-only">
       <button class="btn acc" id="btnShieldToggle" title="거시 일정 변동성 실시간 추적">🛡️ 일정 ON</button>
       <button class="btn" id="btnPauseToggle">⏸ 정지</button>
-      <button class="btn acc" id="btnForceRun">⚡ 자율분석</button>
+      <button class="btn acc" id="btnForceRun">⚡ 분석</button>
     </div>
   </div>
 
@@ -496,7 +496,7 @@
     <!-- 오너 전용 실시간 상태 + 최근 AI 가동 사유 + 4인 웹소켓 계기판 -->
     <div class="card owner-only" id="ownerStatusCard" style="padding:11px 13px;">
       <div class="row-sb" style="align-items:center;gap:8px;">
-        <span id="statusHeadline" style="font-size:12px;font-weight:800;color:#f1f5f9;line-height:1.4;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">4인 웹소켓 데이터 동기화 중...</span>
+        <span id="statusHeadline" style="font-size:12px;font-weight:800;color:#f1f5f9;line-height:1.35;min-width:0;white-space:normal;word-break:keep-all;">4인 웹소켓 데이터 동기화 중...</span>
         <span id="nextRunLabel" style="font-size:11px;font-weight:800;color:var(--acc);white-space:nowrap;flex-shrink:0;font-variant-numeric:tabular-nums;">4인 WS 직결</span>
       </div>
       <div class="trig-reason-bar">
@@ -1066,13 +1066,13 @@
     if (!dotEl) return;
     if (isEngineOffline()) {
       dotEl.style.color = '#f59e0b';
-      setTxt('liveDot', '🔌 오프라인');
+      setTxt('liveDot', '● 오프라인');
     } else if (S.cycleRunning) {
       dotEl.style.color = '#38bdf8';
-      setTxt('liveDot', '⚡ 자율추론중');
+      setTxt('liveDot', '● 추론중');
     } else if (S.orderPaused) {
       dotEl.style.color = '#f59e0b';
-      setTxt('liveDot', '⏸ 정지중');
+      setTxt('liveDot', '● 정지중');
     } else {
       dotEl.style.color = '#10b981';
       setTxt('liveDot', '● 가동중');
