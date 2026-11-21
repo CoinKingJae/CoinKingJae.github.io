@@ -758,8 +758,9 @@
           <button type="button" class="chip" data-tf="1D">일봉</button>
         </div>
         <div class="tabs-line" id="cmBtcTools">
-          <button type="button" class="chip active" id="btnToggleLines">🎯 주문·헤지선 ON</button>
+          <button type="button" class="chip active" id="btnToggleLines">🎯 주문선: 심플</button>
           <button type="button" class="chip active ctrl-only" id="btnToggleMarks">📍 체결기록 ON</button>
+          <button type="button" class="chip" id="btnResetChartView">↺ 화면정렬</button>
         </div>
       </div>
 
@@ -991,7 +992,7 @@
   let perfPeriod = 'd7', perfMode = 'roi', pingDone = false;
   let ordSig = '', ordExpSig = '', posSig = '', tacSig = '', brdSig = '', econSig = '', pnlSig = '', scSig = '', calSig = '', logSig = '', perfSig = '';
   let perfChart = null, perfSeries = null, perfNativeRedraw = null, perfLastPointTime = 0, perfPeakEq = 0, perfPeakRelNav = 1.0, perfBaseStartEq = 10000;
-  let cmChart = null, cmSeries = null, cmNativeCtrl = null, cmSym = 'BTC', cmTf = '15m', showLines = true, showMarks = true, cmPriceLines = [], lastTradeTs = 0, cmLastCandle = null;
+  let cmChart = null, cmSeries = null, cmNativeCtrl = null, cmSym = 'BTC', cmTf = '15m', showLines = 1, showMarks = true, cmResetViewFn = null, cmPriceLines = [], lastTradeTs = 0, cmLastCandle = null;
   let cmMacroPollTmr = null, cmReqSeq = 0, chartLibPromise = null;
   let curLbArr = [], curLbIdx = 0;
 
@@ -2054,7 +2055,7 @@
   async function fetchFreshBtcKlinesDirect(tf) {
     try {
       const iv = BYBIT_IV_MAP[tf] || '15';
-      const r = await fetch(`https://api.bybit.com/v5/market/kline?category=linear&symbol=BTCUSDT&interval=${iv}&limit=120`, { cache:'no-store' });
+      const r = await fetch(`https://api.bybit.com/v5/market/kline?category=linear&symbol=BTCUSDT&interval=${iv}&limit=500`, { cache:'no-store' });
       if (r.ok) {
         const j = await r.json();
         const rows = ((j.result || {}).list) || [];
@@ -2066,7 +2067,7 @@
     } catch(e){}
     try {
       const biv = BINANCE_IV_MAP[tf] || '15m';
-      const r2 = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=${biv}&limit=120`, { cache:'no-store' });
+      const r2 = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=${biv}&limit=500`, { cache:'no-store' });
       if (r2.ok) {
         const rows2 = await r2.json();
         if (Array.isArray(rows2) && rows2.length) {
@@ -2114,7 +2115,9 @@
     $('cmDelayBadge').style.display = (cmSym === 'NQ100' || cmSym === 'GOLD') ? 'inline-flex' : 'none';
     document.querySelectorAll('#cmSymBar .chip').forEach(b => b.classList.toggle('active', b.dataset.csym === cmSym));
     document.querySelectorAll('#cmTfBar .chip').forEach(b => b.classList.toggle('active', b.dataset.tf === cmTf));
-    $('cmBtcTools').style.display = sym === 'BTC' ? 'flex' : 'none';
+    $('cmBtcTools').style.display = 'flex';
+    $('btnToggleLines').style.display = sym === 'BTC' ? 'inline-block' : 'none';
+    $('btnToggleMarks').style.display = (sym === 'BTC' && isProMode()) ? 'inline-block' : 'none';
     $('cmLastTradeStrip').style.display = 'none';
 
     const curP = getCurSymPrice(sym);
@@ -2133,14 +2136,12 @@
     let rawRows = ((((S && S.allOhlc) || {})[sym] || {})[tf]) || [];
     const libReadyPromise = ensureChartLib();
 
-    if (!rawRows.length) {
-      if (sym === 'BTC') {
-        const fresh = await fetchFreshBtcKlinesDirect(tf);
-        if (fresh && fresh.length) rawRows = fresh;
-      } else {
-        const srvInit = await fetchMacroKlinesFromServer(sym, tf);
-        if (srvInit && Array.isArray(srvInit.bars) && srvInit.bars.length) rawRows = srvInit.bars;
-      }
+    if (sym === 'BTC') {
+      const fresh = await fetchFreshBtcKlinesDirect(tf);
+      if (fresh && fresh.length) rawRows = fresh;
+    } else if (!rawRows.length) {
+      const srvInit = await fetchMacroKlinesFromServer(sym, tf);
+      if (srvInit && Array.isArray(srvInit.bars) && srvInit.bars.length) rawRows = srvInit.bars;
     }
 
     const hasLib = await libReadyPromise;
@@ -2165,25 +2166,31 @@
     const lineSpecs = [];
     if (sym === 'BTC' && S && showLines) {
       const unlocked = isProMode() && Boolean(S._vaultUnlocked);
+      const compact = (showLines === 1);
       if (unlocked) {
         (S.positions || []).forEach(p => {
+          const sCh = p.side === 'LONG' ? 'L' : 'S';
           const sKo = p.side === 'LONG' ? '롱' : '숏';
-          lineSpecs.push({ price:p.entry, color:p.side==='LONG'?'#38bdf8':'#c084fc', lineWidth:2, lineStyle:0, title:`${sKo} 평단` });
-          if (p.sl > 0) lineSpecs.push({ price:p.sl, color:'#f43f5e', lineWidth:1, lineStyle:2, title:`${sKo} SL` });
-          if (p.tp > 0) lineSpecs.push({ price:p.tp, color:'#10b981', lineWidth:1, lineStyle:2, title:`${sKo} TP` });
+          lineSpecs.push({ price:p.entry, color:p.side==='LONG'?'#38bdf8':'#c084fc', lineWidth:2, lineStyle:0, title:compact ? `${sCh}평단` : `${sKo} 평단` });
+          if (p.sl > 0) lineSpecs.push({ price:p.sl, color:'#f43f5e', lineWidth:1, lineStyle:2, title:compact ? `${sCh}·SL` : `${sKo} SL` });
+          if (p.tp > 0) lineSpecs.push({ price:p.tp, color:'#10b981', lineWidth:1, lineStyle:2, title:compact ? `${sCh}·TP` : `${sKo} TP` });
         });
       }
       (S.openOrders || []).forEach(o => {
+        const sCh = o.side === 'LONG' ? 'L' : 'S';
         if (o.orderKind === 'REDUCE_TP') {
-          lineSpecs.push({ price:o.price, color:'#38bdf8', lineWidth:1, lineStyle:2, title:unlocked ? o.badge : '💰 분할익절' });
+          const sh = Math.round(Number(o.sharePct || 0));
+          const shortTpLbl = sh > 0 ? `익절${sh}%` : '분할TP';
+          lineSpecs.push({ price:o.price, color:'#38bdf8', lineWidth:1, lineStyle:2, title:compact ? shortTpLbl : (unlocked ? o.badge : '💰 분할익절') });
         } else if (o.orderKind === 'STOP') {
           const sClr = o.side === 'LONG' ? '#34d399' : '#fb7185';
-          lineSpecs.push({ price:o.price, color:sClr, lineWidth:2, lineStyle:1, title:`${unlocked ? o.badge : o.guestBadge} ${o.sideKo}` });
+          lineSpecs.push({ price:o.price, color:sClr, lineWidth:2, lineStyle:1, title:compact ? `${sCh}돌파` : `${unlocked ? o.badge : o.guestBadge} ${o.sideKo}` });
         } else {
           const clr = o.side === 'LONG' ? '#10b981' : '#f43f5e';
           const isPrimary = Number(o.sharePct || 0) >= 40;
-          const bLbl = unlocked ? o.badge : (o.guestBadge || o.badge);
-          lineSpecs.push({ price:o.price, color:clr, lineWidth:isPrimary ? 2 : 1, lineStyle:isPrimary ? 0 : 2, title:`${bLbl} ${o.sideKo}` });
+          const shortLimLbl = String(o.badge || '').includes('재장전') ? `${sCh}순환` : `${sCh}#${o.leg || 1}`;
+          const bLbl = compact ? shortLimLbl : `${unlocked ? o.badge : (o.guestBadge || o.badge)} ${o.sideKo}`;
+          lineSpecs.push({ price:o.price, color:clr, lineWidth:isPrimary ? 2 : 1, lineStyle:isPrimary ? 0 : 2, title:bLbl });
         }
       });
     }
@@ -2209,10 +2216,15 @@
         layout: { background:{ color:'#070b14' }, textColor:'#94a3b8', fontSize:11, attributionLogo:false },
         grid: { vertLines:{ color:'rgba(148,163,184,0.07)' }, horzLines:{ color:'rgba(148,163,184,0.07)' } },
         crosshair: { mode: 0 },
+        handleScroll: { mouseWheel:true, pressedMouseMove:true, horzTouchDrag:true, vertTouchDrag:true },
+        handleScale: { axisPressedMouseMove:{ time:true, price:true }, mouseWheel:true, pinch:true },
+        kineticScroll: { touch:true, mouse:true },
         localization: { timeFormatter: (t) => cmTf === '1D' ? fmtKstTs(t).date : fmtKstTs(t).full },
-        rightPriceScale: { borderColor:'rgba(148,163,184,0.18)' },
+        rightPriceScale: { borderColor:'rgba(148,163,184,0.18)', scaleMargins:{ top:0.08, bottom:0.08 } },
         timeScale: {
-          borderColor:'rgba(148,163,184,0.18)', timeVisible: tf !== '1D', secondsVisible: false, fixRightEdge: true,
+          borderColor:'rgba(148,163,184,0.18)', timeVisible: tf !== '1D', secondsVisible: false,
+          rightOffset: 14, barSpacing: 6, minBarSpacing: 1.2,
+          fixLeftEdge: false, fixRightEdge: false, shiftVisibleRangeOnNewBar: false,
           tickMarkFormatter: (t, tickType) => {
             const info = fmtKstTs(t);
             if (tf === '1D' || tickType <= 2 || info.isDayStart) return info.date;
@@ -2221,7 +2233,10 @@
         }
       });
 
-      cmSeries = cmChart.addCandlestickSeries({ upColor:'#10b981', downColor:'#f43f5e', borderUpColor:'#10b981', borderDownColor:'#f43f5e', wickUpColor:'#10b981', wickDownColor:'#f43f5e' });
+      cmSeries = cmChart.addCandlestickSeries({
+        upColor:'#10b981', downColor:'#f43f5e', borderUpColor:'#10b981', borderDownColor:'#f43f5e', wickUpColor:'#10b981', wickDownColor:'#f43f5e',
+        priceFormat: { type:'price', precision:dec, minMove: dec === 1 ? 0.1 : 0.01 }
+      });
       cmSeries.setData(candles);
 
       const calcEma = (period) => {
@@ -2324,8 +2339,17 @@
         }
       }
 
-      if (focusKstSec > 0) cmChart.timeScale().setVisibleRange({ from: focusKstSec - 3600 * 5, to: focusKstSec + 3600 * 2 });
-      else cmChart.timeScale().fitContent();
+      cmResetViewFn = () => {
+        if (!cmChart || !candles.length) return;
+        cmChart.priceScale('right').applyOptions({ autoScale: true });
+        const visN = Math.min(58, candles.length);
+        cmChart.timeScale().setVisibleLogicalRange({
+          from: Math.max(0, candles.length - visN),
+          to: candles.length - 1 + 14
+        });
+      };
+      if (focusKstSec > 0) cmChart.timeScale().setVisibleRange({ from: focusKstSec - 3600 * 4, to: focusKstSec + 3600 * 2 });
+      else cmResetViewFn();
 
       const onMove = (param) => {
         if (!param || !param.time) return;
@@ -2504,10 +2528,15 @@
     if (b) openCandleModal(cmSym, b.dataset.tf);
   };
   $('btnToggleLines').onclick = () => {
-    showLines = !showLines;
-    $('btnToggleLines').classList.toggle('active', showLines);
+    showLines = showLines === 1 ? 2 : (showLines === 2 ? 0 : 1);
+    const lbl = showLines === 1 ? '🎯 주문선: 심플' : (showLines === 2 ? '🎯 주문선: 상세' : '🎯 주문선: OFF');
+    setTxt('btnToggleLines', lbl);
+    $('btnToggleLines').classList.toggle('active', showLines > 0);
     openCandleModal(cmSym, cmTf);
   };
+  if ($('btnResetChartView')) {
+    $('btnResetChartView').onclick = () => { if (cmResetViewFn) cmResetViewFn(); };
+  }
   $('btnToggleMarks').onclick = () => {
     showMarks = !showMarks;
     $('btnToggleMarks').classList.toggle('active', showMarks);
