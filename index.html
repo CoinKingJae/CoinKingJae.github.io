@@ -1183,7 +1183,7 @@
   }
 
   let _guestFallbackAnchor = 0;
-  function calcGuestLiveSeed(stObj, btcNow) {
+  function calcPortfolioNav(stObj, btcNow) {
     const d = stObj || S || {};
     const b = Number(d.publicBaseSeed || d.publicTotalSeed || 0);
     const p = Number(btcNow || 0);
@@ -1271,7 +1271,7 @@
     if (!S) return;
     S.btcPrice = bp;
     if (!isOwner() || !S._vaultUnlocked) {
-      const gEq = calcGuestLiveSeed(S, bp);
+      const gEq = calcPortfolioNav(S, bp);
       if (gEq > 0) setTxt('totalSeedVal', fmt(gEq, 2));
       return;
     }
@@ -2459,7 +2459,7 @@
         ordSig = ''; ordExpSig = ''; posSig = ''; perfSig = ''; brdSig = '';
         if (lastRawPayload) await applyState(lastRawPayload);
         else fetchStateTick();
-        showToast('✅ V77 PRO 오너 인증 완료 — 실시간 수급 계기판이 활성화됩니다.');
+        showToast('✅ 관리자 인증 완료');
       } else {
         kpPinBuf = '';
         renderKpDots(true);
@@ -2515,7 +2515,7 @@
     if (taps >= 5) {
       taps = 0;
       if (isOwner()) {
-        if (confirm('오너 화면을 잠그고 미인증 게스트 화면으로 전환하시겠습니까?')) {
+        if (confirm('관리자 제어 모드를 잠그시겠습니까?')) {
           try {
             localStorage.removeItem('kj_v77_verify_hash');
             localStorage.removeItem('kj_v40_verify_hash');
@@ -2529,10 +2529,10 @@
           ordSig = ''; ordExpSig = ''; posSig = '';
           if (lastRawPayload) applyState(lastRawPayload);
           switchMainTab('dash');
-          showToast('🔒 게스트 모드 전환 완료');
+          showToast('🔒 관리자 제어 잠금 완료');
         }
       } else {
-        openKeypadModal('unlock', '🔓 KingJae V77 PRO 잠금 해제', '6자리 오너 PIN을 입력하면 실계좌 및 4인 웹소켓 계기판이 열립니다.');
+        openKeypadModal('unlock', '🔐 관리자 제어 인증', '원격 제어 권한을 활성화하려면 6자리 보안 코드를 입력하세요.');
       }
     } else tapTmr = setTimeout(() => { taps = 0; }, 2200);
   });
@@ -3333,7 +3333,7 @@
         vaultAutoPrompted = true;
         setTimeout(() => {
           if (isOwner() && (!S || !S._vaultUnlocked)) {
-            openKeypadModal('unlock', '🔐 KingJae V77 PRO 볼트 동기화', '6자리 PIN을 1회 입력하시면 실계좌 시드와 4인 웹소켓 계기판이 활성화됩니다.');
+            openKeypadModal('unlock', '🔐 관리자 세션 동기화', '원격 제어 세션을 동기화하려면 6자리 보안 코드를 입력하세요.');
           }
         }, 250);
       }
@@ -3393,7 +3393,7 @@
     if (isOwner()) {
       const nsBox = $('newsShieldBanner');
       if (!d._vaultUnlocked) {
-        setTxt('statusHeadline', '🔐 볼트 동기화 대기 중 (로고 5회 터치로 인증)');
+        setTxt('statusHeadline', '🔐 관리자 세션 동기화 대기 중');
         nsBox.style.display = 'none';
       } else {
         if (d.cycleRunning && !offline) {
@@ -3469,7 +3469,7 @@
     const w = showOwnerSeed ? (d.wallet || {}) : {};
     const eqVal = showOwnerSeed
       ? Number(w.totalEquity || d.realTotalSeed || d.publicTotalSeed || 0)
-      : calcGuestLiveSeed(d, d.btcPrice);
+      : calcPortfolioNav(d, d.btcPrice);
     setTxt('totalSeedVal', fmt(eqVal, 2));
 
     const posArr = d.positions || [];
