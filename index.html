@@ -3748,5 +3748,206 @@
 })();
 </script>
 
+
+<script>
+(function(){
+  if (window.__kjPerfFixInstalled) return;
+  window.__kjPerfFixInstalled = true;
+
+  function parseKoreanOrNum(txt){
+    if (!txt) return 0;
+    const m = String(txt).replace(/,/g, '').match(/[+-]?\d+(\.\d+)?/);
+    return m ? parseFloat(m[0]) : 0;
+  }
+
+  function findRowByLabel(labelText){
+    const all = Array.from(document.querySelectorAll('div, button, a, li, tr'));
+    for (const el of all){
+      if (el.children.length <= 4 && el.textContent && el.textContent.includes(labelText)){
+        const r = el.getBoundingClientRect();
+        if (r.height > 20 && r.height < 90 && r.width > 120) return el;
+      }
+    }
+    return null;
+  }
+
+  function openModalBox(title, htmlBody){
+    let ov = document.getElementById('kjQuickInfoOverlay');
+    if (!ov){
+      ov = document.createElement('div');
+      ov.id = 'kjQuickInfoOverlay';
+      ov.style.cssText = 'position:fixed;inset:0;background:rgba(2,6,18,0.78);z-index:99999;display:flex;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(4px);';
+      ov.onclick = function(e){ if (e.target === ov) ov.style.display = 'none'; };
+      document.body.appendChild(ov);
+    }
+    ov.innerHTML =
+      '<div style="width:100%;max-width:440px;background:#0f172a;border:1px solid #293856;border-radius:16px;padding:18px;color:#f1f5f9;box-shadow:0 20px 50px rgba(0,0,0,0.6);">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">' +
+          '<div style="font-weight:700;font-size:16px;color:#38bdf8;">' + title + '</div>' +
+          '<button type="button" onclick="document.getElementById(\'kjQuickInfoOverlay\').style.display=\'none\'" style="background:#1e293b;border:1px solid #334155;color:#cbd5e1;border-radius:8px;padding:4px 10px;font-size:13px;cursor:pointer;">닫기</button>' +
+        '</div>' +
+        '<div style="font-size:13.5px;line-height:1.6;color:#cbd5e1;">' + htmlBody + '</div>' +
+      '</div>';
+    ov.style.display = 'flex';
+  }
+
+  function clickBottomNav(tabHint){
+    const btns = Array.from(document.querySelectorAll('button, a, div'));
+    for (const b of btns){
+      if (b.children.length <= 2 && b.textContent && b.textContent.trim().includes(tabHint)){
+        const r = b.getBoundingClientRect();
+        if (r.top > window.innerHeight * 0.75 && r.height > 24 && r.height < 80){
+          b.click();
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function bindRowsAndChart(){
+    // 1) Last Trade 클릭 활성화
+    const ltRow = findRowByLabel('Last Trade');
+    if (ltRow && !ltRow.dataset.kjBound){
+      ltRow.dataset.kjBound = '1';
+      ltRow.style.cursor = 'pointer';
+      ltRow.addEventListener('click', function(e){
+        e.stopPropagation();
+        const valTxt = ltRow.textContent.replace('Last Trade', '').replace('>', '').trim();
+        if (valTxt.includes('대기') || valTxt.includes('--')){
+          const roiEl = Array.from(document.querySelectorAll('div,span')).find(x => x.textContent && x.textContent.trim() === 'ROI (TWR)');
+          const pnlEl = Array.from(document.querySelectorAll('div,span')).find(x => x.textContent && x.textContent.trim() === 'PnL(USDT)');
+          const roiV = roiEl && roiEl.nextElementSibling ? roiEl.nextElementSibling.textContent.trim() : '-';
+          const pnlV = pnlEl && pnlEl.nextElementSibling ? pnlEl.nextElementSibling.textContent.trim() : '-';
+          openModalBox(
+            '최근 체결 내역 (Last Trade)',
+            '<div style="background:#090e1c;border:1px solid #1e293b;border-radius:10px;padding:12px;">' +
+              '<div>• <b>확정 마감 포지션:</b> 아직 없음 (현재 1회차 포지션 진행 중)</div>' +
+              '<div>• <b>실시간 미실현 수익률:</b> <span style="color:#34d399;font-weight:700;">' + roiV + ' (' + pnlV + ' USDT)</span></div>' +
+              '<div style="margin-top:8px;font-size:12px;color:#94a3b8;">첫 포지션이 익절·손절로 최종 종료되면 이곳에 체결 단가와 실현 손익이 기록됩니다.</div>' +
+            '</div>'
+          );
+        } else {
+          if (!clickBottomNav('기록')) openModalBox('최근 체결 내역', valTxt);
+        }
+      }, true);
+    }
+
+    // 2) Days Trading 클릭 활성화
+    const dtRow = findRowByLabel('Days Trading');
+    if (dtRow && !dtRow.dataset.kjBound){
+      dtRow.dataset.kjBound = '1';
+      dtRow.style.cursor = 'pointer';
+      dtRow.addEventListener('click', function(e){
+        e.stopPropagation();
+        const dayTxt = dtRow.textContent.replace('Days Trading', '').replace('>', '').trim();
+        const badgeEl = Array.from(document.querySelectorAll('div,span')).find(x => x.textContent && x.textContent.includes('이후 · TWR'));
+        const startStr = badgeEl ? badgeEl.textContent.trim() : '2026-11-23 00:43 이후 · TWR';
+        const roiEl = Array.from(document.querySelectorAll('div,span')).find(x => x.textContent && x.textContent.trim() === 'ROI (TWR)');
+        const pnlEl = Array.from(document.querySelectorAll('div,span')).find(x => x.textContent && x.textContent.trim() === 'PnL(USDT)');
+        const mddEl = Array.from(document.querySelectorAll('div,span')).find(x => x.textContent && x.textContent.trim() === 'MDD');
+        const roiV = roiEl && roiEl.nextElementSibling ? roiEl.nextElementSibling.textContent.trim() : '-';
+        const pnlV = pnlEl && pnlEl.nextElementSibling ? pnlEl.nextElementSibling.textContent.trim() : '-';
+        const mddV = mddEl && mddEl.nextElementSibling ? mddEl.nextElementSibling.textContent.trim() : '-';
+        openModalBox(
+          '운용 일수 및 누적 성과 (' + dayTxt + ')',
+          '<div style="background:#090e1c;border:1px solid #1e293b;border-radius:10px;padding:12px;">' +
+            '<div>• <b>운용 기준시각:</b> ' + startStr + '</div>' +
+            '<div>• <b>누적 운용일수:</b> <span style="color:#38bdf8;font-weight:700;">' + dayTxt + '</span></div>' +
+            '<div>• <b>실시간 TWR 수익률:</b> <span style="color:#34d399;font-weight:700;">' + roiV + ' (' + pnlV + ' USDT)</span></div>' +
+            '<div>• <b>최대 낙폭(MDD):</b> ' + mddV + '</div>' +
+          '</div>'
+        );
+      }, true);
+    }
+
+    // 3) Performance 차트 영역이 비어 있을 때 실시간 미실현/확정 곡선 자동 렌더링 + 시작 시각 정렬
+    const wsLbl = Array.from(document.querySelectorAll('div,span')).find(x => x.textContent && x.textContent.includes('실시간 웹소켓 연동'));
+    if (wsLbl && wsLbl.parentElement && wsLbl.parentElement.parentElement){
+      const card = wsLbl.parentElement.parentElement;
+      const axisRow = Array.from(card.querySelectorAll('div')).find(d => d.textContent && /2026-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}/.test(d.textContent) && d.children.length >= 2);
+      if (axisRow && axisRow.children[0]){
+        const badgeEl = Array.from(document.querySelectorAll('div,span')).find(x => x.textContent && x.textContent.includes('이후 · TWR'));
+        const mEp = badgeEl ? badgeEl.textContent.match(/(\d{2}-\d{2}\s+\d{2}:\d{2})/) : null;
+        if (mEp) axisRow.children[0].textContent = '2026-' + mEp[1] + ':00';
+      }
+
+      // 빈 차트 컨테이너 탐색 (높이 100px 이상이면서 내부에 그려진 선/경로가 없는 영역)
+      const boxes = Array.from(card.querySelectorAll('div'));
+      const chartBox = boxes.find(b => {
+        const r = b.getBoundingClientRect();
+        return r.height >= 110 && r.height <= 320 && r.width >= 220 && !b.querySelector('path[stroke], polyline');
+      });
+
+      if (chartBox){
+        const roiEl = Array.from(document.querySelectorAll('div,span')).find(x => x.textContent && x.textContent.trim() === 'ROI (TWR)');
+        const pnlEl = Array.from(document.querySelectorAll('div,span')).find(x => x.textContent && x.textContent.trim() === 'PnL(USDT)');
+        const mddEl = Array.from(document.querySelectorAll('div,span')).find(x => x.textContent && x.textContent.trim() === 'MDD');
+        const isPnlMode = !!Array.from(card.querySelectorAll('button,div,span')).find(b => b.textContent && b.textContent.trim() === 'PnL' && /rgb\(51,\s*65,\s*85\)|#1e293b|#334155/i.test(getComputedStyle(b).backgroundColor));
+
+        const curRoi = parseKoreanOrNum(roiEl && roiEl.nextElementSibling ? roiEl.nextElementSibling.textContent : '0');
+        const curPnl = parseKoreanOrNum(pnlEl && pnlEl.nextElementSibling ? pnlEl.nextElementSibling.textContent : '0');
+        const mddVal = Math.abs(parseKoreanOrNum(mddEl && mddEl.nextElementSibling ? mddEl.nextElementSibling.textContent : '0'));
+
+        window.__kjLiveCurve = window.__kjLiveCurve || [];
+        const nowT = Date.now();
+        if (window.__kjLiveCurve.length === 0){
+          window.__kjLiveCurve.push({t: nowT - 3600000, roi: 0, pnl: 0});
+          if (mddVal > 0.05){
+            window.__kjLiveCurve.push({t: nowT - 1800000, roi: -mddVal, pnl: -Math.abs(mddVal * 1000)});
+          }
+        }
+        const lastPt = window.__kjLiveCurve[window.__kjLiveCurve.length - 1];
+        if (Math.abs(lastPt.roi - curRoi) >= 0.005 || (nowT - lastPt.t) >= 15000){
+          window.__kjLiveCurve.push({t: nowT, roi: curRoi, pnl: curPnl});
+          if (window.__kjLiveCurve.length > 120) window.__kjLiveCurve.shift();
+        }
+
+        const pts = window.__kjLiveCurve;
+        const vals = pts.map(p => isPnlMode ? p.pnl : p.roi);
+        const minV = Math.min(0, ...vals);
+        const maxV = Math.max(0.05, ...vals);
+        const spanV = Math.max(0.05, maxV - minV);
+        const W = 340, H = 150, padX = 10, padY = 18;
+        const coords = pts.map((p, i) => {
+          const x = padX + (pts.length === 1 ? 0 : (i / (pts.length - 1)) * (W - padX * 2));
+          const v = isPnlMode ? p.pnl : p.roi;
+          const y = H - padY - ((v - minV) / spanV) * (H - padY * 2);
+          return [x.toFixed(1), y.toFixed(1)];
+        });
+        const zeroY = (H - padY - ((0 - minV) / spanV) * (H - padY * 2)).toFixed(1);
+        const polyStr = coords.map(c => c.join(',')).join(' ');
+        const areaStr = `${coords[0][0]},${zeroY} ${polyStr} ${coords[coords.length-1][0]},${zeroY}`;
+        const lastC = coords[coords.length - 1];
+        const curVal = isPnlMode ? curPnl : curRoi;
+        const strokeClr = curVal >= 0 ? '#10b981' : '#f43f5e';
+        const fillClr = curVal >= 0 ? 'rgba(16,185,129,0.16)' : 'rgba(244,63,94,0.16)';
+        const lblTxt = isPnlMode ? ((curPnl >= 0 ? '+' : '') + curPnl.toFixed(2) + '$') : ((curRoi >= 0 ? '+' : '') + curRoi.toFixed(2) + '%');
+
+        let holder = chartBox.querySelector('.kj-fallback-svg');
+        if (!holder){
+          holder = document.createElement('div');
+          holder.className = 'kj-fallback-svg';
+          holder.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;';
+          chartBox.appendChild(holder);
+        }
+        holder.innerHTML =
+          '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:100%;overflow:visible;">' +
+            '<line x1="' + padX + '" y1="' + zeroY + '" x2="' + (W - padX) + '" y2="' + zeroY + '" stroke="#334155" stroke-dasharray="3 3" stroke-width="1"/>' +
+            '<polygon points="' + areaStr + '" fill="' + fillClr + '"/>' +
+            '<polyline fill="none" stroke="' + strokeClr + '" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" points="' + polyStr + '"/>' +
+            '<circle cx="' + lastC[0] + '" cy="' + lastC[1] + '" r="4" fill="' + strokeClr + '"/>' +
+            '<text x="' + Math.min(W - 62, parseFloat(lastC[0]) + 6) + '" y="' + Math.max(14, parseFloat(lastC[1]) - 8) + '" fill="' + strokeClr + '" font-size="11" font-weight="700">' + lblTxt + '</text>' +
+          '</svg>';
+      }
+    }
+  }
+
+  setInterval(bindRowsAndChart, 1200);
+  document.addEventListener('DOMContentLoaded', bindRowsAndChart);
+  setTimeout(bindRowsAndChart, 400);
+})();
+</script>
+
 </body>
 </html>
