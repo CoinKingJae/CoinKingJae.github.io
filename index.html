@@ -34,7 +34,7 @@
   }
   body {
     max-width:540px; margin:0 auto;
-    padding:max(18px, calc(env(safe-area-inset-top, 0px) + 14px)) 12px calc(104px + env(safe-area-inset-bottom, 0px)) 12px;
+    padding:max(18px, calc(env(safe-area-inset-top, 0px) + 14px)) 12px calc(118px + env(safe-area-inset-bottom, 0px)) 12px;
   }
   body.modal-open { overflow:hidden !important; }
   html[data-auth="guest"] .owner-only { display:none !important; }
@@ -78,21 +78,26 @@
   .btn.warn { background:rgba(245,158,11,0.18); border-color:rgba(245,158,11,0.5); color:#fde68a; }
   .btn.danger { background:rgba(244,63,94,0.15); border-color:rgba(244,63,94,0.45); color:#fda4af; }
 
-  .top-hdr { display:flex; align-items:center; justify-content:space-between; gap:5px; margin-bottom:11px; flex-wrap:nowrap; }
-  .brand-wrap { display:flex; align-items:center; gap:5px; min-width:0; flex:1 1 auto; overflow:hidden; }
-  .brand-name { font-size:17px; font-weight:900; letter-spacing:-0.4px; user-select:none; cursor:default; white-space:nowrap; flex-shrink:0; }
+  .top-hdr { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:11px; flex-wrap:wrap; }
+  .brand-wrap { display:flex; align-items:center; gap:6px; min-width:0; flex:1 1 auto; flex-wrap:wrap; }
+  .brand-name { font-size:18px; font-weight:900; letter-spacing:-0.4px; user-select:none; cursor:default; white-space:nowrap; flex-shrink:0; }
   .status-pill-slim {
-    font-size:10.5px; font-weight:800; padding:3.5px 7.5px; border-radius:999px;
+    font-size:11px; font-weight:800; padding:4px 9px; border-radius:999px;
     background:var(--card2); border:1px solid var(--line); color:#10b981;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer;
+    white-space:nowrap; flex-shrink:0; cursor:pointer;
   }
   .sess-pill {
-    font-size:10px; font-weight:900; padding:3px 6.5px; border-radius:999px;
+    font-size:10.5px; font-weight:900; padding:3.5px 7.5px; border-radius:999px;
     background:rgba(56,189,248,0.16); border:1px solid rgba(56,189,248,0.45); color:#7dd3fc;
     white-space:nowrap; cursor:pointer; flex-shrink:0; display:none; font-variant-numeric:tabular-nums;
   }
-  .hdr-actions { display:flex; align-items:center; gap:4px; flex-wrap:nowrap; flex-shrink:0; }
-  .hdr-actions .btn { padding:5.5px 7.5px; font-size:11px; }
+  .hdr-actions { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:6px; width:100%; }
+  .hdr-actions .btn { width:100%; text-align:center; padding:6.5px 4px; font-size:11.5px; }
+  .pill-wrap {
+    white-space:normal !important; word-break:keep-all !important; overflow-wrap:anywhere !important;
+    max-width:100% !important; flex-shrink:1 !important; line-height:1.42 !important;
+    border-radius:10px !important; padding:5px 9.5px !important;
+  }
 
   .hero-card {
     position:relative; overflow:hidden; cursor:pointer;
@@ -129,22 +134,23 @@
     display:none; margin-top:8px; padding-top:8px; border-top:1px solid var(--line);
     font-size:11.5px; line-height:1.45;
   }
-  .shield-l1 { font-weight:800; color:#fde68a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .shield-l2 { font-weight:700; color:#cbd5e1; padding-left:18px; margin-top:2px; font-variant-numeric:tabular-nums; }
+  .shield-l1 { font-weight:800; color:#fde68a; white-space:normal; word-break:keep-all; overflow-wrap:anywhere; }
+  .shield-l2 { font-weight:700; color:#cbd5e1; padding-left:18px; margin-top:2px; font-variant-numeric:tabular-nums; white-space:normal; word-break:keep-all; }
 
-  /* 오너 전용 18인 전담 직원 4대 본부 그리드 */
+  /* 오너 전용 18인 전담 직원 4대 본부 그리드 (말줄임 완전 해제) */
   .hq18-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; margin-bottom:10px; }
+  @media (max-width:350px) { .hq18-grid { grid-template-columns:minmax(0,1fr); } }
   .hq18-box {
     background:linear-gradient(180deg, rgba(19,29,50,0.92), rgba(13,20,36,0.98));
-    border:1px solid var(--line); border-radius:14px; padding:9.5px 11px;
-    cursor:pointer; min-width:0; display:flex; flex-direction:column; gap:3.5px;
+    border:1px solid var(--line); border-radius:14px; padding:10px 11px;
+    cursor:pointer; min-width:0; display:flex; flex-direction:column; gap:4px;
   }
   .hq18-box:active { border-color:var(--acc); }
-  .hq18-top { display:flex; align-items:center; justify-content:space-between; gap:4px; }
-  .hq18-ttl { font-size:11.5px; font-weight:900; color:#f1f5f9; letter-spacing:-0.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .hq18-bdg { font-size:9.5px; font-weight:800; padding:1.5px 5.5px; border-radius:999px; background:rgba(16,185,129,0.16); color:#34d399; flex-shrink:0; }
-  .hq18-l1 { font-size:11px; font-weight:800; color:#7dd3fc; line-height:1.32; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-variant-numeric:tabular-nums; }
-  .hq18-l2 { font-size:10.3px; font-weight:600; color:var(--sub); line-height:1.32; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .hq18-top { display:flex; align-items:center; justify-content:space-between; gap:4px; flex-wrap:wrap; }
+  .hq18-ttl { font-size:11.8px; font-weight:900; color:#f1f5f9; letter-spacing:-0.2px; word-break:keep-all; }
+  .hq18-bdg { font-size:9.5px; font-weight:800; padding:1.5px 6px; border-radius:999px; background:rgba(16,185,129,0.16); color:#34d399; flex-shrink:0; }
+  .hq18-l1 { font-size:11.2px; font-weight:800; color:#7dd3fc; line-height:1.42; white-space:normal; word-break:keep-all; overflow-wrap:anywhere; font-variant-numeric:tabular-nums; }
+  .hq18-l2 { font-size:10.5px; font-weight:600; color:var(--sub); line-height:1.42; white-space:normal; word-break:keep-all; overflow-wrap:anywhere; }
 
   .wk18-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; max-height:54vh; overflow-y:auto; padding-right:2px; }
   @media (max-width:420px) { .wk18-grid { grid-template-columns:minmax(0,1fr); } }
@@ -239,8 +245,8 @@
     padding:12px 13px; margin-top:9px; border-left:3.5px solid rgba(148,163,184,0.3);
   }
   .ord-card.pos-clickable { cursor:pointer; overflow:hidden; }
-  .ord-card.pos-clickable > .row-sb:first-child { flex-wrap:nowrap; gap:4px; min-height:21px; }
-  .ord-card.pos-clickable > .row-sb:first-child > span:first-child { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; font-variant-numeric:tabular-nums; letter-spacing:-0.35px; font-size:clamp(11.5px, 3.3vw, 13px) !important; }
+  .ord-card.pos-clickable > .row-sb:first-child { flex-wrap:wrap; gap:4px 6px; min-height:21px; }
+  .ord-card.pos-clickable > .row-sb:first-child > span:first-child { white-space:normal; word-break:keep-all; min-width:0; font-variant-numeric:tabular-nums; letter-spacing:-0.3px; font-size:clamp(12px, 3.4vw, 13.5px) !important; }
   [id^="posPnl-"] { white-space:nowrap; flex-shrink:0; text-align:right; font-variant-numeric:tabular-nums; letter-spacing:-0.35px; font-size:clamp(11.5px, 3.3vw, 13.5px) !important; }
   [id^="posRmult-"], [id^="odist-"], .upnl-pill { white-space:nowrap; font-variant-numeric:tabular-nums; }
   .ord-card.edge-long { border-left-color:#10b981; background:linear-gradient(90deg, rgba(16,185,129,0.06) 0%, #111a2c 35%); }
@@ -497,9 +503,9 @@
     </div>
 
     <div class="card owner-only" id="ownerStatusCard" style="padding:10px 13px;">
-      <div class="row-sb" style="align-items:center;gap:8px;">
-        <span id="statusHeadline" style="font-size:12px;font-weight:800;color:#f1f5f9;line-height:1.4;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">데이터 동기화 중...</span>
-        <span id="nextRunLabel" style="font-size:11px;font-weight:800;color:var(--acc);white-space:nowrap;flex-shrink:0;font-variant-numeric:tabular-nums;">분석 --:--</span>
+      <div class="row-sb" style="align-items:flex-start;gap:6px 8px;flex-wrap:wrap;">
+        <span id="statusHeadline" style="font-size:12px;font-weight:800;color:#f1f5f9;line-height:1.42;min-width:0;word-break:keep-all;overflow-wrap:anywhere;">데이터 동기화 중...</span>
+        <span id="nextRunLabel" style="font-size:11px;font-weight:800;color:var(--acc);white-space:nowrap;flex-shrink:0;margin-left:auto;font-variant-numeric:tabular-nums;">분석 --:--</span>
       </div>
       <div id="newsShieldBanner" class="shield-banner-box">
         <div class="shield-l1" id="shieldLine1"></div>
@@ -565,21 +571,18 @@
         <span class="upnl-pill pos owner-only" id="liveUpnlPill" style="display:none;">미실현 +0.00</span>
       </div>
 
-      <div class="gear-grid owner-only" id="riskGearBar">
-        <button class="gear-btn" data-rmode="SAFE">🛡 안정(2.5%)</button>
-        <button class="gear-btn" data-rmode="BALANCE">⚖️ 밸런스(3.5%)</button>
-        <button class="gear-btn" data-rmode="AGGRESSIVE">🔥 공격(5%)</button>
-        <button class="gear-btn active" data-rmode="AUTO">🤖 AI자율(5%)</button>
-      </div>
-
-      <div class="seed-meta-rows owner-only">
-        <div class="row-sb">
-          <span>포지션당 손실상한 · 월목표</span>
-          <b style="color:#e2e8f0;" id="riskAllowanceTxt">최대 5.0% · 월 +50% 타겟</b>
+      <div class="seed-meta-rows owner-only" style="margin-top:11px;">
+        <div class="row-sb" style="flex-wrap:wrap;gap:4px 8px;">
+          <span style="white-space:nowrap;">포지션 손실상한</span>
+          <b style="color:#e2e8f0;margin-left:auto;" id="riskAllowanceTxt">최대 5.0% · 월 +50% 목표</b>
         </div>
-        <div class="row-sb">
-          <span>누적 확정손익</span>
-          <b id="totalRealizedBadge">--</b>
+        <div class="row-sb" style="flex-wrap:wrap;gap:4px 8px;">
+          <span style="white-space:nowrap;">현재 세션 위험</span>
+          <b style="color:#7dd3fc;margin-left:auto;" id="sessionRiskUseTxt">롱 0.00% · 숏 0.00%</b>
+        </div>
+        <div class="row-sb" style="flex-wrap:wrap;gap:4px 8px;">
+          <span style="white-space:nowrap;">누적 확정손익</span>
+          <b style="margin-left:auto;" id="totalRealizedBadge">+0.00$</b>
         </div>
       </div>
       <div id="guardBrakeBanner" class="owner-only" style="display:none;margin-top:7px;font-size:11px;font-weight:800;color:#fde68a;line-height:1.4;"></div>
@@ -674,7 +677,7 @@
       <div class="pf-proj-box">
         <div class="row-sb">
           <span style="font-size:12px;font-weight:900;color:#7dd3fc;" id="pfProjTitle">📈 월 +50% 복리 목표 시뮬레이션</span>
-          <span class="pill" id="pfProjModeTag" style="font-size:10px;">🤖 AI자율(5%한도)</span>
+          <span class="pill" id="pfProjModeTag" style="font-size:10px;">교차 100x · 5%한도</span>
         </div>
         <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:7px;">
           <span style="font-size:18px;font-weight:900;color:#34d399;font-variant-numeric:tabular-nums;" id="pfProjMonthlyPct">+45% ~ +58% (목표 +50%)</span>
@@ -757,14 +760,13 @@
         </div>
       </div>
       <div id="cbTacBody">
-        <div style="margin-top:7px;display:flex;gap:5px;flex-wrap:wrap;">
-          <span class="pill" id="cbTacRegime" style="color:#7dd3fc;border-color:rgba(56,189,248,0.35);font-size:11px;">분석 대기</span>
-          <span class="pill" id="cbTacWake" style="font-size:10.5px;">구조선 감시</span>
+        <div style="margin-top:7px;display:flex;gap:6px;flex-wrap:wrap;min-width:0;max-width:100%;">
+          <span class="pill pill-wrap" id="cbTacRegime" style="color:#7dd3fc;border-color:rgba(56,189,248,0.35);font-size:11px;">분석 대기</span>
+          <span class="pill pill-wrap" id="cbTacWake" style="font-size:10.8px;">15m~4H 구조선 감시</span>
         </div>
-        <div id="cbTacSummaryWrap" style="margin-top:10px;font-size:13px;line-height:1.68;color:#dbeafe;word-break:keep-all;"></div>
+        <div id="cbTacSummaryWrap" style="margin-top:10px;font-size:13px;line-height:1.68;color:#dbeafe;word-break:keep-all;overflow-wrap:anywhere;"></div>
         <div id="cbTacLadderCards" class="tac-grid-2"></div>
         <div id="cbTacReasonsWrap" style="margin-top:10px;display:flex;flex-direction:column;gap:8px;"></div>
-        <div id="cbBoardsGrid" class="b-grid"></div>
       </div>
     </div>
   </div>
@@ -789,12 +791,9 @@
   <!-- [탭 3] 기록 -->
   <div class="tab-pane owner-only" id="pane-rec">
     <div class="card">
-      <div class="row-sb" style="margin-bottom:11px;">
-        <span style="font-size:15.5px;font-weight:900;">운용 기록 & 실현손익</span>
-        <div class="tabs-line" id="recSubTabs">
-          <button class="chip active" data-rsub="pnl">실현손익</button>
-          <button class="chip" data-rsub="logs">사이클 (6/6)</button>
-        </div>
+      <div class="row-sb" style="margin-bottom:11px;flex-wrap:wrap;">
+        <span style="font-size:15.5px;font-weight:900;">운용 성적표 & 실현손익</span>
+        <span class="pill" style="font-size:10.5px;color:#38bdf8;border-color:rgba(56,189,248,0.35);">TWR 원장</span>
       </div>
 
       <div id="recPnlPane">
@@ -814,7 +813,7 @@
         </div>
 
         <div class="row-sb" style="background:#111a2e;border:1px solid var(--line);border-radius:11px;padding:9px 11px;margin-bottom:10px;gap:6px;">
-          <span style="font-size:11px;color:var(--sub);font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="recEpochStatusTxt">전체 누적 집계 중</span>
+          <span style="font-size:11px;color:var(--sub);font-weight:700;min-width:0;word-break:keep-all;overflow-wrap:anywhere;" id="recEpochStatusTxt">전체 누적 집계 중</span>
           <div style="display:flex;gap:5px;flex-shrink:0;">
             <button class="btn" id="btnRestorePnl" style="display:none;padding:5px 7px;font-size:11px;">↩ 복원</button>
             <button class="btn danger" id="btnResetPnl" style="padding:5px 7px;font-size:11px;">🔄 지금부터 재집계</button>
@@ -833,18 +832,7 @@
         <div id="recPnlWrap"></div>
       </div>
 
-      <div id="recLogsPane" style="display:none;">
-        <div class="row-sb" style="margin-bottom:9px;gap:6px;">
-          <div class="tabs-scroll" id="logFilterTabs">
-            <button class="chip active" data-lflt="ALL">전체</button>
-            <button class="chip" data-lflt="order">타점·주문</button>
-            <button class="chip" data-lflt="guard">수비·순환매</button>
-            <button class="chip" data-lflt="news">경제·시스템</button>
-          </div>
-          <button class="btn danger" id="btnClearLogs" style="padding:5px 8px;font-size:11px;">🗑 비우기</button>
-        </div>
-        <div id="recLogsWrap"></div>
-      </div>
+
     </div>
   </div>
 
@@ -860,23 +848,7 @@
 
   <div class="modal-bg" id="candleModal" style="display:none!important;"><button id="cmCloseBtn" style="display:none;"></button></div>
 
-  <!-- [모달: 마스터 보드 고해상도 줌 뷰어 (오너 전용)] -->
-  <div class="modal-bg owner-only" id="lbModal">
-    <div class="modal-card">
-      <div class="row-sb" style="padding:10px 13px;border-bottom:1px solid var(--line);">
-        <b style="font-size:13px;" id="lbTitle">마스터 보드</b>
-        <div style="display:flex;gap:5px;">
-          <button class="btn" id="lbPrev">◀</button>
-          <button class="btn" id="lbNext">▶</button>
-          <button class="btn danger" id="lbClose">✕</button>
-        </div>
-      </div>
-      <div id="lbScrollWrap">
-        <img id="lbImg" src="" alt="board">
-        <div class="lb-zoom-pill" id="lbZoomPill">1.0x</div>
-      </div>
-    </div>
-  </div>
+
 
   <!-- [모달: 18인 전담 직원 상세 바텀시트 (오너 전용)] -->
   <div class="modal-bg sheet-align owner-only" id="workersSheetModal">
@@ -1862,7 +1834,7 @@
     setTxt('pfEndTs', pObj.endTimeStr || '--');
 
     const mp = pf.monthlyProjection || {};
-    setTxt('pfProjModeTag', mp.modeLabel || '🤖 AI자율(5%한도)');
+    setTxt('pfProjModeTag', '교차 100x · 5%한도');
     if (mp.livePaceAvailable) {
       const pPct = Number(mp.paceMonthlyPct || 0), pUsd = Number(mp.paceMonthlyUsd || 0);
       $('pfProjMonthlyPct').style.color = pPct >= 0 ? '#34d399' : '#fb7185';
@@ -2385,7 +2357,6 @@
   attachSheetSwipeClose('keypadSheetCard', 'keypadModal', () => { pendingCmd = null; });
 
   if ($('cmCloseBtn')) $('cmCloseBtn').onclick = () => closeModalById('candleModal');
-  if ($('lbClose')) $('lbClose').onclick = () => closeModalById('lbModal');
   if ($('wkSheetCloseBtn')) $('wkSheetCloseBtn').onclick = () => closeModalById('workersSheetModal');
   $('daysSheetOkBtn').onclick = () => closeModalById('daysSheetModal');
   $('kpCloseBtn').onclick = () => { pendingCmd = null; closeModalById('keypadModal'); };
@@ -2828,20 +2799,8 @@
   };
   $('btnCancelAll').onclick = () => requestPinAndSendCmd('🚨 [대기주문 전체취소] 미체결 진입·돌파 대기주문 일괄 취소', 'cancel_all');
 
-  document.querySelectorAll('[data-rmode]').forEach(b => {
-    b.onclick = () => {
-      const rm = b.dataset.rmode;
-      if (S && S._vaultUnlocked && String(S.riskMode || '') === rm) {
-        showToast(`이미 [${b.textContent}] 모드가 적용 중입니다.`);
-        return;
-      }
-      requestPinAndSendCmd(`🎯 [손실 상한 모드 전환] ${b.textContent} 적용`, 'set_risk_mode', { riskMode: rm });
-    };
-  });
-
   $('btnResetPnl').onclick = () => requestPinAndSendCmd('🔄 [실현손익 초기화] 지금 이 시각부터 0.00$ 재집계', 'reset_pnl_epoch');
   $('btnRestorePnl').onclick = () => requestPinAndSendCmd('↩ [실현손익 복원] 직전 집계 기준점으로 되돌리기', 'restore_pnl_epoch');
-  $('btnClearLogs').onclick = () => requestPinAndSendCmd('🗑 [사이클 기록] 운용 로그 전체 비우기', 'clear_logs');
 
   $('btnToggleOrdFold').onclick = () => {
     ordFolded = !ordFolded;
@@ -2919,20 +2878,7 @@
     if ((targetTab === 'chartboard' || targetTab === 'rec') && !isOwner()) return;
     const sameTab = (activeTab === targetTab);
 
-    if (sameTab && targetTab === 'rec') {
-      const btnPnl = document.querySelector('#recSubTabs .chip[data-rsub="pnl"]');
-      const btnLogs = document.querySelector('#recSubTabs .chip[data-rsub="logs"]');
-      if (btnPnl && btnLogs) {
-        const toLogs = btnPnl.classList.contains('active');
-        btnPnl.classList.toggle('active', !toLogs);
-        btnLogs.classList.toggle('active', toLogs);
-        $('recPnlPane').style.display = toLogs ? 'none' : 'block';
-        $('recLogsPane').style.display = toLogs ? 'block' : 'none';
-      }
-      markRecAsSeen();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
+
 
     if (targetTab !== 'chartboard' && cmMacroPollTmr) {
       clearInterval(cmMacroPollTmr);
@@ -2975,12 +2921,7 @@
     };
   }
 
-  $('recSubTabs').onclick = (ev) => {
-    const b = ev.target.closest('.chip'); if (!b) return;
-    document.querySelectorAll('#recSubTabs .chip').forEach(x => x.classList.toggle('active', x === b));
-    $('recPnlPane').style.display = b.dataset.rsub === 'pnl' ? 'block' : 'none';
-    $('recLogsPane').style.display = b.dataset.rsub === 'logs' ? 'block' : 'none';
-  };
+
 
   $('pnlFilterTabs').onclick = (ev) => {
     const b = ev.target.closest('.chip'); if (!b) return;
@@ -3005,138 +2946,7 @@
     showToast('📥 실현손익 CSV 파일 다운로드 완료');
   };
 
-  $('logFilterTabs').onclick = (ev) => {
-    const b = ev.target.closest('.chip'); if (!b) return;
-    logFilter = b.dataset.lflt || 'ALL';
-    document.querySelectorAll('#logFilterTabs .chip').forEach(x => x.classList.toggle('active', x === b));
-    logSig = '';
-    if (S) renderLogsList(S.logs || []);
-  };
 
-  let lbScale = 1, lbTx = 0, lbTy = 0;
-  let lbPinchDist0 = 0, lbPinchScale0 = 1, lbPinchMid0 = { x:0, y:0 }, lbPinchT0 = { x:0, y:0 };
-  let lbPanStart = { x:0, y:0 }, lbPanT0 = { x:0, y:0 }, lbIsPanning = false, lbLastTapTs = 0;
-  let touchStartX = 0, touchStartY = 0;
-
-  function applyLbTransform() {
-    const wrap = $('lbScrollWrap'), im = $('lbImg');
-    if (!wrap || !im) return;
-    const w = wrap.clientWidth || 340, h = im.offsetHeight || wrap.clientHeight || 220;
-    lbScale = Math.max(1, Math.min(4.5, lbScale));
-    if (lbScale <= 1.01) {
-      lbScale = 1; lbTx = 0; lbTy = 0;
-    } else {
-      const minX = w - w * lbScale;
-      const minY = Math.min(0, (wrap.clientHeight || h) - h * lbScale);
-      lbTx = Math.min(0, Math.max(minX, lbTx));
-      lbTy = Math.min(0, Math.max(minY, lbTy));
-    }
-    im.style.transform = `translate3d(${lbTx.toFixed(1)}px, ${lbTy.toFixed(1)}px, 0) scale(${lbScale.toFixed(3)})`;
-    setTxt('lbZoomPill', lbScale > 1.01 ? `${lbScale.toFixed(1)}x · 드래그 / 더블탭 복귀` : '1.0x · 두 손가락 확대 / 더블탭');
-  }
-
-  function resetLbZoom() {
-    lbScale = 1; lbTx = 0; lbTy = 0;
-    applyLbTransform();
-  }
-
-  function openLb(idx) {
-    if (!curLbArr.length) return;
-    curLbIdx = (idx + curLbArr.length) % curLbArr.length;
-    const b = curLbArr[curLbIdx];
-    setTxt('lbTitle', b.title);
-    resetLbZoom();
-    const im = $('lbImg');
-    if (!im) return;
-    const isLoc = location.origin.includes('127.0.0.1') || location.origin.includes('localhost');
-    const fullUrl = isLoc ? `/${b.full}` : (directApi ? `${directApi}/${b.full}` : b.full);
-    im.onload = () => resetLbZoom();
-    im.onerror = () => { if (b.inlineThumb && im.src !== b.inlineThumb) im.src = b.inlineThumb; };
-    im.src = fullUrl || b.inlineThumb;
-    openModalById('lbModal');
-  }
-  if ($('lbPrev')) $('lbPrev').onclick = () => openLb(curLbIdx - 1);
-  if ($('lbNext')) $('lbNext').onclick = () => openLb(curLbIdx + 1);
-
-  $('lbScrollWrap').addEventListener('touchstart', (e) => {
-    const wrap = $('lbScrollWrap');
-    const rect = wrap.getBoundingClientRect();
-    if (e.touches.length === 2) {
-      e.preventDefault();
-      lbIsPanning = false;
-      const t1 = e.touches[0], t2 = e.touches[1];
-      lbPinchDist0 = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY) || 1;
-      lbPinchScale0 = lbScale;
-      lbPinchMid0 = { x: (t1.clientX + t2.clientX) / 2 - rect.left, y: (t1.clientY + t2.clientY) / 2 - rect.top };
-      lbPinchT0 = { x: lbTx, y: lbTy };
-    } else if (e.touches.length === 1) {
-      const t = e.touches[0];
-      touchStartX = t.clientX; touchStartY = t.clientY;
-      if (lbScale > 1.01) {
-        lbIsPanning = true;
-        lbPanStart = { x: t.clientX, y: t.clientY };
-        lbPanT0 = { x: lbTx, y: lbTy };
-      }
-    }
-  }, { passive:false });
-
-  $('lbScrollWrap').addEventListener('touchmove', (e) => {
-    const wrap = $('lbScrollWrap');
-    const rect = wrap.getBoundingClientRect();
-    if (e.touches.length === 2 && lbPinchDist0 > 0) {
-      e.preventDefault();
-      const t1 = e.touches[0], t2 = e.touches[1];
-      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
-      const nextScale = Math.max(1, Math.min(4.5, lbPinchScale0 * (dist / lbPinchDist0)));
-      const midX = (t1.clientX + t2.clientX) / 2 - rect.left;
-      const midY = (t1.clientY + t2.clientY) / 2 - rect.top;
-      const ratio = nextScale / lbPinchScale0;
-      lbScale = nextScale;
-      lbTx = midX - (lbPinchMid0.x - lbPinchT0.x) * ratio;
-      lbTy = midY - (lbPinchMid0.y - lbPinchT0.y) * ratio;
-      applyLbTransform();
-    } else if (e.touches.length === 1 && lbIsPanning && lbScale > 1.01) {
-      e.preventDefault();
-      const t = e.touches[0];
-      lbTx = lbPanT0.x + (t.clientX - lbPanStart.x);
-      lbTy = lbPanT0.y + (t.clientY - lbPanStart.y);
-      applyLbTransform();
-    }
-  }, { passive:false });
-
-  $('lbScrollWrap').addEventListener('touchend', (e) => {
-    if (e.touches.length < 2) lbPinchDist0 = 0;
-    if (e.touches.length === 0) {
-      lbIsPanning = false;
-      if (e.changedTouches.length === 1) {
-        const t = e.changedTouches[0];
-        const dx = t.clientX - touchStartX;
-        const dy = t.clientY - touchStartY;
-        const nowTap = Date.now();
-        if (Math.abs(dx) < 12 && Math.abs(dy) < 12) {
-          if (nowTap - lbLastTapTs < 280) {
-            lbLastTapTs = 0;
-            const rect = $('lbScrollWrap').getBoundingClientRect();
-            const tapX = t.clientX - rect.left, tapY = t.clientY - rect.top;
-            if (lbScale > 1.05) {
-              resetLbZoom();
-            } else {
-              lbScale = 2.4;
-              lbTx = tapX - tapX * lbScale;
-              lbTy = tapY - tapY * lbScale;
-              applyLbTransform();
-            }
-            return;
-          }
-          lbLastTapTs = nowTap;
-        }
-        if (lbScale <= 1.02 && Math.abs(dx) > 65 && Math.abs(dy) < 50) {
-          if (dx < 0) openLb(curLbIdx + 1);
-          else openLb(curLbIdx - 1);
-        }
-      }
-    }
-  }, { passive:true });
 
   function renderBoards() {
     if (!isOwner() || !S || !S._vaultUnlocked || !S.rationaleInfo) return;
@@ -3226,20 +3036,6 @@
     ).join('');
     $('cbTacReasonsWrap').innerHTML = rCards.join('') + skipNotes;
 
-    curLbArr = bArr;
-    const bgHost = $('cbBoardsGrid');
-    if (bgHost) {
-      bgHost.innerHTML = bArr.map((b, idx) => {
-        const thSrc = b.inlineThumb || b.thumb;
-        return `<div class="b-card" data-bidx="${idx}">
-          <div class="b-thumb"><span class="b-num">${escHtml(b.num)}</span><img src="${thSrc}" alt="${escHtml(b.title)}" loading="lazy"></div>
-          <div class="b-title">${escHtml(b.title)}</div>
-        </div>`;
-      }).join('');
-      bgHost.querySelectorAll('.b-card').forEach(el => {
-        el.onclick = () => openLb(Number(el.dataset.bidx || 0));
-      });
-    }
   }
 
   function renderEconSectionView(econObj) {
@@ -3285,30 +3081,6 @@
         <div class="econ-list">${rowsHtml}</div>
       </div>`;
     }).join('');
-  }
-
-  function renderLogsList(logs) {
-    const filtered = (logs || []).filter(l => {
-      if (logFilter === 'ALL') return true;
-      const k = String(l.kind || '');
-      if (logFilter === 'order') return k === 'order' || k === 'cycle';
-      if (logFilter === 'guard') return k === 'guard' || k === 'rotation';
-      return k === 'news' || k === 'system' || k === 'warn';
-    });
-    const lSig = logFilter + ':' + filtered.length + ':' + (filtered[0] ? filtered[0].id : '');
-    if (logSig === lSig) return;
-    logSig = lSig;
-    $('recLogsWrap').innerHTML = filtered.length ? filtered.map(l => {
-      const k = String(l.kind || '');
-      const edgeCls = k === 'warn' ? 'edge-warn' : ((k === 'guard' || k === 'rotation') ? 'edge-guard' : ((k === 'order' || k === 'cycle') ? 'edge-order' : 'edge-news'));
-      const cleanTitle = String(l.title || '').replace(/->/g, '→');
-      const cleanDesc = String(l.desc || '').replace(/->/g, '→');
-      return `
-      <div class="ord-card ${edgeCls}">
-        <div class="row-sb"><b style="font-size:12.5px;">${escHtml(cleanTitle)}</b><span style="font-size:11px;color:var(--sub);">${escHtml(l.time || '')}</span></div>
-        <div style="font-size:11.5px;color:var(--sub);margin-top:4px;line-height:1.5;">${escHtml(cleanDesc)}</div>
-      </div>`;
-    }).join('') : '<div style="color:var(--sub);font-size:12.5px;padding:12px 0;">표시할 운용 기록이 없습니다.</div>';
   }
 
   function renderPnlCalendar(calArr) {
@@ -3641,6 +3413,7 @@
       if (!d._vaultUnlocked) {
         $('liveUpnlPill').style.display = 'none';
         setTxt('riskAllowanceTxt', '보안 볼트 동기화 후 표시');
+        setTxt('sessionRiskUseTxt', '--');
         setTxt('totalRealizedBadge', '--');
         $('guardBrakeBanner').style.display = 'none';
         setTxt('wbVal', '--'); setTxt('avVal', '--'); setTxt('omVal', '--');
@@ -3656,12 +3429,11 @@
         }
 
         window.__kjRadarMeta = { run: !!d.cycleRunning, btc: Number(d.btcPrice || 0), anchor: Number(d.radarAnchor || 0), hm: String((d.rationaleInfo && d.rationaleInfo.updatedAtHm) || '') };
-        const rg = d.riskGear || {};
-        const capPct = Number(rg.maxPosRiskPct || rg.ladderPct || 5.0);
-        const capUsd = Math.round(eqVal * (capPct / 100.0));
+        const capUsd = Math.round(eqVal * 0.05);
         const m18 = (((sumInfo.workers18) || {}).metrics) || {};
         const lU = Number(m18.sessionRiskLongPct || 0), sU = Number(m18.sessionRiskShortPct || 0);
-        setTxt('riskAllowanceTxt', `상한 ${capPct.toFixed(1)}% (${capUsd.toLocaleString()}$) · 사용 L ${lU.toFixed(1)}% / S ${sU.toFixed(1)}%`);
+        setTxt('riskAllowanceTxt', `최대 5.0% (${capUsd.toLocaleString()}$) · 월 +50% 목표`);
+        setTxt('sessionRiskUseTxt', `롱 ${lU.toFixed(2)}% · 숏 ${sU.toFixed(2)}%`);
 
         $('guardBrakeBanner').style.display = 'none';
         setTxt('wbVal', fmt(w.walletBalance || 0, 2) + '$');
@@ -3803,7 +3575,6 @@
     }
 
     if (showOwnerSeed) {
-      renderLogsList(d.logs || []);
       renderBoards();
       if (activeTab === 'chartboard' && !cmChart && !cmNativeCtrl) {
         openCandleModal(cmSym || 'BTC', cmTf || '15m');
