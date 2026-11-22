@@ -91,7 +91,7 @@
     background:rgba(56,189,248,0.16); border:1px solid rgba(56,189,248,0.45); color:#7dd3fc;
     white-space:nowrap; cursor:pointer; flex-shrink:0; display:none; font-variant-numeric:tabular-nums;
   }
-  .hdr-actions { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:6px; width:100%; }
+  .hdr-actions { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:6px; width:100%; }
   .hdr-actions .btn { width:100%; text-align:center; padding:6.5px 4px; font-size:11.5px; }
   .pill-wrap {
     white-space:normal !important; word-break:keep-all !important; overflow-wrap:anywhere !important;
@@ -470,7 +470,6 @@
     </div>
     <div class="hdr-actions owner-only">
       <button class="btn" id="btnOpenWorkersHdr" title="18인 전담 직원 현황">👥 18인</button>
-      <button class="btn acc" id="btnShieldToggle" title="지표 발표 15분 전 자동 방어막">🛡️ 방어 ON</button>
       <button class="btn" id="btnPauseToggle">⏸ 정지</button>
       <button class="btn acc" id="btnForceRun">⚡ 분석</button>
     </div>
@@ -507,10 +506,6 @@
         <span id="statusHeadline" style="font-size:12px;font-weight:800;color:#f1f5f9;line-height:1.42;min-width:0;word-break:keep-all;overflow-wrap:anywhere;">데이터 동기화 중...</span>
         <span id="nextRunLabel" style="font-size:11px;font-weight:800;color:var(--acc);white-space:nowrap;flex-shrink:0;margin-left:auto;font-variant-numeric:tabular-nums;">분석 --:--</span>
       </div>
-      <div id="newsShieldBanner" class="shield-banner-box">
-        <div class="shield-l1" id="shieldLine1"></div>
-        <div class="shield-l2" id="shieldLine2"></div>
-      </div>
     </div>
 
     <!-- [오너 전용 추가] 18인 전담 직원 · 4대 본부 실시간 요약 (게스트 노출 0%) -->
@@ -526,13 +521,13 @@
         <div class="hq18-l2" id="hqL2-1">구조붕괴 · 매크로 판독</div>
       </div>
       <div class="hq18-box" data-hq="hq3_exec">
-        <div class="hq18-top"><span class="hq18-ttl">⚡ 5%수문장·집행</span><span class="hq18-bdg" id="hqBdg-2">4/4 가동</span></div>
+        <div class="hq18-top"><span class="hq18-ttl">⚡ 자율집행·순환</span><span class="hq18-bdg" id="hqBdg-2">4/4 가동</span></div>
         <div class="hq18-l1" id="hqL1-2">세션위험 L 0% · S 0%</div>
         <div class="hq18-l2" id="hqL2-2">교차 100x · 순환·불타기</div>
       </div>
       <div class="hq18-box" data-hq="hq4_brain">
         <div class="hq18-top"><span class="hq18-ttl">🧠 추론·복리원장</span><span class="hq18-bdg" id="hqBdg-3">3/3 가동</span></div>
-        <div class="hq18-l1" id="hqL1-3">Carbon 단일탭 · 목표+50%</div>
+        <div class="hq18-l1" id="hqL1-3">Carbon 단일탭 · 가변보드 연동</div>
         <div class="hq18-l2" id="hqL2-3">15m~4H 구조선 감시</div>
       </div>
     </div>
@@ -572,10 +567,6 @@
       </div>
 
       <div class="seed-meta-rows owner-only" style="margin-top:11px;">
-        <div class="row-sb" style="flex-wrap:wrap;gap:4px 8px;">
-          <span style="white-space:nowrap;">포지션 손실상한</span>
-          <b style="color:#e2e8f0;margin-left:auto;" id="riskAllowanceTxt">최대 5.0% · 월 +50% 목표</b>
-        </div>
         <div class="row-sb" style="flex-wrap:wrap;gap:4px 8px;">
           <span style="white-space:nowrap;">현재 세션 위험</span>
           <b style="color:#7dd3fc;margin-left:auto;" id="sessionRiskUseTxt">롱 0.00% · 숏 0.00%</b>
@@ -672,22 +663,6 @@
       <div class="pf-ts-row">
         <span id="pfStartTs">--</span>
         <span id="pfEndTs">--</span>
-      </div>
-
-      <div class="pf-proj-box">
-        <div class="row-sb">
-          <span style="font-size:12px;font-weight:900;color:#7dd3fc;" id="pfProjTitle">📈 월 +50% 복리 목표 시뮬레이션</span>
-          <span class="pill" id="pfProjModeTag" style="font-size:10px;">교차 100x · 5%한도</span>
-        </div>
-        <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:7px;">
-          <span style="font-size:18px;font-weight:900;color:#34d399;font-variant-numeric:tabular-nums;" id="pfProjMonthlyPct">+45% ~ +58% (목표 +50%)</span>
-          <span class="pill up" style="font-size:11px;" id="pfProjMonthlyUsd">월 목표 +50%</span>
-        </div>
-        <div class="row-sb" style="margin-top:8px;padding-top:7px;border-top:1px solid rgba(148,163,184,0.12);font-size:11.5px;">
-          <span style="color:var(--sub);">3개월 복리 추정 시드</span>
-          <b style="color:#f8fafc;font-variant-numeric:tabular-nums;" id="pfProj3mTxt">-- USDT</b>
-        </div>
-        <div style="font-size:10.5px;color:#64748b;margin-top:4px;" id="pfProjNoteTxt">일복리 +1.36% 기준 · 체결 3건 누적 시 실전 페이스로 자동 전환</div>
       </div>
 
       <div class="pf-nav-bar" id="pfLastTradeBar">
@@ -1833,27 +1808,6 @@
     setTxt('pfStartTs', pObj.startTimeStr || '--');
     setTxt('pfEndTs', pObj.endTimeStr || '--');
 
-    const mp = pf.monthlyProjection || {};
-    setTxt('pfProjModeTag', '교차 100x · 5%한도');
-    if (mp.livePaceAvailable) {
-      const pPct = Number(mp.paceMonthlyPct || 0), pUsd = Number(mp.paceMonthlyUsd || 0);
-      $('pfProjMonthlyPct').style.color = pPct >= 0 ? '#34d399' : '#fb7185';
-      $('pfProjMonthlyUsd').className = 'pill ' + (pUsd >= 0 ? 'up' : 'dn');
-      setTxt('pfProjTitle', '📈 실전 복리 페이스 기반 월 예상 (목표 +50%)');
-      setTxt('pfProjMonthlyPct', `${pPct >= 0 ? '+' : ''}${pPct.toFixed(1)}%`);
-      setTxt('pfProjMonthlyUsd', `월 ${pUsd >= 0 ? '+' : ''}${pUsd.toLocaleString()}$`);
-      setTxt('pfProjNoteTxt', '입출금 왜곡이 제거된 순수 TWR 복리 속도 환산치');
-      setTxt('pfProj3mTxt', `${Number(mp.pace3mEquity || eqNow).toLocaleString()} USDT`);
-    } else {
-      $('pfProjMonthlyPct').style.color = '#34d399';
-      $('pfProjMonthlyUsd').className = 'pill up';
-      setTxt('pfProjTitle', '📈 월 +50% 복리 목표 시뮬레이션');
-      setTxt('pfProjMonthlyPct', mp.modelRangePct || '+45% ~ +58% (목표 +50%)');
-      setTxt('pfProjMonthlyUsd', `월 ${mp.modelUsdRange || ''}`);
-      setTxt('pfProjNoteTxt', '일복리 +1.36% 기준 · 체결 3건 누적 시 실전 페이스로 자동 전환');
-      setTxt('pfProj3mTxt', `${Number(mp.model3mEquity || eqNow).toLocaleString()} USDT`);
-    }
-
     const lastTrStr = (pf.lastTrade && pf.lastTrade.timeStr) ? pf.lastTrade.timeStr : '체결 대기 중';
     const daysNum = Number(pf.daysTrading || 1);
     const closedPortN = Number(pf.closedPortfolios || 0);
@@ -2074,7 +2028,7 @@
       if (showOwner) {
         (S.positions || []).forEach(p => {
           lineSpecs.push({ price:p.entry, color:'#38bdf8', lineWidth:2, lineStyle:0, title:`${p.side==='LONG'?'롱':'숏'} 평단` });
-          const rtpM = String(p.stageNote || '').match(/부분익절\s*([\d,]+(?:\.\d+)?)\$/);
+          const rtpM = String(p.stageNote || '').match(/(?:부분익절|지정가익절)\s*([\d,]+(?:\.\d+)?)\$/);
           if (rtpM) {
             const rtpPx = Number(rtpM[1].replace(/,/g, ''));
             if (rtpPx > 0) lineSpecs.push({ price:rtpPx, color:'#22d3ee', lineWidth:1, lineStyle:2, title:'🎯 지정가익절' });
@@ -2370,7 +2324,7 @@
     if (banner) {
       const wkTxt = ri.wakeSummary || m.nextWakeSummary || '15m~4H 구조선·체결 감시 중';
       banner.innerHTML =
-        `<div>• <b>고정 원칙</b>: 교차 100x · 양방향 헤지 · 세션 최대 손실 5.0% 상한 · 월 +50% 복리 타겟</div>` +
+        `<div>• <b>운용 체제</b>: 교차 100x · 양방향 헤지 · AI 자율 리스크 · 가변 보드</div>` +
         `<div>• <b>세션 위험</b>: 롱 <b>${Number(m.sessionRiskLongPct || 0).toFixed(2)}%</b> / 숏 <b>${Number(m.sessionRiskShortPct || 0).toFixed(2)}%</b></div>` +
         `<div>• <b>기상 레이더</b>: ${escHtml(wkTxt)}</div>`;
     }
@@ -2793,10 +2747,6 @@
     const nxt = (S && S.orderPaused) ? '정상 자동 발주 재개' : '신규 발주 일시정지 (브리핑·수비 전용)';
     requestPinAndSendCmd(`⏸ [발주 모드 전환] ${nxt}`, 'toggle_pause');
   };
-  $('btnShieldToggle').onclick = () => {
-    const curOn = !(S && S.newsShield === false);
-    requestPinAndSendCmd(`🛡️ [지표 방어막] ${curOn ? 'OFF 해제' : 'ON 활성화'}`, 'toggle_news_shield');
-  };
   $('btnCancelAll').onclick = () => requestPinAndSendCmd('🚨 [대기주문 전체취소] 미체결 진입·돌파 대기주문 일괄 취소', 'cancel_all');
 
   $('btnResetPnl').onclick = () => requestPinAndSendCmd('🔄 [실현손익 초기화] 지금 이 시각부터 0.00$ 재집계', 'reset_pnl_epoch');
@@ -3173,7 +3123,7 @@
                 <div class="exp-cell-val up">+${fmt(le.fullTpPct, 2)}% (+${fmt(le.fullTpUsd, 0)}$)</div>
               </div>
               <div class="exp-cell">
-                <div class="exp-cell-lbl">최대 손실 시 (5% 한도 내)</div>
+                <div class="exp-cell-lbl">손절 도달 시</div>
                 <div class="exp-cell-val dn">${fmt(le.maxLossPct, 2)}% (${fmt(le.maxLossUsd, 0)}$)</div>
               </div>
             </div>
@@ -3192,7 +3142,7 @@
                 <div class="exp-cell-val up">+${fmt(se.fullTpPct, 2)}% (+${fmt(se.fullTpUsd, 0)}$)</div>
               </div>
               <div class="exp-cell">
-                <div class="exp-cell-lbl">최대 손실 시 (5% 한도 내)</div>
+                <div class="exp-cell-lbl">손절 도달 시</div>
                 <div class="exp-cell-val dn">${fmt(se.maxLossPct, 2)}% (${fmt(se.maxLossUsd, 0)}$)</div>
               </div>
             </div>
@@ -3317,12 +3267,6 @@
       pBtn.className = d.orderPaused ? 'btn warn' : 'btn';
       setTxt('btnPauseToggle', d.orderPaused ? '▶ 재개' : '⏸ 정지');
     }
-    const shOn = d.newsShield !== false;
-    const shBtn = $('btnShieldToggle');
-    if (shBtn) {
-      shBtn.className = shOn ? 'btn acc' : 'btn';
-      setTxt('btnShieldToggle', shOn ? '🛡️ 방어 ON' : '🛡️ 방어 OFF');
-    }
 
     const curRmode = d._vaultUnlocked ? String(d.riskMode || 'AUTO').toUpperCase() : '';
     document.querySelectorAll('[data-rmode]').forEach(b => b.classList.toggle('active', Boolean(curRmode) && b.dataset.rmode === curRmode));
@@ -3342,13 +3286,11 @@
     const offline = isEngineOffline();
     const sumInfo = d.orderSummary || {};
     if (isOwner()) {
-      const nsBox = $('newsShieldBanner');
       if (!d._vaultUnlocked) {
         setTxt('statusHeadline', '🔐 볼트 동기화 대기 중 (로고 5회 터치로 인증)');
-        nsBox.style.display = 'none';
       } else {
         if (d.cycleRunning && !offline) {
-          setTxt('statusHeadline', d.phaseNote || '15m~1W 마스터 보드 6/6장 분석 중');
+          setTxt('statusHeadline', d.phaseNote || 'AI 가변 보드 · 전술 분석 중');
         } else if (sumInfo.ownerHeadline) {
           setTxt('statusHeadline', sumInfo.ownerHeadline);
         } else {
@@ -3366,27 +3308,8 @@
         if ($('workersSheetModal') && $('workersSheetModal').classList.contains('open')) {
           renderWorkers18SheetList();
         }
-
-        const ns = sumInfo.newsShield || {};
-        if (ns.active && ns.event) {
-          nsBox.style.display = 'block';
-          $('shieldLine1').style.color = '#fb7185';
-          setTxt('shieldLine1', `🛡️ [지표 방어막 가동] ${ns.event.timeStr} · ${ns.event.title}`);
-          setTxt('shieldLine2', `${ns.phase}`);
-        } else if (ns.enabled && ns.nextEvent && Number(ns.nextEvent.diffMin) <= 240 && Number(ns.nextEvent.diffMin) > 0) {
-          const dm = Math.max(1, Math.round(Number(ns.nextEvent.diffMin)));
-          const shieldIn = Math.max(0, dm - 15);
-          const l2Txt = shieldIn > 0 ? `발표 ${dm}분 전 · 🛡️ 방어막 가동 ${shieldIn}분 전` : `발표 ${dm}분 전 · 🛡️ 방어막 가동 임박`;
-          nsBox.style.display = 'block';
-          $('shieldLine1').style.color = '#fde68a';
-          setTxt('shieldLine1', `🕒 ${ns.nextEvent.timeStr} · ${ns.nextEvent.title}`);
-          setTxt('shieldLine2', l2Txt);
-        } else {
-          nsBox.style.display = 'none';
-        }
       }
     }
-
     const mq = d.macroQuotes || {};
     ['NQ100', 'NVDA', 'SOXL', 'GOLD'].forEach(sym => {
       const q = mq[sym] || {};
@@ -3412,7 +3335,6 @@
     if (isOwner()) {
       if (!d._vaultUnlocked) {
         $('liveUpnlPill').style.display = 'none';
-        setTxt('riskAllowanceTxt', '보안 볼트 동기화 후 표시');
         setTxt('sessionRiskUseTxt', '--');
         setTxt('totalRealizedBadge', '--');
         $('guardBrakeBanner').style.display = 'none';
@@ -3432,7 +3354,6 @@
         const capUsd = Math.round(eqVal * 0.05);
         const m18 = (((sumInfo.workers18) || {}).metrics) || {};
         const lU = Number(m18.sessionRiskLongPct || 0), sU = Number(m18.sessionRiskShortPct || 0);
-        setTxt('riskAllowanceTxt', `최대 5.0% (${capUsd.toLocaleString()}$) · 월 +50% 목표`);
         setTxt('sessionRiskUseTxt', `롱 ${lU.toFixed(2)}% · 숏 ${sU.toFixed(2)}%`);
 
         $('guardBrakeBanner').style.display = 'none';
@@ -3498,7 +3419,7 @@
         $('posListWrap').innerHTML = posArr.map((p, idx) => {
           const edgeCls = p.side === 'LONG' ? 'edge-long' : 'edge-short';
           const liqBadge = p.liqSafe
-            ? `<span class="pill up" style="font-size:10px;">단독청산 안전 (이격 ${p.liqGapPct}%)</span>`
+            ? `<span class="pill up" style="font-size:10px;">${Number(p.liqPrice || 0) > 0 ? '단독청산 안전 (이격 ' + p.liqGapPct + '%)' : '무청산 안전 (증거금 여유)'}</span>`
             : `<span class="pill dn" style="font-size:10px;">⚠️ 청산가 근접 주의</span>`;
           let lockBanner = '';
           if (p.lockedPnlUsd !== null && p.lockedPnlUsd !== undefined) {
@@ -3515,7 +3436,7 @@
             </div>
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;font-size:12px;">
               <div><div class="sm-lbl">진입평단</div><b style="border-bottom:1px dashed rgba(148,163,184,0.4);">${fmt(p.entry,1)}</b></div>
-              <div><div class="sm-lbl">목표익절</div><b class="up">${fmt(p.tp,1)}</b></div>
+              <div><div class="sm-lbl">목표익절</div><b class="up">${Number(p.tp || 0) > 0 ? fmt(p.tp, 1) : "분할지정가"}</b></div>
               <div><div class="sm-lbl">보호손절</div><b class="dn">${fmt(p.sl,1)}</b></div>
             </div>
             <div class="row-sb" style="margin-top:7px;font-size:11px;color:var(--sub);">
@@ -3621,10 +3542,10 @@
         var bar = document.createElement('div');
         bar.id = 'kjDesktopDeskBar';
         bar.className = 'owner-only';
-        bar.innerHTML = '<div>👑 <span style="color:#f5b942;font-weight:800;">KINGJAE V40 PRO</span> · 교차 100x · 양방향 헤지 · 세션 5% 한도 · 18인 자율 커맨드</div>'
+        bar.innerHTML = '<div>👑 <span style="color:#f5b942;font-weight:800;">KINGJAE V40 PRO</span> · 교차 100x · 양방향 헤지 · 18인 AI 자율 커맨드</div>'
           + '<div style="display:flex;gap:12px;align-items:center;">'
           + '<span style="color:#34d399;">● 0.2초 WebSocket 직결</span>'
-          + '<span style="color:#94a3b8;">월 +50% 복리 타겟</span>'
+          + '<span style="color:#94a3b8;">실시간 TWR 원장</span>'
           + '</div>';
         document.body.insertBefore(bar, document.body.firstChild);
       }
