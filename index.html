@@ -1825,9 +1825,7 @@
     for (const p of (pObj.points || [])) {
       const tSec = Math.floor(Number(p.t)) + 9 * 3600;
       const vNum = cleanZero(perfMode === 'roi' ? Number(p.pct || 0) : Number(p.pnl || 0));
-      if (Number.isFinite(tSec) && tSec > 0 && Number.isFinite(vNum)) {
-        rawMap.set(tSec, vNum);
-      }
+      if (Number.isFinite(tSec) && tSec > 0 && Number.isFinite(vNum)) rawMap.set(tSec, vNum);
     }
     const pts = Array.from(rawMap.entries()).sort((a, b) => a[0] - b[0]).map(e => ({ time: e[0], value: e[1] }));
     const liveDomTxt = ($(perfMode === 'roi' ? 'pfRoiVal' : 'pfPnlVal')?.textContent || '0').replace(/[^0-9.+-]/g, '');
@@ -1835,17 +1833,10 @@
     const nowKst = Math.floor(Date.now() / 1000) + 9 * 3600;
     const epMsRaw = Number(pf.epochMs || 0);
     const startKst = epMsRaw > 0 ? (Math.floor(epMsRaw / 1000) + 9 * 3600) : (pts.length ? pts[0].time : (nowKst - 60));
-    if (pts.length === 0) {
-      pts.push({ time: Math.min(startKst, nowKst - 1), value: 0 });
-    }
-    const lastT = pts[pts.length - 1].time;
-    const endKst = Math.max(lastT + 1, nowKst);
+    if (pts.length === 0) pts.push({ time: Math.min(startKst, nowKst - 1), value: 0 });
+    const endKst = Math.max(pts[pts.length - 1].time + 1, nowKst);
     if (pts.length < 2 || Math.abs(pts[pts.length - 1].value - liveVal) >= 0.005) {
       pts.push({ time: endKst, value: liveVal });
-    }
-    if (pts.length >= 2) {
-      setTxt('pfStartTs', fmtKstTs(pts[0].time).full);
-      setTxt('pfEndTs', fmtKstTs(pts[pts.length - 1].time).full);
     }
 
     const newSig = `${pf.resetAt || 'ALL'}:${cfCnt}:${perfPeriod}:${perfMode}:${box.clientWidth}:${pts.length}:${pts.length ? pts[pts.length - 1].value : 0}`;
@@ -1909,9 +1900,24 @@
 
     if (pts.length) {
       try {
-        perfLastPointTime = pts[pts.length - 1].time;
-        perfSeries.setData(pts);
-        perfChart.timeScale().fitContent();
+        const fitKey = `${pf.resetAt || 'ALL'}:${perfPeriod}:${perfMode}`;
+        const srcCnt = (pObj.points || []).length;
+        if (window.__kjPerfFitKey !== fitKey || !perfLastPointTime) {
+          perfLastPointTime = pts[pts.length - 1].time;
+          perfSeries.setData(pts);
+          perfChart.timeScale().fitContent();
+          window.__kjPerfFitKey = fitKey;
+          window.__kjPerfSrcCnt = srcCnt;
+        } else if ((window.__kjPerfSrcCnt || 0) !== srcCnt) {
+          perfLastPointTime = pts[pts.length - 1].time;
+          perfSeries.setData(pts);
+          window.__kjPerfSrcCnt = srcCnt;
+        } else {
+          const lastPt = pts[pts.length - 1];
+          const updT = Math.max(perfLastPointTime, lastPt.time);
+          perfLastPointTime = updT;
+          perfSeries.update({ time: updT, value: lastPt.value });
+        }
         perfSig = newSig;
       } catch (errPerf) {}
     }
@@ -2364,19 +2370,20 @@
       else openCandleModal('BTC', '15m');
     };
   }
-  if (!window.__kjPerfBoxTickerV3) {
-    window.__kjPerfBoxTickerV3 = true;
+  if (!window.__kjPerfSmoothV4) {
+    window.__kjPerfSmoothV4 = true;
     window.__kjLivePerfHist = window.__kjLivePerfHist || [];
     setInterval(() => {
-      if (!isOwner()) return;
+      if (!isOwner() || typeof LightweightCharts === 'undefined') return;
       const box = $('perfChartBox');
       if (!box || box.clientWidth < 40) return;
 
       const pf = (S && (S.performance || S.twr)) || {};
       const pMap = pf.periods || pf;
       const pObj = (pMap && (pMap[perfPeriod] || pMap.d7 || pMap.d1)) || {};
+      const srcPts = pObj.points || [];
       const rawMap = new Map();
-      for (const p of (pObj.points || [])) {
+      for (const p of srcPts) {
         const tSec = Math.floor(Number(p.t)) + 9 * 3600;
         const vNum = cleanZero(perfMode === 'roi' ? Number(p.pct || 0) : Number(p.pnl || 0));
         if (Number.isFinite(tSec) && tSec > 0 && Number.isFinite(vNum)) rawMap.set(tSec, vNum);
@@ -2411,79 +2418,81 @@
         pts.push({ time: endKst, value: liveVal });
       }
 
-      setTxt('pfStartTs', fmtKstTs(pts[0].time).full);
-      setTxt('pfEndTs', fmtKstTs(pts[pts.length - 1].time).full);
+      if (($('pfStartTs')?.textContent || '--').trim() === '--') {
+        setTxt('pfStartTs', fmtKstTs(pts[0].time).short || fmtKstTs(pts[0].time).full);
+      }
+      if (($('pfEndTs')?.textContent || '--').trim() === '--') {
+        setTxt('pfEndTs', fmtKstTs(pts[pts.length - 1].time).short || fmtKstTs(pts[pts.length - 1].time).full);
+      }
 
-      if (typeof LightweightCharts !== 'undefined') {
-        const minBand = perfMode === 'roi' ? 0.35 : 35.0;
-        const autoScaleProv = (baseImpl) => {
-          const res = baseImpl();
-          if (!res || !res.priceRange) return res;
-          let mn = res.priceRange.minValue, mx = res.priceRange.maxValue;
-          if (mx - mn < minBand * 2) {
-            const mid = (mx + mn) / 2.0;
-            mn = Math.min(-minBand, mid - minBand);
-            mx = Math.max(minBand, mid + minBand);
+      const minBand = perfMode === 'roi' ? 0.35 : 35.0;
+      const autoScaleProv = (baseImpl) => {
+        const res = baseImpl();
+        if (!res || !res.priceRange) return res;
+        let mn = res.priceRange.minValue, mx = res.priceRange.maxValue;
+        if (mx - mn < minBand * 2) {
+          const mid = (mx + mn) / 2.0;
+          mn = Math.min(-minBand, mid - minBand);
+          mx = Math.max(minBand, mid + minBand);
+        }
+        return { priceRange: { minValue: mn, maxValue: mx } };
+      };
+      const priceFmt = perfMode === 'roi'
+        ? { type:'custom', minMove:0.01, formatter:(v) => `${cleanZero(v, 0.005).toFixed(2)}%` }
+        : { type:'custom', minMove:0.1, formatter:(v) => { const z = cleanZero(v, 0.05); return `${z > 0 ? '+' : ''}${z.toFixed(1)}$`; } };
+
+      if (!perfChart) {
+        box.innerHTML = '';
+        perfChart = LightweightCharts.createChart(box, {
+          width: box.clientWidth, height: 195,
+          handleScroll: { mouseWheel:true, pressedMouseMove:true, horzTouchDrag:true, vertTouchDrag:false },
+          handleScale: { axisPressedMouseMove:true, mouseWheel:true, pinch:true },
+          layout: { background:{ color:'transparent' }, textColor:'#64748b', fontSize:11, attributionLogo:false },
+          grid: { vertLines:{ visible:false }, horzLines:{ color:'rgba(148,163,184,0.08)', style:2 } },
+          leftPriceScale: { visible:true, borderVisible:false, scaleMargins:{ top:0.18, bottom:0.18 } },
+          rightPriceScale: { visible:false },
+          timeScale: { visible:false, borderVisible:false },
+          crosshair: { vertLine:{ color:'rgba(148,163,184,0.35)', labelVisible:false }, horzLine:{ color:'rgba(148,163,184,0.35)' } }
+        });
+        perfSeries = perfChart.addBaselineSeries({
+          baseValue: { type: 'price', price: 0 },
+          topLineColor: '#10b981', topFillColor1: 'rgba(16, 185, 129, 0.30)', topFillColor2: 'rgba(16, 185, 129, 0.02)',
+          bottomLineColor: '#f43f5e', bottomFillColor1: 'rgba(244, 63, 94, 0.02)', bottomFillColor2: 'rgba(244, 63, 94, 0.30)',
+          lineWidth: 2, priceLineVisible: false, lastValueVisible: false,
+          priceFormat: priceFmt, autoscaleInfoProvider: autoScaleProv
+        });
+        perfChart.subscribeCrosshairMove((param) => {
+          if (!param || !param.time || !param.seriesData || !param.seriesData.get(perfSeries)) {
+            setTxt('pfHoverVal', '실시간 웹소켓 연동 중');
+            return;
           }
-          return { priceRange: { minValue: mn, maxValue: mx } };
-        };
-        const priceFmt = perfMode === 'roi'
-          ? { type:'custom', minMove:0.01, formatter:(v) => `${cleanZero(v, 0.005).toFixed(2)}%` }
-          : { type:'custom', minMove:0.1, formatter:(v) => { const z = cleanZero(v, 0.05); return `${z > 0 ? '+' : ''}${z.toFixed(1)}$`; } };
-
-        if (!perfChart) {
-          box.innerHTML = '';
-          perfChart = LightweightCharts.createChart(box, {
-            width: box.clientWidth, height: 195,
-            layout: { background:{ color:'transparent' }, textColor:'#64748b', fontSize:11, attributionLogo:false },
-            grid: { vertLines:{ visible:false }, horzLines:{ color:'rgba(148,163,184,0.08)', style:2 } },
-            leftPriceScale: { visible:true, borderVisible:false, scaleMargins:{ top:0.18, bottom:0.18 } },
-            rightPriceScale: { visible:false },
-            timeScale: { visible:false, borderVisible:false },
-            crosshair: { vertLine:{ color:'rgba(148,163,184,0.35)', labelVisible:false }, horzLine:{ color:'rgba(148,163,184,0.35)' } }
-          });
-          perfSeries = perfChart.addBaselineSeries({
-            baseValue: { type: 'price', price: 0 },
-            topLineColor: '#10b981', topFillColor1: 'rgba(16, 185, 129, 0.30)', topFillColor2: 'rgba(16, 185, 129, 0.02)',
-            bottomLineColor: '#f43f5e', bottomFillColor1: 'rgba(244, 63, 94, 0.02)', bottomFillColor2: 'rgba(244, 63, 94, 0.30)',
-            lineWidth: 2, priceLineVisible: false, lastValueVisible: false,
-            priceFormat: priceFmt, autoscaleInfoProvider: autoScaleProv
-          });
-        } else {
+          const val = cleanZero(param.seriesData.get(perfSeries).value);
+          const dt = fmtKstTs(param.time).full;
+          setTxt('pfHoverVal', `${dt} · ${perfMode === 'roi' ? val.toFixed(2) + '%' : (val > 0 ? '+' : '') + fmt(val, 2) + '$'}`);
+        });
+      } else {
+        if (window.__kjLastBoxW !== box.clientWidth || window.__kjLastPMode !== perfMode) {
           perfChart.applyOptions({ width: box.clientWidth });
           perfSeries.applyOptions({ priceFormat: priceFmt, autoscaleInfoProvider: autoScaleProv });
+          window.__kjLastBoxW = box.clientWidth;
+          window.__kjLastPMode = perfMode;
         }
-        try {
+      }
+
+      try {
+        const fitKey = `${pf.resetAt || 'ALL'}:${perfPeriod}:${perfMode}`;
+        if (window.__kjPerfFitKey !== fitKey || !perfLastPointTime) {
           perfLastPointTime = pts[pts.length - 1].time;
           perfSeries.setData(pts);
           perfChart.timeScale().fitContent();
-          return;
-        } catch (e) {}
-      }
-
-      const vals = pts.map(p => p.value);
-      const minV = Math.min(0, ...vals);
-      const maxV = Math.max(perfMode === 'roi' ? 0.1 : 10, ...vals);
-      const spanV = Math.max(0.05, maxV - minV);
-      const W = Math.max(260, box.clientWidth), H = 185, padX = 8, padY = 18;
-      const coords = pts.map((p, i) => {
-        const x = padX + (i / Math.max(1, pts.length - 1)) * (W - padX * 2);
-        const y = H - padY - ((p.value - minV) / spanV) * (H - padY * 2);
-        return [x.toFixed(1), y.toFixed(1)];
-      });
-      const zeroY = (H - padY - ((0 - minV) / spanV) * (H - padY * 2)).toFixed(1);
-      const polyStr = coords.map(c => c.join(',')).join(' ');
-      const areaStr = coords[0][0] + ',' + zeroY + ' ' + polyStr + ' ' + coords[coords.length - 1][0] + ',' + zeroY;
-      const lastC = coords[coords.length - 1];
-      const clr = liveVal >= 0 ? '#10b981' : '#f43f5e';
-      const fillC = liveVal >= 0 ? 'rgba(16,185,129,0.18)' : 'rgba(244,63,94,0.18)';
-      box.innerHTML =
-        '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:195px;display:block;">' +
-          '<line x1="' + padX + '" y1="' + zeroY + '" x2="' + (W - padX) + '" y2="' + zeroY + '" stroke="#334155" stroke-dasharray="3 3" stroke-width="1"/>' +
-          '<polygon points="' + areaStr + '" fill="' + fillC + '"/>' +
-          '<polyline fill="none" stroke="' + clr + '" stroke-width="2.2" points="' + polyStr + '"/>' +
-          '<circle cx="' + lastC[0] + '" cy="' + lastC[1] + '" r="3.8" fill="' + clr + '"/>' +
-        '</svg>';
+          window.__kjPerfFitKey = fitKey;
+          window.__kjPerfSrcCnt = srcPts.length;
+        } else {
+          const updT = Math.max(perfLastPointTime, nowKst);
+          perfLastPointTime = updT;
+          perfSeries.update({ time: updT, value: liveVal });
+        }
+      } catch (e) {}
     }, 1000);
   }
   $('kpCloseBtn').onclick = () => { pendingCmd = null; closeModalById('keypadModal'); };
