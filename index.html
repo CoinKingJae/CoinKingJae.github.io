@@ -461,7 +461,6 @@
 
   <div class="kj-toast" id="kjToast"></div>
 
-  <!-- 최상단 헤더 (게스트 화면 무수정 그대로 유지) -->
   <div class="top-hdr">
     <div class="brand-wrap">
       <div class="brand-name" id="brandLogo">KingJae</div>
@@ -475,7 +474,6 @@
     </div>
   </div>
 
-  <!-- [탭 1] 메인 대시보드 -->
   <div class="tab-pane active" id="pane-dash">
 
     <div class="card hero-card" id="btcHeroCard">
@@ -508,7 +506,6 @@
       </div>
     </div>
 
-    <!-- [오너 전용 추가] 18인 전담 직원 · 4대 본부 실시간 요약 (게스트 노출 0%) -->
     <div class="hq18-grid owner-only" id="hq18Grid">
       <div class="hq18-box" data-hq="hq1_feed">
         <div class="hq18-top"><span class="hq18-ttl">📡 수급·유동성</span><span class="hq18-bdg" id="hqBdg-0">6/6 가동</span></div>
@@ -551,7 +548,6 @@
       </div>
     </div>
 
-    <!-- 시드(AUM) 카드 -->
     <div class="card">
       <div class="row-sb">
         <div style="font-size:12px;color:var(--sub);font-weight:700;">전체 시드 (AUM)</div>
@@ -678,7 +674,6 @@
 
   </div>
 
-  <!-- [탭: 차트·전술 (오너 인증 전용 — 15m·1h·2h·4h·1D 동기화)] -->
   <div class="tab-pane owner-only" id="pane-chartboard">
     <div class="card" style="padding:12px 13px;overflow:hidden;">
       <div class="row-sb" style="padding-bottom:9px;border-bottom:1px solid var(--line);">
@@ -746,7 +741,6 @@
     </div>
   </div>
 
-  <!-- [탭 2] 경제소식 -->
   <div class="tab-pane" id="pane-econ">
     <div class="card">
       <div class="row-sb" style="margin-bottom:10px;">
@@ -763,7 +757,6 @@
     </div>
   </div>
 
-  <!-- [탭 3] 기록 -->
   <div class="tab-pane owner-only" id="pane-rec">
     <div class="card">
       <div class="row-sb" style="margin-bottom:11px;flex-wrap:wrap;">
@@ -811,7 +804,6 @@
     </div>
   </div>
 
-  <!-- 하단 네비게이션 (게스트 화면 무수정 유지) -->
   <div class="bnav">
     <div class="bnav-in">
       <button class="bnav-btn active" data-tab="dash">⊞ 대시보드</button>
@@ -825,7 +817,6 @@
 
 
 
-  <!-- [모달: 18인 전담 직원 상세 바텀시트 (오너 전용)] -->
   <div class="modal-bg sheet-align owner-only" id="workersSheetModal">
     <div class="sheet-card" id="workersSheetCard" style="max-width:560px;">
       <div class="sheet-handle"></div>
@@ -845,7 +836,6 @@
     </div>
   </div>
 
-  <!-- [모달 3] Days Trading 바텀시트 -->
   <div class="modal-bg sheet-align" id="daysSheetModal">
     <div class="sheet-card" id="daysSheetCard">
       <div class="sheet-handle"></div>
@@ -869,7 +859,6 @@
     </div>
   </div>
 
-  <!-- [모달 4] 6자리 보안 터치 키패드 바텀시트 (KingJae 5회 터치 유지) -->
   <div class="modal-bg sheet-align" id="keypadModal">
     <div class="sheet-card" id="keypadSheetCard">
       <div class="sheet-handle"></div>
@@ -2453,7 +2442,7 @@
         ordSig = ''; ordExpSig = ''; posSig = ''; perfSig = ''; brdSig = ''; ratSig = ''; wkSig = '';
         if (lastRawPayload) await applyState(lastRawPayload);
         else fetchStateTick();
-        showToast('✅ 관리자 인증 완료 — 실계좌 및 18인 전담 본부가 표시됩니다.');
+        showToast('✅ 관리자 인증 완료 — 전용 제어판이 활성화되었습니다.');
       } else {
         kpPinBuf = '';
         renderKpDots(true);
@@ -2509,7 +2498,7 @@
     if (taps >= 5) {
       taps = 0;
       if (isOwner()) {
-        if (confirm('관리자 화면을 닫고 미인증 게스트 화면으로 전환하시겠습니까?')) {
+        if (confirm('관리자 제어판을 잠금 상태로 전환하시겠습니까?')) {
           try {
             localStorage.removeItem('kj_v40_verify_hash');
             localStorage.removeItem('kj_v40_vault_key');
@@ -2521,10 +2510,10 @@
           ordSig = ''; ordExpSig = ''; posSig = ''; ratSig = ''; wkSig = '';
           if (lastRawPayload) applyState(lastRawPayload);
           switchMainTab('dash');
-          showToast('🔒 게스트 화면으로 전환되었습니다.');
+          showToast('🔒 관리자 제어판이 잠금 처리되었습니다.');
         }
       } else {
-        openKeypadModal('unlock', '🔓 관리자 인증', '6자리 관리자 PIN을 입력하면 실계좌 시드와 전용 제어판이 열립니다.');
+        openKeypadModal('unlock', '🔓 관리자 인증', '전용 제어판 잠금 해제를 위해 6자리 관리자 PIN을 입력하세요.');
       }
     } else tapTmr = setTimeout(() => { taps = 0; }, 2200);
   });
@@ -3234,7 +3223,7 @@
         vaultAutoPrompted = true;
         setTimeout(() => {
           if (isOwner() && (!S || !S._vaultUnlocked)) {
-            openKeypadModal('unlock', '🔐 보안 볼트 동기화', '6자리 PIN을 1회 입력하시면 실계좌 시드와 18인 본부가 복원됩니다.');
+            openKeypadModal('unlock', '🔐 보안 볼트 동기화', '세션 동기화를 위해 6자리 관리자 PIN을 입력해 주세요.');
           }
         }, 250);
       }
@@ -3287,7 +3276,7 @@
     const sumInfo = d.orderSummary || {};
     if (isOwner()) {
       if (!d._vaultUnlocked) {
-        setTxt('statusHeadline', '🔐 볼트 동기화 대기 중 (로고 5회 터치로 인증)');
+        setTxt('statusHeadline', '🔐 보안 세션 동기화 대기 중');
       } else {
         if (d.cycleRunning && !offline) {
           setTxt('statusHeadline', d.phaseNote || 'AI 가변 보드 · 전술 분석 중');
