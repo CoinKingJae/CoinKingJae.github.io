@@ -1819,15 +1819,37 @@
     };
 
     const box = $('perfChartBox');
-    if (!box || box.clientWidth < 40) return;
+    if (!box || box.clientWidth < 40 || typeof LightweightCharts === 'undefined') return;
 
-    const pts = (pObj.points || []).map(p => ({
-      time: Number(p.t) + 9 * 3600,
-      value: cleanZero(perfMode === 'roi' ? p.pct : p.pnl)
-    }));
+    const rawMap = new Map();
+    for (const p of (pObj.points || [])) {
+      const tSec = Math.floor(Number(p.t)) + 9 * 3600;
+      const vNum = cleanZero(perfMode === 'roi' ? Number(p.pct || 0) : Number(p.pnl || 0));
+      if (Number.isFinite(tSec) && tSec > 0 && Number.isFinite(vNum)) {
+        rawMap.set(tSec, vNum);
+      }
+    }
+    const pts = Array.from(rawMap.entries()).sort((a, b) => a[0] - b[0]).map(e => ({ time: e[0], value: e[1] }));
+    const liveDomTxt = ($(perfMode === 'roi' ? 'pfRoiVal' : 'pfPnlVal')?.textContent || '0').replace(/[^0-9.+-]/g, '');
+    const liveVal = cleanZero(parseFloat(liveDomTxt) || 0);
+    const nowKst = Math.floor(Date.now() / 1000) + 9 * 3600;
+    const epMsRaw = Number(pf.epochMs || 0);
+    const startKst = epMsRaw > 0 ? (Math.floor(epMsRaw / 1000) + 9 * 3600) : (pts.length ? pts[0].time : (nowKst - 60));
+    if (pts.length === 0) {
+      pts.push({ time: Math.min(startKst, nowKst - 1), value: 0 });
+    }
+    const lastT = pts[pts.length - 1].time;
+    const endKst = Math.max(lastT + 1, nowKst);
+    if (pts.length < 2 || Math.abs(pts[pts.length - 1].value - liveVal) >= 0.005) {
+      pts.push({ time: endKst, value: liveVal });
+    }
+    if (pts.length >= 2) {
+      setTxt('pfStartTs', fmtKstTs(pts[0].time).full);
+      setTxt('pfEndTs', fmtKstTs(pts[pts.length - 1].time).full);
+    }
+
     const newSig = `${pf.resetAt || 'ALL'}:${cfCnt}:${perfPeriod}:${perfMode}:${box.clientWidth}:${pts.length}:${pts.length ? pts[pts.length - 1].value : 0}`;
     if (perfSig === newSig) return;
-    perfSig = newSig;
 
     const hasLib = await ensureChartLib();
     if (!hasLib) {
@@ -1886,9 +1908,12 @@
     }
 
     if (pts.length) {
-      perfLastPointTime = pts[pts.length - 1].time;
-      perfSeries.setData(pts);
-      perfChart.timeScale().fitContent();
+      try {
+        perfLastPointTime = pts[pts.length - 1].time;
+        perfSeries.setData(pts);
+        perfChart.timeScale().fitContent();
+        perfSig = newSig;
+      } catch (errPerf) {}
     }
   }
 
@@ -2312,6 +2337,33 @@
   if ($('cmCloseBtn')) $('cmCloseBtn').onclick = () => closeModalById('candleModal');
   if ($('wkSheetCloseBtn')) $('wkSheetCloseBtn').onclick = () => closeModalById('workersSheetModal');
   $('daysSheetOkBtn').onclick = () => closeModalById('daysSheetModal');
+  if ($('pfDaysTradingBar')) {
+    $('pfDaysTradingBar').style.cursor = 'pointer';
+    $('pfDaysTradingBar').onclick = () => {
+      if (!isOwner()) return;
+      const pf = (S && (S.performance || S.twr)) || {};
+      const lTxt = ($('pfLastTradeTxt')?.textContent || '체결 대기 중').replace('›', '').trim();
+      const dTxt = ($('pfDaysTradingTxt')?.textContent || '1').replace(/[^0-9]/g, '') || '1';
+      const clCnt = pf.closedPortfolios !== undefined ? pf.closedPortfolios : 0;
+      const pStart = pf.projectStartStr || pf.resetAt || '--';
+      setTxt('sheetLastTradeVal', lTxt);
+      setTxt('sheetDaysVal', String(dTxt));
+      setTxt('sheetClosedVal', String(clCnt));
+      if ($('sheetDescVal')) {
+        $('sheetDescVal').innerHTML = `현재 운용 프로젝트 기준일(<span class="num-nw" style="color:#cbd5e1;">${escHtml(String(pStart))} KST</span>)로부터 경과한 매매 일수이며, 수시 입출금은 TWR 기준가로 자동 분리됩니다.`;
+      }
+      openModalById('daysSheetModal');
+    };
+  }
+  if ($('pfLastTradeBar')) {
+    $('pfLastTradeBar').style.cursor = 'pointer';
+    $('pfLastTradeBar').onclick = () => {
+      if (!isOwner()) return;
+      const pf = (S && (S.performance || S.twr)) || {};
+      if (pf.lastTrade && pf.lastTrade.timeSec) openCandleModal('BTC', '15m', Number(pf.lastTrade.timeSec) + 9 * 3600);
+      else openCandleModal('BTC', '15m');
+    };
+  }
   $('kpCloseBtn').onclick = () => { pendingCmd = null; closeModalById('keypadModal'); };
 
   function renderWorkers18SheetList() {
