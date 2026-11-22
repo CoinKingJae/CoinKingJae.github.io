@@ -610,6 +610,7 @@
       </div>
       <div class="ord-exp-box owner-only" id="ordExposureBox" style="display:none;"></div>
       <div id="ordListWrap"></div>
+      <div id="roOrdersSection" class="owner-only" style="margin-top:8px;display:none;"></div>
     </div>
 
     <div class="pf-card owner-only" id="perfCardHost">
@@ -1797,7 +1798,7 @@
     setTxt('pfStartTs', pObj.startTimeStr || '--');
     setTxt('pfEndTs', pObj.endTimeStr || '--');
 
-    const lastTrStr = (pf.lastTrade && pf.lastTrade.timeStr) ? pf.lastTrade.timeStr : '체결 대기 중';
+    const lastTrStr = (pf.lastTrade && pf.lastTrade.timeStr) ? pf.lastTrade.timeStr : ((d.positions || []).length > 0 ? `마감 내역 없음 (${d.positions.length}건 운용 중)` : '마감 내역 없음');
     const daysNum = Number(pf.daysTrading || 1);
     const closedPortN = Number(pf.closedPortfolios || 0);
     const projStartS = String(pf.projectStartStr || '--');
@@ -2017,10 +2018,19 @@
       if (showOwner) {
         (S.positions || []).forEach(p => {
           lineSpecs.push({ price:p.entry, color:'#38bdf8', lineWidth:2, lineStyle:0, title:`${p.side==='LONG'?'롱':'숏'} 평단` });
-          const rtpM = String(p.stageNote || '').match(/(?:부분익절|지정가익절)\s*([\d,]+(?:\.\d+)?)\$/);
-          if (rtpM) {
+          const roChartAll = (S && S._vaultUnlocked && ((S.v40Summary || S.summary || {}).reduceOrders)) || [];
+          const roChartSide = Array.isArray(roChartAll) ? roChartAll.filter(x => x.side === p.side) : [];
+          if (roChartSide.length > 0) {
+            roChartSide.forEach(roItem => {
+              const rtpPx = Number(roItem.price || 0);
+              if (rtpPx > 0) lineSpecs.push({ price:rtpPx, color:'#22d3ee', lineWidth:1, lineStyle:2, title:`🎯 익절${roItem.idx}차(${roItem.qty}B)` });
+            });
+          } else {
+            const rtpM = String(p.stageNote || '').match(/(?:부분익절|지정가익절)\s*([\d,]+(?:\.\d+)?)\$/);
+            if (rtpM) {
             const rtpPx = Number(rtpM[1].replace(/,/g, ''));
             if (rtpPx > 0) lineSpecs.push({ price:rtpPx, color:'#22d3ee', lineWidth:1, lineStyle:2, title:'🎯 지정가익절' });
+          }
           }
           if (p.sl > 0) lineSpecs.push({ price:p.sl, color:'#f43f5e', lineWidth:1, lineStyle:2, title:'보호손절' });
           if (p.tp > 0) lineSpecs.push({ price:p.tp, color:'#10b981', lineWidth:1, lineStyle:2, title:'목표익절' });
@@ -2837,6 +2847,7 @@
     if (targetTab === 'chartboard' && isOwner()) {
       brdSig = '';
       renderBoards();
+      renderExtraPolishWidgets(d, sumInfo);
       if (!skipAutoChart) {
         setTimeout(() => openCandleModal(cmSym || 'BTC', cmTf || '15m'), 15);
       }
@@ -2886,6 +2897,197 @@
   };
 
 
+
+
+  let __kjRoOnlyMode = false;
+  function renderExtraPolishWidgets(d, sumInfo) {
+    // 1) 차트·전술 자율 분할 카드 차수별 [체결 / 대기] 배지 실시간 표시
+    const ladRoot = $('cbTacLadderCards');
+    if (ladRoot) {
+      const openEn = Array.isArray(d.orders) ? d.orders : [];
+      const actPos = Array.isArray(d.positions) ? d.positions : [];
+      ladRoot.querySelectorAll(':scope > div').forEach(cardEl => {
+        const hdrTxt = cardEl.textContent || '';
+        const sideK = hdrTxt.includes('롱') ? 'LONG' : (hdrTxt.includes('숏') ? 'SHORT' : '');
+        if (!sideK) return;
+        const hasPos = actPos.some(p => String(p.side || '').toUpperCase() === sideK);
+        const sideOrderPxs = openEn
+          .filter(o => String(o.side || '').toUpperCase() === sideK && !o.reduceOnly)
+          .map(o => Number(o.price || 0));
+        cardEl.querySelectorAll('div, span').forEach(el => {
+          if (el.children.length > 1) return;
+          const t = (el.textContent || '').trim();
+          const pm = t.match(/([\d,]+(?:\.\d+)?)\$\s*·\s*[\d.]+\s*BTC/);
+          if (!pm) return;
+          const legPx = Number(pm[1].replace(/,/g, ''));
+          if (!legPx) return;
+          const oldB = el.parentElement ? el.parentElement.querySelector('.kj-leg-st') : null;
+          if (oldB) oldB.remove();
+          const isPending = sideOrderPxs.some(op => Math.abs(op - legPx) <= 25.0);
+          if (isPending || hasPos) {
+            const bdg = document.createElement('span');
+            bdg.className = 'kj-leg-st';
+            bdg.style.cssText = isPending
+              ? 'margin-left:5px;font-size:9.5px;font-weight:800;padding:1.5px 5.5px;border-radius:999px;background:rgba(250,204,21,0.15);color:#fde047;white-space:nowrap;'
+              : 'margin-left:5px;font-size:9.5px;font-weight:800;padding:1.5px 5.5px;border-radius:999px;background:rgba(16,185,129,0.18);color:#34d399;white-space:nowrap;';
+            bdg.textContent = isPending ? '대기' : '체결';
+            el.appendChild(bdg);
+          }
+        });
+      });
+    }
+
+    // 2) 대기주문 내 부분익절(ReduceOnly) 지정가 목록 & 🎯 익절 필터 탭 연동
+    const roBox = $('roOrdersSection');
+    const enBox = $('ordListWrap');
+    if (!roBox || !enBox) return;
+    const roAll = (d && d._vaultUnlocked && sumInfo && Array.isArray(sumInfo.reduceOrders)) ? sumInfo.reduceOrders : [];
+    const enAll = (d && Array.isArray(d.orders)) ? d.orders : [];
+
+    // 상단 'N건 대기 중' 배지에 진입·익절 합산 건수 반영
+    const cardRoot = roBox.closest('.card') || roBox.parentElement;
+    if (cardRoot) {
+      cardRoot.querySelectorAll('.pill, span').forEach(sp => {
+        const tx = (sp.textContent || '').trim();
+        if (/^\d+건 대기 중$/.test(tx) || /^\d+건 \(진입\d+·익절\d+\)$/.test(tx)) {
+          sp.textContent = roAll.length > 0
+            ? `${enAll.length + roAll.length}건 (진입${enAll.length}·익절${roAll.length})`
+            : `${enAll.length}건 대기 중`;
+        }
+      });
+
+      // 필터 바에 [🎯 익절 (N)] 칩 자동 부착 및 동기화
+      const chipSample = cardRoot.querySelector('.chip, [data-oflt]');
+      const filterBar = chipSample ? chipSample.parentElement : null;
+      if (filterBar) {
+        filterBar.style.flexWrap = 'wrap';
+        let roChip = filterBar.querySelector('[data-ro-chip="1"]');
+        if (roAll.length > 0) {
+          if (!roChip) {
+            roChip = document.createElement('button');
+            roChip.type = 'button';
+            roChip.className = chipSample.className.replace(/\bactive\b/g, '').trim();
+            roChip.setAttribute('data-ro-chip', '1');
+            roChip.onclick = (ev) => {
+              ev.stopPropagation();
+              __kjRoOnlyMode = !__kjRoOnlyMode;
+              filterBar.querySelectorAll('button').forEach(b => {
+                if (b === roChip) b.classList.toggle('active', __kjRoOnlyMode);
+                else if (__kjRoOnlyMode) b.classList.remove('active');
+              });
+              if (!__kjRoOnlyMode) {
+                const firstBtn = filterBar.querySelector('button:not([data-ro-chip="1"])');
+                if (firstBtn) firstBtn.classList.add('active');
+              }
+              renderExtraPolishWidgets(S || d, (S && (S.v40Summary || S.summary)) || sumInfo);
+            };
+            filterBar.appendChild(roChip);
+          }
+          roChip.textContent = `🎯 익절 (${roAll.length})`;
+          if (!filterBar.__kjHooked) {
+            filterBar.__kjHooked = true;
+            filterBar.addEventListener('click', (ev) => {
+              const btn = ev.target.closest('button');
+              if (btn && !btn.hasAttribute('data-ro-chip') && __kjRoOnlyMode) {
+                __kjRoOnlyMode = false;
+                if (roChip) roChip.classList.remove('active');
+                setTimeout(() => renderExtraPolishWidgets(S || d, (S && (S.v40Summary || S.summary)) || sumInfo), 10);
+              }
+            });
+          }
+        } else if (roChip) {
+          __kjRoOnlyMode = false;
+          roChip.remove();
+        }
+      }
+    }
+
+    enBox.style.display = __kjRoOnlyMode ? 'none' : '';
+    if (roAll.length === 0) {
+      roBox.style.display = 'none';
+      roBox.innerHTML = '';
+      return;
+    }
+
+    // 현재 선택된 방향 필터(전체 / 롱 / 숏) 감지
+    let activeSideFlt = 'ALL';
+    if (cardRoot && !__kjRoOnlyMode) {
+      const actChip = cardRoot.querySelector('.chip.active:not([data-ro-chip="1"]), button.active:not([data-ro-chip="1"])');
+      const actTxt = actChip ? (actChip.textContent || '') : '';
+      if (actTxt.includes('롱')) activeSideFlt = 'LONG';
+      else if (actTxt.includes('숏')) activeSideFlt = 'SHORT';
+    }
+    const roFiltered = activeSideFlt === 'ALL' ? roAll : roAll.filter(r => r.side === activeSideFlt);
+    if (roFiltered.length === 0) {
+      roBox.style.display = 'none';
+      roBox.innerHTML = '';
+      return;
+    }
+
+    if (enAll.length === 0 && (enBox.textContent || '').includes('대기 중인 주문이 없습니다')) {
+      enBox.style.display = 'none';
+    }
+
+    const totRoPnl = roFiltered.reduce((acc, x) => acc + Number(x.estPnlUsd || 0), 0);
+    const totRoPct = roFiltered.reduce((acc, x) => acc + Number(x.estPnlPct || 0), 0);
+    const totRoQty = roFiltered.reduce((acc, x) => acc + Number(x.qty || 0), 0);
+
+    let htmlRo = `
+      <div style="background:rgba(15,23,42,0.78);border:1px solid rgba(56,189,248,0.32);border-radius:13px;padding:10px 12px;margin-bottom:8px;">
+        <div class="row-sb" style="flex-wrap:wrap;gap:4px 8px;">
+          <b style="font-size:12.5px;color:#7dd3fc;">🎯 지정가 부분익절 ${roFiltered.length}건 대기</b>
+          <span style="font-size:11.5px;color:#cbd5e1;font-variant-numeric:tabular-nums;">합산 ${totRoQty.toFixed(3)} BTC</span>
+        </div>
+        <div class="row-sb" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(148,163,184,0.14);font-size:12px;">
+          <span style="color:var(--sub);">전량 체결 시 확정수익</span>
+          <b class="up">+${totRoPct.toFixed(2)}% (+${fmt(totRoPnl, 0)}$)</b>
+        </div>
+      </div>
+    `;
+
+    roFiltered.forEach(ro => {
+      const sKo = ro.side === 'LONG' ? '롱' : '숏';
+      const sClr = ro.side === 'LONG' ? '#34d399' : '#fb7185';
+      const dSign = Number(ro.distPct || 0) >= 0 ? '+' : '';
+      const uSign = Number(ro.distUsd || 0) >= 0 ? '+' : '';
+      htmlRo += `
+        <div class="ord-card" style="border-left:3px solid #38bdf8;margin-bottom:8px;">
+          <div class="row-sb" style="gap:6px;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+              <span class="pill" style="color:${sClr};font-size:10.5px;">${sKo} 익절</span>
+              <span class="pill" style="color:#7dd3fc;border-color:rgba(56,189,248,0.38);font-size:10.5px;">${ro.badge}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:7px;margin-left:auto;">
+              <b style="font-size:17.5px;font-variant-numeric:tabular-nums;">${fmt(ro.price, 1)}</b>
+              <button type="button" class="btn danger kj-ro-cancel" data-ro-oid="${ro.orderId}" data-ro-px="${fmt(ro.price, 1)}" style="padding:4px 8.5px;font-size:11px;">취소</button>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:9px;font-size:11.5px;">
+            <div><div class="sm-lbl">청산수량</div><b>${ro.qty} BTC</b></div>
+            <div><div class="sm-lbl">진입평단</div><b>${fmt(ro.entryPrice, 1)}</b></div>
+            <div><div class="sm-lbl">추가증거금</div><b style="color:#94a3b8;">0.0$ (감축)</b></div>
+          </div>
+          <div class="row-sb" style="margin-top:8px;padding-top:7px;border-top:1px solid rgba(148,163,184,0.12);font-size:11.5px;flex-wrap:wrap;gap:4px;">
+            <span style="color:var(--sub);">현재가 대비 ${dSign}${Number(ro.distPct || 0).toFixed(2)}% (${uSign}${fmt(ro.distUsd, 0)}$)</span>
+            <span style="margin-left:auto;">체결 확정익절 <b class="up">+${Number(ro.estPnlPct || 0).toFixed(2)}% (+${fmt(ro.estPnlUsd, 1)}$)</b></span>
+          </div>
+        </div>
+      `;
+    });
+
+    roBox.innerHTML = htmlRo;
+    roBox.style.display = 'block';
+    roBox.querySelectorAll('.kj-ro-cancel').forEach(btn => {
+      btn.onclick = (ev) => {
+        ev.stopPropagation();
+        const oid = btn.getAttribute('data-ro-oid');
+        const pxTxt = btn.getAttribute('data-ro-px');
+        if (oid) {
+          requestPinAndSendCmd(`🎯 [부분익절 취소] ${pxTxt}$ 지정가 주문 취소`, 'cancel_order', { orderId: oid });
+        }
+      };
+    });
+  }
 
   function renderBoards() {
     if (!isOwner() || !S || !S._vaultUnlocked || !S.rationaleInfo) return;
@@ -3154,7 +3356,7 @@
         const dispBadge = showOwnerDetails ? o.badge : (o.guestBadge || o.badge);
         const edgeCls = o.side === 'LONG' ? 'edge-long' : 'edge-short';
         const ladNote = (showOwnerDetails && o.track === 'LADDER' && o.ladderFullTpUsd > 0)
-          ? `<div class="row-sb" style="font-size:11px;color:#7dd3fc;margin-top:6px;"><span>🛡 자율 ${o.ladderLegCount || 2}분할 합산 익절 시</span><b class="num-nw">+${fmt(o.ladderFullTpPct, 2)}% (+${fmt(o.ladderFullTpUsd, 0)}$)</b></div>`
+          ? `<div class="row-sb" style="font-size:11px;color:#7dd3fc;margin-top:6px;"><span>🛡 남은 진입대기(${o.ladderLegCount || 2}건) 합산 익절 시</span><b class="num-nw">+${fmt(o.ladderFullTpPct, 2)}% (+${fmt(o.ladderFullTpUsd, 0)}$)</b></div>`
           : '';
         return `
         <div class="ord-card ${edgeCls}">
@@ -3343,7 +3545,10 @@
         const capUsd = Math.round(eqVal * 0.05);
         const m18 = (((sumInfo.workers18) || {}).metrics) || {};
         const lU = Number(m18.sessionRiskLongPct || 0), sU = Number(m18.sessionRiskShortPct || 0);
-        setTxt('sessionRiskUseTxt', `롱 ${lU.toFixed(2)}% · 숏 ${sU.toFixed(2)}%`);
+        const lP = Number(m18.pendingRiskLongPct || 0), sP = Number(m18.pendingRiskShortPct || 0);
+        const lRStr = lP >= 0.05 ? `롱 ${lU.toFixed(2)}%(합 ${(lU + lP).toFixed(2)}%)` : `롱 ${lU.toFixed(2)}%`;
+        const sRStr = sP >= 0.05 ? `숏 ${sU.toFixed(2)}%(합 ${(sU + sP).toFixed(2)}%)` : `숏 ${sU.toFixed(2)}%`;
+        setTxt('sessionRiskUseTxt', `${lRStr} · ${sRStr}`);
 
         $('guardBrakeBanner').style.display = 'none';
         setTxt('wbVal', fmt(w.walletBalance || 0, 2) + '$');
@@ -3476,7 +3681,7 @@
     if (d.econNews) {
       setTxt('econUpdTime', d.econNews.updatedAt || '--:--');
       syncEconNewBadge(String(d.econNews.updatedAt || '') + '|' + String((d.econNews.text || '').length));
-      setTxt('econNextUpdTag', d.econNews.nextUpdateAt ? `(다음예정 ${d.econNews.nextUpdateAt})` : '');
+      setTxt('econNextUpdTag', d.econNews.nextUpdateAt ? `` : '');
       const eKey = (d.econNews.updatedAt || '') + ':' + (d.econNews.text || '').length;
       if (econSig !== eKey) {
         econSig = eKey;
