@@ -1798,7 +1798,7 @@
     setTxt('pfStartTs', pObj.startTimeStr || '--');
     setTxt('pfEndTs', pObj.endTimeStr || '--');
 
-    const lastTrStr = (pf.lastTrade && pf.lastTrade.timeStr) ? pf.lastTrade.timeStr : ((d.positions || []).length > 0 ? `마감 내역 없음 (${d.positions.length}건 운용 중)` : '마감 내역 없음');
+    const lastTrStr = (pf.lastTrade && pf.lastTrade.timeStr) ? pf.lastTrade.timeStr : ((S.positions || []).length > 0 ? `마감 내역 없음 (${S.positions.length}건 운용 중)` : '마감 내역 없음');
     const daysNum = Number(pf.daysTrading || 1);
     const closedPortN = Number(pf.closedPortfolios || 0);
     const projStartS = String(pf.projectStartStr || '--');
@@ -2049,7 +2049,7 @@
       if (showOwner) {
         (S.positions || []).forEach(p => {
           lineSpecs.push({ price:p.entry, color:'#38bdf8', lineWidth:2, lineStyle:0, title:`${p.side==='LONG'?'롱':'숏'} 평단` });
-          const roChartAll = (S && S._vaultUnlocked && ((S.v40Summary || S.summary || {}).reduceOrders)) || [];
+          const roChartAll = (S && S._vaultUnlocked && ((S.orderSummary || S.v40Summary || S.summary || {}).reduceOrders)) || [];
           const roChartSide = Array.isArray(roChartAll) ? roChartAll.filter(x => x.side === p.side) : [];
           if (roChartSide.length > 0) {
             roChartSide.forEach(roItem => {
@@ -2944,7 +2944,7 @@
     ordFilter = b.dataset.oflt || 'ALL';
     document.querySelectorAll('#ordFilterBar .chip').forEach(x => x.classList.toggle('active', x === b));
     ordSig = '';
-    if (S) renderOpenOrdersSection(S);
+    if (S) { renderOpenOrdersSection(S); renderExtraPolishWidgets(S, S.orderSummary || {}); }
   };
 
   function markRecAsSeen() {
@@ -3030,7 +3030,7 @@
     if (targetTab === 'chartboard' && isOwner()) {
       brdSig = '';
       renderBoards();
-      renderExtraPolishWidgets(d, sumInfo);
+      if (S) renderExtraPolishWidgets(S, S.orderSummary || {});
       if (!skipAutoChart) {
         setTimeout(() => openCandleModal(cmSym || 'BTC', cmTf || '15m'), 15);
       }
@@ -3087,7 +3087,7 @@
     // 1) 차트·전술 자율 분할 카드 차수별 [체결 / 대기] 배지 실시간 표시
     const ladRoot = $('cbTacLadderCards');
     if (ladRoot) {
-      const openEn = Array.isArray(d.orders) ? d.orders : [];
+      const openEn = Array.isArray(d.openOrders) ? d.openOrders : (Array.isArray(d.orders) ? d.orders : []);
       const actPos = Array.isArray(d.positions) ? d.positions : [];
       ladRoot.querySelectorAll(':scope > div').forEach(cardEl => {
         const hdrTxt = cardEl.textContent || '';
@@ -3125,7 +3125,7 @@
     const enBox = $('ordListWrap');
     if (!roBox || !enBox) return;
     const roAll = (d && d._vaultUnlocked && sumInfo && Array.isArray(sumInfo.reduceOrders)) ? sumInfo.reduceOrders : [];
-    const enAll = (d && Array.isArray(d.orders)) ? d.orders : [];
+    const enAll = (d && Array.isArray(d.openOrders)) ? d.openOrders : ((d && Array.isArray(d.orders)) ? d.orders : []);
 
     // 상단 'N건 대기 중' 배지에 진입·익절 합산 건수 반영
     const cardRoot = roBox.closest('.card') || roBox.parentElement;
@@ -3162,7 +3162,7 @@
                 const firstBtn = filterBar.querySelector('button:not([data-ro-chip="1"])');
                 if (firstBtn) firstBtn.classList.add('active');
               }
-              renderExtraPolishWidgets(S || d, (S && (S.v40Summary || S.summary)) || sumInfo);
+              renderExtraPolishWidgets(S || d, (S && (S.orderSummary || S.v40Summary || S.summary)) || sumInfo);
             };
             filterBar.appendChild(roChip);
           }
@@ -3174,7 +3174,7 @@
               if (btn && !btn.hasAttribute('data-ro-chip') && __kjRoOnlyMode) {
                 __kjRoOnlyMode = false;
                 if (roChip) roChip.classList.remove('active');
-                setTimeout(() => renderExtraPolishWidgets(S || d, (S && (S.v40Summary || S.summary)) || sumInfo), 10);
+                setTimeout(() => renderExtraPolishWidgets(S || d, (S && (S.orderSummary || S.v40Summary || S.summary)) || sumInfo), 10);
               }
             });
           }
@@ -3857,7 +3857,7 @@
 
     const ordCardEl = $('ordSectionCard');
     if (ordCardEl) ordCardEl.style.display = showOwnerSeed ? 'block' : 'none';
-    if (showOwnerSeed) renderOpenOrdersSection(d);
+    if (showOwnerSeed) { renderOpenOrdersSection(d); renderExtraPolishWidgets(d, sumInfo); }
 
     applyRealtimeQuoteTick();
 
